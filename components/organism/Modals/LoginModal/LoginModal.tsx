@@ -40,20 +40,26 @@ const LoginModal = ({ open, onClose }: TProps) => {
   });
   const [notFoundError, setNotFoundError] = useState(false);
 
-  const { mutate, isLoading, isSuccess, isError, status } = useMutation<
-    OkResponseDto,
-    ApiError,
-    LoginDto
-  >(async (vars) => userLogin(vars), {
-    onSuccess: async () => {
-      // await router.push("/konto");
+  const {
+    mutate,
+    isLoading,
+    isSuccess,
+    isError,
+    status,
+    reset: resetMutation,
+  } = useMutation<OkResponseDto, ApiError, LoginDto>(
+    async (vars) => userLogin(vars),
+    {
+      onSuccess: async () => {
+        router.reload();
+      },
+      onError: (error) => {
+        if (error.statusCode === 404) {
+          setNotFoundError(true);
+        }
+      },
     },
-    onError: (error) => {
-      if (error.statusCode === 404) {
-        setNotFoundError(true);
-      }
-    },
-  });
+  );
 
   const handleLogin: SubmitHandler<LoginDto> = async (form) =>
     mutate({
@@ -63,8 +69,9 @@ const LoginModal = ({ open, onClose }: TProps) => {
     });
 
   const handleClose = () => {
-    reset();
     onClose();
+    reset();
+    resetMutation();
   };
 
   return (

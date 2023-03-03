@@ -11,6 +11,7 @@ import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
 import useModalState from "../../../hooks/useModalState";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import CartButton from "../../atoms/CartButton/CartButton";
+import { useAccountContext } from "../../../providers/AccountProvider";
 
 const links = [
   {
@@ -42,6 +43,8 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useModalState();
+
+  const { user, logout } = useAccountContext();
 
   return (
     <>
@@ -75,12 +78,21 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
             <Box mr={1} display='flex' gap={2}>
               <CartButton value={4} />
             </Box>
-            <Button onClick={onOpen} variant='contained'>
-              Rejestracja
-            </Button>
-            <Button variant='outlined' onClick={onOpenLoginModal}>
-              Zaloguj
-            </Button>
+            {!user && (
+              <>
+                <Button onClick={onOpen} variant='contained'>
+                  Rejestracja
+                </Button>
+                <Button variant='outlined' onClick={onOpenLoginModal}>
+                  Zaloguj
+                </Button>
+              </>
+            )}
+            {user && (
+              <Button onClick={logout} variant='contained'>
+                Wyloguj
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
