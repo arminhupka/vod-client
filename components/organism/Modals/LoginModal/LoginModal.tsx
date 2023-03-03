@@ -94,6 +94,13 @@ const LoginModal = ({ open, onClose }: TProps) => {
                   {...register("password", { required: true })}
                 />
               </Grid>
+              {isError && (
+                <Grid item xs={12}>
+                  <Alert severity='error'>
+                    Brak użytkownika lub nie poprawne hasło
+                  </Alert>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox />}
@@ -107,11 +114,6 @@ const LoginModal = ({ open, onClose }: TProps) => {
                 </Button>
               </Grid>
             </Grid>
-            {isError && (
-              <Alert severity='error'>
-                Brak użytkownika lub nie poprawne hasło
-              </Alert>
-            )}
           </form>
         )}
       </>
