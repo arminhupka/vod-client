@@ -3,9 +3,9 @@ import { Grid } from "@mui/material";
 import CourseDetailsHeading from "../../../components/molecues/CourseDetailsHeading/CourseDetailsHeading";
 import CourseDetailsSidebar from "../../../components/organism/CourseDetailsSidebar/CourseDetailsSidebar";
 import PreviewPlayer from "../../../components/molecues/PreviewPlayer/PreviewPlayer";
-import CourseDescription from "../../../components/molecues/CourseDescription/CourseDescription";
 import CourseDetailsSidebarPrice from "../../../components/organism/CourseDetailsSidebarPrice/CourseDetailsSidebarPrice";
 import MainLayout from "../../../components/layouts/MainLayout";
+import CourseInfoTabs from "../../../components/organism/CourseInfoTabs/CourseInfoTabs";
 
 const CourseDetailsPage: NextPage = () => (
   <MainLayout>
@@ -19,7 +19,7 @@ const CourseDetailsPage: NextPage = () => (
             <PreviewPlayer />
           </Grid>
           <Grid item xs={12}>
-            <CourseDescription />
+            <CourseInfoTabs />
           </Grid>
         </Grid>
       </Grid>
