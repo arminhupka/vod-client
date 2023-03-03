@@ -1,10 +1,17 @@
-import { NextPage } from "next";
-import Hero from "../components/organism/Hero/Hero";
-import CoursesGrid from "../components/organism/CoursesGrid/CoursesGrid";
 import { Box } from "@mui/material";
-import MainLayout from "../components/layouts/MainLayout";
+import { NextPage } from "next";
 
-const HomePage: NextPage = () => (
+import { GetCoursesListResponseDto } from "../api/api-types";
+import { client } from "../api/client";
+import MainLayout from "../components/layouts/MainLayout";
+import CoursesGrid from "../components/organism/CoursesGrid/CoursesGrid";
+import Hero from "../components/organism/Hero/Hero";
+
+interface INextPage {
+  courses: GetCoursesListResponseDto;
+}
+
+const HomePage: NextPage<INextPage> = ({ courses }) => (
   <MainLayout>
     <Box>
       <Hero />
@@ -12,9 +19,20 @@ const HomePage: NextPage = () => (
         title='Najnowsze kursy'
         link='/kursy'
         linkName='Zobacz wszystkie'
+        courses={courses.docs || []}
       />
     </Box>
   </MainLayout>
 );
+
+export const getServerSideProps = async () => {
+  const { data } = await client.get<GetCoursesListResponseDto>("/courses");
+
+  return {
+    props: {
+      courses: data,
+    },
+  };
+};
 
 export default HomePage;
