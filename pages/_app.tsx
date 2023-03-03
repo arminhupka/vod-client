@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "../api/client";
+import { AccountProvider } from "../providers/AccountProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -11,7 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <AccountProvider account={null}>
+            <Component {...pageProps} />
+          </AccountProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </>
