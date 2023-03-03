@@ -367,6 +367,37 @@ export interface UserOrderListItem {
   totalSum: number;
 }
 
+export type OrderBilling = object;
+
+export interface ProductItem {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+export interface OrderItem {
+  product: ProductItem;
+  price: number;
+  tax: number;
+}
+
+export interface GetOrderResponseDto {
+  _id: string;
+  status: "NEW" | "IN_PROGRESS" | "COMPLETE" | "CANCELED" | "REFUNDED";
+  /** @format date-time */
+  paidAt: string;
+  billing: OrderBilling;
+  orderItems: OrderItem[];
+  orderId: string;
+  /** @format date-time */
+  createdAt: string;
+  /** @format date-time */
+  updatedAt: string;
+  total: number;
+  totalTax: number;
+  totalSum: number;
+}
+
 export interface CreateCouponDto {
   code: string;
   course: string;
@@ -1399,9 +1430,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/user/orders/{id}
      */
     userControllerGetOrder: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        GetOrderResponseDto,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
         path: `/user/orders/${id}`,
         method: "GET",
+        format: "json",
         ...params,
       }),
 

@@ -1,19 +1,36 @@
-import MainLayout from "../../../components/layouts/MainLayout";
-import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
-import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
-import { NextPageContext } from "next";
-import { getCookie } from "cookies-next";
-import { client } from "../../../api/client";
+import { Box } from "@mui/material";
 import { AxiosError } from "axios";
+import { getCookie } from "cookies-next";
+import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
+import Head from "next/head";
 
-const MyAccountOrders = () => {
+import { GetOrdersResponseDto } from "../../../api/api-types";
+import { client } from "../../../api/client";
+import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
+import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
+import MainLayout from "../../../components/layouts/MainLayout";
+import OrdersTable from "../../../components/organism/OrdersTable/OrdersTable";
+
+interface INextPage {
+  orders: GetOrdersResponseDto;
+}
+
+const MyAccountOrders: NextPage<INextPage> = ({ orders }) => {
   return (
-    <MainLayout>
-      <AccountLayout>
-        <SectionTitle title='Moje zamówienia' />
-      </AccountLayout>
-    </MainLayout>
+    <>
+      <Head>
+        <title>Zamówienia | Olga Wałek</title>
+      </Head>
+      <MainLayout>
+        <AccountLayout>
+          <SectionTitle title='Moje zamówienia' />
+          <Box mt={5}>
+            <OrdersTable data={orders} />
+          </Box>
+        </AccountLayout>
+      </MainLayout>
+    </>
   );
 };
 
@@ -30,7 +47,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get("/user/orders", {
+    const { data } = await client.get<GetOrdersResponseDto>("/user/orders", {
       headers: {
         Cookie: `token=${token};`,
       },
@@ -38,7 +55,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
     return {
       props: {
-        courses: data,
+        orders: data,
       },
     };
   } catch (err) {
