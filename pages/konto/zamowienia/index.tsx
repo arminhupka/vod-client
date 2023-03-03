@@ -1,22 +1,17 @@
-import { ReactElement } from "react";
-import { NextPage, NextPageContext } from "next";
 import MainLayout from "../../../components/layouts/MainLayout";
 import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
+import { NextPageContext } from "next";
 import { getCookie } from "cookies-next";
-import { AxiosError } from "axios";
 import { client } from "../../../api/client";
+import { AxiosError } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
 
-interface INextPage {
-  courses: any;
-}
-
-const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
+const MyAccountOrders = () => {
   return (
     <MainLayout>
       <AccountLayout>
-        <SectionTitle title='Moje kursy' />
+        <SectionTitle title='Moje zamówienia' />
       </AccountLayout>
     </MainLayout>
   );
@@ -35,7 +30,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get("/user/courses", {
+    const { data } = await client.get("/user/orders", {
       headers: {
         Cookie: `token=${token};`,
       },
@@ -66,4 +61,4 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 };
 
-export default MyAccountCourses;
+export default MyAccountOrders;
