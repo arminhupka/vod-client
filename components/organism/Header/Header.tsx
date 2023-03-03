@@ -10,6 +10,7 @@ import {
 import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
 import useModalState from "../../../hooks/useModalState";
 import LoginModal from "../Modals/LoginModal/LoginModal";
+import CartButton from "../../atoms/CartButton/CartButton";
 
 const links = [
   {
@@ -70,11 +71,16 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
           <Box>
             <Typography color='primary'>OW VOD</Typography>
           </Box>
-          <Box ml='auto' display='flex' gap={2}>
+          <Box ml='auto' display='flex' alignItems='center' gap={2}>
+            <Box mr={1} display='flex' gap={2}>
+              <CartButton value={4} />
+            </Box>
             <Button onClick={onOpen} variant='contained'>
               Rejestracja
             </Button>
-            <Button onClick={onOpenLoginModal}>Zaloguj</Button>
+            <Button variant='outlined' onClick={onOpenLoginModal}>
+              Zaloguj
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
