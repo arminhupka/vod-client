@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 import {
   AppBar,
   Box,
@@ -7,11 +6,14 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
+import { ReactElement } from "react";
+
 import useModalState from "../../../hooks/useModalState";
-import LoginModal from "../Modals/LoginModal/LoginModal";
-import CartButton from "../../atoms/CartButton/CartButton";
 import { useAccountContext } from "../../../providers/AccountProvider";
+import { useCartContext } from "../../../providers/CartProvider";
+import CartButton from "../../atoms/CartButton/CartButton";
+import LoginModal from "../Modals/LoginModal/LoginModal";
+import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
 
 const links = [
   {
@@ -43,6 +45,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useModalState();
+  const { total } = useCartContext();
 
   const { user, logout } = useAccountContext();
 
@@ -76,7 +79,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
           </Box>
           <Box ml='auto' display='flex' alignItems='center' gap={2}>
             <Box mr={1} display='flex' gap={2}>
-              <CartButton value={4} />
+              <CartButton value={total} />
             </Box>
             {!user && (
               <>
