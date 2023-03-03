@@ -1,5 +1,11 @@
 import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
-import { Button, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  TextField,
+} from "@mui/material";
 
 type TProps = Pick<IBaseModalProps, "open" | "onClose">;
 
@@ -20,6 +26,12 @@ const RegistrationModal = ({ open, onClose }: TProps) => (
       </Grid>
       <Grid item xs={12}>
         <TextField label='Powtórz hasło' type='password' fullWidth />
+      </Grid>
+      <Grid item xs={12}>
+        <FormControlLabel
+          control={<Checkbox defaultChecked />}
+          label='Akceptuję regulamin platformy'
+        />
       </Grid>
       <Grid item xs={12}>
         <Button fullWidth variant='contained'>

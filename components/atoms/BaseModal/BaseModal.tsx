@@ -5,7 +5,6 @@ import {
   StyledBodyWrapper,
   StyledHeaderWrapper,
   StyledModalWrapper,
-  StyledWrapper,
 } from "./BaseModal.styles";
 
 export interface IBaseModalProps extends ModalProps {
@@ -20,19 +19,20 @@ const BaseModal = ({
   title,
 }: IBaseModalProps): ReactElement => (
   <Modal open={open} onClose={onClose}>
-    <StyledWrapper>
-      <StyledModalWrapper>
-        <StyledHeaderWrapper>
-          <Typography fontSize={18} fontWeight={500}>
-            {title}
-          </Typography>
-          <IconButton onClick={onClose}>
-            <Close />
-          </IconButton>
-        </StyledHeaderWrapper>
-        <StyledBodyWrapper>{children}</StyledBodyWrapper>
-      </StyledModalWrapper>
-    </StyledWrapper>
+    <StyledModalWrapper>
+      <StyledHeaderWrapper>
+        <Typography
+          fontSize={24}
+          fontWeight={500}
+          fontFamily='Playfair Display'>
+          {title}
+        </Typography>
+        <IconButton onClick={onClose}>
+          <Close />
+        </IconButton>
+      </StyledHeaderWrapper>
+      <StyledBodyWrapper>{children}</StyledBodyWrapper>
+    </StyledModalWrapper>
   </Modal>
 );
 

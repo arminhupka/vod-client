@@ -9,12 +9,12 @@ import MainLayout from "../../../components/layouts/MainLayout";
 
 const CourseDetailsPage: NextPage = () => (
   <MainLayout>
-    <Grid container spacing={3}>
+    <Grid container spacing={5}>
       <Grid item lg={12}>
         <CourseDetailsHeading />
       </Grid>
       <Grid item lg={8}>
-        <Grid container spacing={3}>
+        <Grid container spacing={5}>
           <Grid item xs={12}>
             <PreviewPlayer />
           </Grid>
@@ -24,7 +24,7 @@ const CourseDetailsPage: NextPage = () => (
         </Grid>
       </Grid>
       <Grid item lg={4}>
-        <Grid container spacing={3}>
+        <Grid container spacing={5}>
           <Grid item xs={12}>
             <CourseDetailsSidebarPrice />
           </Grid>
