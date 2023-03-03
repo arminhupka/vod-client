@@ -6,6 +6,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
 import { ReactElement } from "react";
 
 import useModalState from "../../../hooks/useModalState";
@@ -78,9 +79,11 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
             <Typography color='primary'>OW VOD</Typography>
           </Box>
           <Box ml='auto' display='flex' alignItems='center' gap={2}>
-            <Box mr={1} display='flex' gap={2}>
-              <CartButton value={total} />
-            </Box>
+            <Link href='/koszyk' passHref>
+              <Box mr={1} display='flex' gap={2}>
+                <CartButton value={total} />
+              </Box>
+            </Link>
             {!user && (
               <>
                 <Button onClick={onOpen} variant='contained'>
@@ -92,9 +95,11 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
               </>
             )}
             {user && (
-              <Button onClick={logout} variant='contained'>
-                Wyloguj
-              </Button>
+              <Link href='/konto' passHref>
+                <Button component='div' variant='contained'>
+                  Moje Konto
+                </Button>
+              </Link>
             )}
           </Box>
         </Toolbar>

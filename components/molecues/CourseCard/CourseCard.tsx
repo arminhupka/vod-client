@@ -32,8 +32,6 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
 
   const { addToCart } = useCartContext();
 
-  console.log(props.featured);
-
   return (
     <StyledWrapper>
       <StyledBlobsWrapper>

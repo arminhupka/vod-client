@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import type { AppContext, AppProps } from "next/app";
 import App from "next/app";
 import { QueryClientProvider } from "react-query";
@@ -43,13 +43,16 @@ MyApp.getInitialProps = async (context: AppContext) => {
   let account: null | GetMeResponsesDto = null;
 
   if (token) {
-    const { data } = await client.get("/auth/me", {
-      headers: {
-        Cookie: `token=${token}`,
-      },
-    });
-
-    account = data || null;
+    try {
+      const { data } = await client.get("/auth/me", {
+        headers: {
+          Cookie: `token=${token}`,
+        },
+      });
+      account = data || null;
+    } catch {
+      deleteCookie("token", { res: context.ctx.res, req: context.ctx.req });
+    }
   }
 
   return {
