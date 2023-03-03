@@ -1,18 +1,25 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
+import type { AppContext, AppProps } from "next/app";
+import App from "next/app";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "../theme/theme";
 import { QueryClientProvider } from "react-query";
-import { queryClient } from "../api/client";
+import { client, queryClient } from "../api/client";
 import { AccountProvider } from "../providers/AccountProvider";
+import { getCookie } from "cookies-next";
+import { GetMeResponsesDto } from "../api/api-types";
 
-function MyApp({ Component, pageProps }: AppProps) {
+type TAppProps = AppProps & {
+  account: null | GetMeResponsesDto;
+};
+
+function MyApp({ Component, pageProps, account }: TAppProps) {
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <AccountProvider account={null}>
+          <AccountProvider account={account}>
             <Component {...pageProps} />
           </AccountProvider>
         </QueryClientProvider>
@@ -20,5 +27,30 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+MyApp.getInitialProps = async (context: AppContext) => {
+  const ctx = await App.getInitialProps(context);
+  const token = getCookie("token", {
+    res: context.ctx.res,
+    req: context.ctx.req,
+  });
+
+  let account: null | GetMeResponsesDto = null;
+
+  if (token) {
+    const { data } = await client.get("/auth/me", {
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    });
+
+    account = data || null;
+  }
+
+  return {
+    ...ctx,
+    account,
+  };
+};
 
 export default MyApp;
