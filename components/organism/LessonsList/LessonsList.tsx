@@ -1,29 +1,21 @@
+import { List } from "@mui/material";
 import { ReactElement } from "react";
-import {
-  StyledListItem,
-  StyledTime,
-  StyledWrapper,
-} from "./LessonsList.styles";
-import { Checkbox, List, ListItemText } from "@mui/material";
 
-const LessonsList = (): ReactElement => (
+import { GetCourseTopicsItemResponseDto } from "../../../api/api-types";
+import TopicAccordion from "../../atoms/TopicAccordion/TopicAccordion";
+import { StyledWrapper } from "./LessonsList.styles";
+
+interface IProps {
+  topics: GetCourseTopicsItemResponseDto[];
+  course: string;
+}
+
+const LessonsList = ({ topics, course }: IProps): ReactElement => (
   <StyledWrapper>
     <List disablePadding>
-      <StyledListItem>
-        <Checkbox defaultChecked />
-        <ListItemText>Lekcja 1</ListItemText>
-        <StyledTime>4:51</StyledTime>
-      </StyledListItem>
-      <StyledListItem active>
-        <Checkbox />
-        <ListItemText>Lekcja 2</ListItemText>
-        <StyledTime>4:51</StyledTime>
-      </StyledListItem>
-      <StyledListItem>
-        <Checkbox />
-        <ListItemText>Lekcja 3</ListItemText>
-        <StyledTime>4:51</StyledTime>
-      </StyledListItem>
+      {topics.map((item) => (
+        <TopicAccordion course={course} key={item._id} topic={item} />
+      ))}
     </List>
   </StyledWrapper>
 );

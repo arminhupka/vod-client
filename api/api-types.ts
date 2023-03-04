@@ -167,14 +167,14 @@ export interface GetCourseTopicsItemResponseDto {
   _id: string;
   title: string;
   summary: string;
-  lessons: string[];
+  lessons: GetCourseLessonsItemResponseDto[];
 }
 
 export interface AdminGetCourseTopicsItemResponseDto {
   _id: string;
   title: string;
   summary: string;
-  lessons: string[];
+  lessons: AdminGetCourseLessonsItemResponseDto[];
 }
 
 export interface NewLessonDto {
