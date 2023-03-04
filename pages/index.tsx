@@ -26,7 +26,11 @@ const HomePage: NextPage<INextPage> = ({ courses }) => (
 );
 
 export const getServerSideProps = async () => {
-  const { data } = await client.get<GetCoursesListResponseDto>("/courses");
+  const { data } = await client.get<GetCoursesListResponseDto>("/courses", {
+    params: {
+      limit: 6,
+    },
+  });
 
   return {
     props: {

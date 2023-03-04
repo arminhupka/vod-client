@@ -1,0 +1,53 @@
+import { PlayArrow } from "@mui/icons-material";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { ReactElement } from "react";
+
+import { GetUserCourseDto } from "../../../api/api-types";
+
+interface IProps {
+  courses: GetUserCourseDto[];
+}
+
+const CoursesTable = ({ courses }: IProps): ReactElement => (
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>Tytuł</TableCell>
+        <TableCell>Data wygaśniecia</TableCell>
+        <TableCell />
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {!courses.length && (
+        <TableRow>
+          <TableCell colSpan={3}>
+            <Typography textAlign='center'>
+              Nie posiadasz żadnego aktywanego kursu
+            </Typography>
+          </TableCell>
+        </TableRow>
+      )}
+      {courses.map((item) => (
+        <TableRow key={item.course._id}>
+          <TableCell>{item.course.name}</TableCell>
+          <TableCell>
+            {new Date(item.availableUntil).toLocaleDateString("pl-PL")}
+          </TableCell>
+          <TableCell>
+            <Button startIcon={<PlayArrow />}>Zobacz kurs</Button>
+          </TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
+export default CoursesTable;

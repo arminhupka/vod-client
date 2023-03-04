@@ -1,6 +1,9 @@
 import { Box, styled, Typography } from "@mui/material";
 
 export const StyledWrapper = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flex: 1,
+  flexDirection: "column",
   border: "1px solid",
   borderColor: theme.palette.grey["200"],
   borderRadius: theme.spacing(1),
@@ -20,6 +23,7 @@ export const StyledCover = styled("img")(() => ({
 }));
 
 export const StyledInfoWrapper = styled(Box)(({ theme }) => ({
+  flex: 1,
   padding: theme.spacing(2),
 }));
 

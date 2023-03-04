@@ -1,15 +1,19 @@
-import { ReactElement } from "react";
-import { NextPage, NextPageContext } from "next";
-import MainLayout from "../../../components/layouts/MainLayout";
-import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
-import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
-import { getCookie } from "cookies-next";
+import { Box } from "@mui/material";
 import { AxiosError } from "axios";
-import { client } from "../../../api/client";
+import { getCookie } from "cookies-next";
+import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
+import { ReactElement } from "react";
+
+import { GetUserCourseDto } from "../../../api/api-types";
+import { client } from "../../../api/client";
+import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
+import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
+import MainLayout from "../../../components/layouts/MainLayout";
+import CoursesTable from "../../../components/organism/CoursesTable/CoursesTable";
 
 interface INextPage {
-  courses: any;
+  courses: GetUserCourseDto[];
 }
 
 const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
@@ -17,6 +21,9 @@ const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
     <MainLayout>
       <AccountLayout>
         <SectionTitle title='Moje kursy' />
+        <Box mt={2}>
+          <CoursesTable courses={courses} />
+        </Box>
       </AccountLayout>
     </MainLayout>
   );
@@ -35,7 +42,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get("/user/courses", {
+    const { data } = await client.get<GetUserCourseDto[]>("/user/courses", {
       headers: {
         Cookie: `token=${token};`,
       },

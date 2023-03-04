@@ -5,6 +5,7 @@ import { ReactElement } from "react";
 
 import { CourseListItem } from "../../../api/api-types";
 import { useCartContext } from "../../../providers/CartProvider";
+import { convertDifficultLevel } from "../../../utils/convertDifficultLevel";
 import { formatPrice } from "../../../utils/formatPrice";
 import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
 import {
@@ -28,15 +29,18 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
     shortDescription,
     salePrice,
     price,
+    _id,
   } = props;
 
-  const { addToCart } = useCartContext();
+  const { addToCart, cart } = useCartContext();
 
   return (
     <StyledWrapper>
       <StyledBlobsWrapper>
         {featured && <InfoBlob message='Polecany' />}
-        {difficultyLevel && <InfoBlob message={difficultyLevel} />}
+        {difficultyLevel && (
+          <InfoBlob message={convertDifficultLevel(difficultyLevel)} />
+        )}
       </StyledBlobsWrapper>
       <Link href={`/kursy/${slug}`}>
         <StyledCoverWrapper>
@@ -52,6 +56,7 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
       <StyledButtonWrapper>
         <StyledPrice>{formatPrice(salePrice || price)}</StyledPrice>
         <Button
+          disabled={!!cart.find((item) => item._id === _id)}
           startIcon={<ShoppingCart />}
           variant='contained'
           onClick={() => addToCart(props)}>

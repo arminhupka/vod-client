@@ -23,7 +23,11 @@ const CoursesGrid = ({
     <SectionTitle title={title} link={link} linkName={linkName} />
     <Grid mt={1} container spacing={2}>
       {courses.map((c) => (
-        <Grid key={c._id} item xs={4}>
+        <Grid
+          key={c._id}
+          item
+          xs={4}
+          sx={{ display: "flex", flexDirection: "column" }}>
           <CourseCard {...c} />
         </Grid>
       ))}
