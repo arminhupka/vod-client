@@ -1,5 +1,4 @@
 import {
-  Accordion,
   AccordionDetails,
   AccordionSummary,
   List,
@@ -9,6 +8,7 @@ import { ReactElement } from "react";
 
 import { GetCourseTopicsItemResponseDto } from "../../../api/api-types";
 import LessonListItem from "../LessonListItem/LessonListItem";
+import { StyledAccordion } from "./TopicAccordion.styles";
 
 interface IProps {
   course: string;
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const TopicAccordion = ({ topic, course }: IProps): ReactElement => (
-  <Accordion>
+  <StyledAccordion>
     <AccordionSummary>
       <Typography>{topic.title}</Typography>
     </AccordionSummary>
@@ -32,7 +32,7 @@ const TopicAccordion = ({ topic, course }: IProps): ReactElement => (
         ))}
       </List>
     </AccordionDetails>
-  </Accordion>
+  </StyledAccordion>
 );
 
 export default TopicAccordion;
