@@ -398,6 +398,23 @@ export interface GetOrderResponseDto {
   totalSum: number;
 }
 
+export interface UserCourseDto {
+  _id: string;
+  name: string;
+  price: number;
+  salePrice: number;
+  slug: string;
+  featured: boolean;
+  lessonsCount: number;
+  topicsCount: number;
+}
+
+export interface GetUserCourseDto {
+  course: UserCourseDto;
+  /** @format date-time */
+  availableUntil: string;
+}
+
 export interface CreateCouponDto {
   code: string;
   course: string;
@@ -1464,9 +1481,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/user/courses
      */
     userControllerGetCourses: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        GetUserCourseDto[],
+        {
+          /** @example 401 */
+          statusCode: number;
+          /** @example "Unauthorized" */
+          message: string;
+          /** @example "Unauthorized" */
+          error?: string;
+        }
+      >({
         path: `/user/courses`,
         method: "GET",
+        format: "json",
         ...params,
       }),
 
@@ -1475,12 +1503,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags User
      * @name UserControllerGetCourse
+     * @summary Get course details
      * @request GET:/user/courses/{id}
      */
     userControllerGetCourse: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        GetUserCourseDto,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
         path: `/user/courses/${id}`,
         method: "GET",
+        format: "json",
         ...params,
       }),
   };
