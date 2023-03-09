@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ReactElement } from "react";
@@ -10,6 +11,9 @@ const MyAccountProfile: NextPage = (): ReactElement => (
   <MainLayout>
     <AccountLayout>
       <SectionTitle title='Profil' />
+      <Box mt={2}>
+        <p>some form</p>
+      </Box>
     </AccountLayout>
   </MainLayout>
 );

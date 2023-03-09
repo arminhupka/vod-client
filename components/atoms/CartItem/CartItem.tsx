@@ -36,9 +36,11 @@ const CartItem = ({
       </TableCell>
       <TableCell>
         <Link href={`/kursy/${courseSlug}`} passHref>
-          <Typography fontWeight={600} color='primary'>
-            {name}
-          </Typography>
+          <a>
+            <Typography fontWeight={600} color='primary'>
+              {name}
+            </Typography>
+          </a>
         </Link>
       </TableCell>
       <TableCell>

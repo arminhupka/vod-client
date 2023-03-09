@@ -5,9 +5,9 @@ import { useQuery } from "react-query";
 
 import { GetOrderResponseDto } from "../../../api/api-types";
 import { getOrder } from "../../../api/orders";
-import Loading from "../../../components/atoms/Loading/Loading";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import MainLayout from "../../../components/layouts/MainLayout";
+import UserOrder from "../../../components/organism/UserOrder/UserOrder";
 
 const OrderDetailsPage: NextPage = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const OrderDetailsPage: NextPage = () => {
   return (
     <MainLayout>
       <SectionTitle title='Status zamówienia' />
-      {isLoading && <Loading />}
+      <UserOrder isLoading={isLoading} />
       {isSuccess && <p>STATUS: {data.status}</p>}
     </MainLayout>
   );

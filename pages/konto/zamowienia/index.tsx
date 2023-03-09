@@ -25,7 +25,7 @@ const MyAccountOrders: NextPage<INextPage> = ({ orders }) => {
       <MainLayout>
         <AccountLayout>
           <SectionTitle title='Moje zamówienia' />
-          <Box mt={5}>
+          <Box mt={2}>
             <OrdersTable data={orders} />
           </Box>
         </AccountLayout>

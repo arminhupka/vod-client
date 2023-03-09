@@ -35,7 +35,7 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
         {!data.docs.length && (
           <TableRow>
             <TableCell colSpan={4}>
-              <Typography textAlign='center'>
+              <Typography variant='body2' textAlign='center'>
                 Nie masz jeszcze żadnych zamówień
               </Typography>
             </TableCell>

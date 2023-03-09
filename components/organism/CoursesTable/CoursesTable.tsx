@@ -29,7 +29,7 @@ const CoursesTable = ({ courses }: IProps): ReactElement => (
       {!courses.length && (
         <TableRow>
           <TableCell colSpan={3}>
-            <Typography textAlign='center'>
+            <Typography variant='body2' textAlign='center'>
               Nie posiadasz żadnego aktywanego kursu
             </Typography>
           </TableCell>
