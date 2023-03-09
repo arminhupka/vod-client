@@ -200,6 +200,7 @@ export interface LessonResponseDto {
   _id: string;
   title: string;
   description: string;
+  videoLink: string;
   /** @format date-time */
   createdAt: string;
   /** @format date-time */
@@ -209,6 +210,7 @@ export interface LessonResponseDto {
 export interface UpdateLessonDto {
   title: string;
   description: string;
+  videoLink: string;
 }
 
 export interface OkResponseDto {
@@ -357,12 +359,26 @@ export interface LoginDto {
 export interface SimplyBillingResponseDto {
   firstName: string;
   lastName: string;
+  isCompany: boolean;
+  companyName: string;
+  vatNumber: string;
+  street: string;
+  country: string;
+  postCode: string;
+}
+
+export interface SimplyUserCurses {
+  course: string;
+  /** @format date-time */
+  availableUntil: string;
 }
 
 export interface GetMeResponsesDto {
   _id: string;
   email: string;
   billing: SimplyBillingResponseDto;
+  watchedLessons: string[];
+  courses: SimplyUserCurses[];
 }
 
 export interface UserOrderListItem {
@@ -1644,6 +1660,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
           }
       >({
         path: `/user/courses/${course}/lesson/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerGetWatchedLessons
+     * @summary Get array of watched lessons ids
+     * @request GET:/user/watched
+     */
+    userControllerGetWatchedLessons: (params: RequestParams = {}) =>
+      this.request<
+        string[],
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+      >({
+        path: `/user/watched`,
         method: "GET",
         format: "json",
         ...params,

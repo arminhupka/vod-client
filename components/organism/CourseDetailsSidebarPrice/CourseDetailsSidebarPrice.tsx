@@ -5,6 +5,7 @@ import { GetCourseResponseDto } from "../../../api/api-types";
 import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import { formatPrice } from "../../../utils/formatPrice";
+import CourseProgress from "../../atoms/CourseProgress/CourseProgress";
 import {
   StyledInnerWrapper,
   StyledPrice,
@@ -16,12 +17,16 @@ interface IProps {
   course: GetCourseResponseDto;
   price: number;
   salePrice: number;
+  withoutPrice: boolean;
+  progress: number;
 }
 
 const CourseDetailsSidebarPrice = ({
   price,
   salePrice,
   course,
+  withoutPrice,
+  progress,
 }: IProps): ReactElement => {
   const { addToCart, cart } = useCartContext();
   const { user } = useAccountContext();
@@ -70,16 +75,19 @@ const CourseDetailsSidebarPrice = ({
           )}
           {!salePrice && <StyledPrice>{formatPrice(price)}</StyledPrice>}
         </StyledPricesWrapper>
-        <Button
-          fullWidth
-          variant='contained'
-          disabled={isInCart()}
-          onClick={handleAddToCart}>
-          Dodaj do koszyka
-        </Button>
+        {!withoutPrice && (
+          <Button
+            fullWidth
+            variant='contained'
+            disabled={isInCart()}
+            onClick={handleAddToCart}>
+            Dodaj do koszyka
+          </Button>
+        )}
       </StyledInnerWrapper>
       {user && (
         <StyledInnerWrapper solidBg>
+          <CourseProgress value={progress} />
           <Button fullWidth variant='contained'>
             Przejdź do kursu
           </Button>

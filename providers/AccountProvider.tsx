@@ -28,10 +28,16 @@ interface IAccountProvider {
   watched: string[];
 }
 
-export const AccountProvider = ({ children, account }: IAccountProvider) => {
+export const AccountProvider = ({
+  children,
+  account,
+  watched,
+}: IAccountProvider) => {
   const [userAccount, setUserAccount] = useState<GetMeResponsesDto | null>(
     account,
   );
+
+  const [lessonWatched, setLessonWatched] = useState<string[]>(watched);
 
   const logout = async () =>
     client
@@ -41,10 +47,10 @@ export const AccountProvider = ({ children, account }: IAccountProvider) => {
   const value = useMemo<accountContextType>(
     () => ({
       user: userAccount || null,
-      watched: [],
+      watched: lessonWatched,
       logout,
     }),
-    [userAccount],
+    [lessonWatched, userAccount],
   );
 
   return (
