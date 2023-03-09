@@ -1,18 +1,30 @@
 import { ReactElement } from "react";
+
+import { convertDifficultLevel } from "../../../utils/convertDifficultLevel";
+import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
 import {
   StyledBlobsWrapper,
   StyledName,
   StyledWrapper,
 } from "./CourseDetailsHeading.styles";
-import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
 
-const CourseDetailsHeading = (): ReactElement => (
+interface IProps {
+  name: string;
+  isFeatured: boolean;
+  difficultLevel: string;
+}
+
+const CourseDetailsHeading = ({
+  name,
+  difficultLevel,
+  isFeatured,
+}: IProps): ReactElement => (
   <StyledWrapper>
     <StyledBlobsWrapper>
-      <InfoBlob message='Polecany' />
-      <InfoBlob message='Zaawansowany' />
+      {isFeatured && <InfoBlob message='Polecany' />}
+      <InfoBlob message={convertDifficultLevel(difficultLevel)} />
     </StyledBlobsWrapper>
-    <StyledName>Some Course Name</StyledName>
+    <StyledName>{name}</StyledName>
   </StyledWrapper>
 );
 

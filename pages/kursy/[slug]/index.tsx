@@ -1,40 +1,97 @@
-import { NextPage } from "next";
 import { Grid } from "@mui/material";
+import { NextPage, NextPageContext } from "next";
+import Head from "next/head";
+
+import {
+  GetCourseResponseDto,
+  GetCourseTopicsItemResponseDto,
+} from "../../../api/api-types";
+import { client } from "../../../api/client";
+import CourseCover from "../../../components/atoms/CourseCover/CourseCover";
+import MainLayout from "../../../components/layouts/MainLayout";
 import CourseDetailsHeading from "../../../components/molecues/CourseDetailsHeading/CourseDetailsHeading";
 import CourseDetailsSidebar from "../../../components/organism/CourseDetailsSidebar/CourseDetailsSidebar";
-import PreviewPlayer from "../../../components/molecues/PreviewPlayer/PreviewPlayer";
 import CourseDetailsSidebarPrice from "../../../components/organism/CourseDetailsSidebarPrice/CourseDetailsSidebarPrice";
-import MainLayout from "../../../components/layouts/MainLayout";
 import CourseInfoTabs from "../../../components/organism/CourseInfoTabs/CourseInfoTabs";
 
-const CourseDetailsPage: NextPage = () => (
-  <MainLayout>
-    <Grid container spacing={5}>
-      <Grid item lg={12}>
-        <CourseDetailsHeading />
-      </Grid>
-      <Grid item lg={8}>
-        <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <PreviewPlayer />
+interface INextPage {
+  course: GetCourseResponseDto;
+  topics: GetCourseTopicsItemResponseDto[];
+}
+
+const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => (
+  <>
+    <Head>
+      <title>
+        {course.name} | {process.env.NEXT_PUBLIC_APP_NAME}
+      </title>
+    </Head>
+    <MainLayout>
+      <Grid container spacing={2}>
+        <Grid item lg={12}>
+          <CourseDetailsHeading
+            name={course.name}
+            isFeatured={course.featured}
+            difficultLevel={course.difficultyLevel}
+          />
+        </Grid>
+        <Grid item lg={8}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <CourseCover alt={course.name} url={course.cover} />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseInfoTabs
+                description={course.description}
+                topics={topics}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <CourseInfoTabs />
+        </Grid>
+        <Grid item lg={4}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <CourseDetailsSidebarPrice
+                course={course}
+                price={course.price}
+                salePrice={course.salePrice}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseDetailsSidebar />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item lg={4}>
-        <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <CourseDetailsSidebarPrice />
-          </Grid>
-          <Grid item xs={12}>
-            <CourseDetailsSidebar />
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
-  </MainLayout>
+    </MainLayout>
+  </>
 );
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const { slug } = ctx.query;
+
+  const { data: courseData } = await client.get<GetCourseResponseDto>(
+    `/courses/${slug}`,
+  );
+  const { data: topicsData } = await client.get<
+    GetCourseTopicsItemResponseDto[]
+  >(`/courses/${slug}/topics`);
+
+  if (!courseData || !topicsData) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      course: courseData,
+      topics: topicsData,
+    },
+  };
+};
 
 export default CourseDetailsPage;

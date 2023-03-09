@@ -1,5 +1,6 @@
 import { Box, Button, Grid } from "@mui/material";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
 
@@ -27,27 +28,32 @@ const CartPage: NextPage = () => {
   const handlePayment = () => mutate(cart.map((item) => item._id));
 
   return (
-    <MainLayout>
-      <SectionTitle title='Koszyk' />
-      {!cart.length && (
-        <Box mt={5}>
-          <EmptyCartNotification />
-        </Box>
-      )}
-      {!!cart.length && (
-        <Box mt={2}>
-          <Grid container spacing={5}>
-            <Grid item xs={12} lg={8}>
-              <CartList courses={cart} />
+    <>
+      <Head>
+        <title>Koszyk | {process.env.NEXT_PUBLIC_APP_NAME}</title>
+      </Head>
+      <MainLayout>
+        <SectionTitle title='Koszyk' />
+        {!cart.length && (
+          <Box mt={5}>
+            <EmptyCartNotification />
+          </Box>
+        )}
+        {!!cart.length && (
+          <Box mt={2}>
+            <Grid container spacing={5}>
+              <Grid item xs={12} lg={8}>
+                <CartList courses={cart} />
+              </Grid>
+              <Grid item xs={12} lg={4}>
+                <CartTotal cartItems={cart} />
+                <Button onClick={handlePayment}>Zaplac</Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} lg={4}>
-              <CartTotal cartItems={cart} />
-              <Button onClick={handlePayment}>Zaplac</Button>
-            </Grid>
-          </Grid>
-        </Box>
-      )}
-    </MainLayout>
+          </Box>
+        )}
+      </MainLayout>
+    </>
   );
 };
 

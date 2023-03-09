@@ -1,5 +1,6 @@
 import { ShoppingCart } from "@mui/icons-material";
 import { Button } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -11,7 +12,6 @@ import InfoBlob from "../../atoms/InfoBlob/InfoBlob";
 import {
   StyledBlobsWrapper,
   StyledButtonWrapper,
-  StyledCover,
   StyledCoverWrapper,
   StyledDescription,
   StyledInfoWrapper,
@@ -30,6 +30,7 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
     salePrice,
     price,
     _id,
+    cover,
   } = props;
 
   const { addToCart, cart } = useCartContext();
@@ -45,7 +46,13 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
       <Link href={`/kursy/${slug}`} passHref>
         <a>
           <StyledCoverWrapper>
-            <StyledCover src='https://i.imgur.com/uQ20Tuq.jpeg' />
+            <Image
+              alt={`${name} - ${process.env.NEXT_PUBLIC_APP_NAME}`}
+              src={cover || "/placeholder.png"}
+              layout='fill'
+              objectFit='cover'
+              objectPosition='center'
+            />
           </StyledCoverWrapper>
         </a>
       </Link>

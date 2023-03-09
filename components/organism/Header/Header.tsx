@@ -76,12 +76,9 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
           </Box>
         )}
         <Container>
-          <Box
-            display='flex'
-            justifyContent='space-between'
-            alignItems='center'>
+          <Box display='flex' alignItems='center'>
             <Logo />
-            <Box display='flex' gap={2}>
+            <Box ml={10} display='flex' gap={2}>
               {links.map((l) => (
                 <Typography
                   variant='body2'
@@ -93,7 +90,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
                 </Typography>
               ))}
             </Box>
-            <Box display='flex' alignItems='center' gap={2}>
+            <Box ml='auto' display='flex' alignItems='center' gap={2}>
               <Link href='/koszyk' passHref>
                 <Box mr={1} display='flex' gap={2}>
                   <CartButton value={total} />
