@@ -1,6 +1,7 @@
-import { ReactElement } from "react";
-import { IconButton, Modal, ModalProps, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { IconButton, Modal, ModalProps, Typography } from "@mui/material";
+import { ReactElement } from "react";
+
 import {
   StyledBodyWrapper,
   StyledHeaderWrapper,

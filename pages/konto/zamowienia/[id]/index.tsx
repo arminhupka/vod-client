@@ -10,7 +10,6 @@ import { client } from "../../../../api/client";
 import SectionTitle from "../../../../components/atoms/SectionTitle/SectionTitle";
 import AccountLayout from "../../../../components/layouts/AccountLayout/AccountLayout";
 import MainLayout from "../../../../components/layouts/MainLayout";
-import CourseCard from "../../../../components/molecues/CourseCard/CourseCard";
 
 interface INextPage {
   order: GetOrderResponseDto;
@@ -24,13 +23,7 @@ const MyAccountOrderDetails: NextPage<INextPage> = ({ order }) => (
     <MainLayout>
       <AccountLayout>
         <SectionTitle title={`Zamówienie ${order.orderId}`} />
-        <Grid container spacing={5}>
-          {order.orderItems.map((item) => (
-            <Grid key={item.product._id} item>
-              <CourseCard />
-            </Grid>
-          ))}
-        </Grid>
+        <Grid container spacing={5}></Grid>
       </AccountLayout>
     </MainLayout>
   </>

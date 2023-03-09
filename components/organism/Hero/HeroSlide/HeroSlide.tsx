@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+
 import { StyledImage, StyledWrapper } from "./HeroSlide.styles";
 
 const HeroSlide = (): ReactElement => (

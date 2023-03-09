@@ -36,9 +36,7 @@ export const CartProvider = ({ children }: IProps) => {
 
   const addToCart = (item: CourseListItem) => {
     setCart((prevState) => [...prevState, item]);
-    if (window.localStorage.getItem("cart")) {
-      window.localStorage.setItem("cart", JSON.stringify(cart));
-    }
+    window.localStorage.setItem("cart", JSON.stringify([...cart, item]));
   };
 
   const removeFromCart = (id: string) => {
@@ -47,24 +45,25 @@ export const CartProvider = ({ children }: IProps) => {
     const parsedLocalCart: CourseListItem[] | null = localCart
       ? JSON.parse(localCart)
       : null;
-
     if (parsedLocalCart) {
       const filtered = parsedLocalCart.filter((item) => item._id !== id);
       localStorage.setItem("cart", JSON.stringify(filtered));
     }
   };
 
-  const value = useMemo<cartContextType>(
-    () => ({
+  const value = useMemo<cartContextType>(() => {
+    return {
       cart,
       addToCart,
       removeFromCart,
       total: cart.length,
-    }),
-    [addToCart, cart],
-  );
+    };
+  }, [addToCart, cart]);
 
   useEffect(() => {
+    if (!localStorage.getItem("cart")) {
+      return localStorage.setItem("cart", JSON.stringify([]));
+    }
     setCart(JSON.parse(localStorage.getItem("cart")!));
   }, []);
 

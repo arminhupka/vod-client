@@ -1,6 +1,7 @@
-import { ReactElement } from "react";
-import { StyledWrapper } from "./Loading.styles";
 import { CircularProgress } from "@mui/material";
+import { ReactElement } from "react";
+
+import { StyledWrapper } from "./Loading.styles";
 
 const Loading = (): ReactElement => (
   <StyledWrapper>

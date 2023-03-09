@@ -75,7 +75,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
             </Container>
           </Box>
         )}
-        <Container>
+        <Box px={3}>
           <Box display='flex' alignItems='center'>
             <Logo />
             <Box ml={10} display='flex' gap={2}>
@@ -85,14 +85,16 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
                   fontWeight={600}
                   textTransform='uppercase'
                   key={l.id}
-                  color='primary'>
+                  sx={{
+                    color: "#333",
+                  }}>
                   {l.name}
                 </Typography>
               ))}
             </Box>
             <Box ml='auto' display='flex' alignItems='center' gap={2}>
               <Link href='/koszyk' passHref>
-                <Box mr={1} display='flex' gap={2}>
+                <Box component='a' mr={1} display='flex' gap={2}>
                   <CartButton value={total} />
                 </Box>
               </Link>
@@ -109,18 +111,21 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
               {user && (
                 <>
                   <Link href='/konto' passHref>
-                    <Button component='div' variant='outlined'>
+                    <Button component='div' variant='outlined' size='small'>
                       Moje Konto
                     </Button>
                   </Link>
-                  <Button variant='contained' onClick={onOpenCouponModal}>
+                  <Button
+                    variant='contained'
+                    onClick={onOpenCouponModal}
+                    size='small'>
                     Aktywuj kupon
                   </Button>
                 </>
               )}
             </Box>
           </Box>
-        </Container>
+        </Box>
       </AppBar>
     </>
   );

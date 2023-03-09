@@ -1,20 +1,33 @@
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
+import dynamic from "next/dynamic";
 
-import { GetCourseTopicsItemResponseDto } from "../../../../../api/api-types";
+import {
+  GetCourseTopicsItemResponseDto,
+  UserCourseLessonDto,
+} from "../../../../../api/api-types";
 import { client } from "../../../../../api/client";
-import CoursePlayer from "../../../../../components/atoms/CoursePlayer/CoursePlayer";
 import CourseTitle from "../../../../../components/atoms/CourseTitle/CourseTitle";
+import SectionTitle from "../../../../../components/atoms/SectionTitle/SectionTitle";
 import LessonLayout from "../../../../../components/layouts/LessonLayout";
 import LessonsList from "../../../../../components/organism/LessonsList/LessonsList";
+
+// const DynamicHeader = dynamic(() => import('../components/header'), {
+//   loading: () => <p>Loading...</p>,
+// })
+
+const DynamicPlayer = dynamic(
+  () => import("../../../../../components/atoms/CoursePlayer/CoursePlayer"),
+);
 
 interface INextPage {
   course: string;
   topics: GetCourseTopicsItemResponseDto[];
+  lesson: UserCourseLessonDto;
 }
 
-const LessonPage: NextPage<INextPage> = ({ topics, course }) => {
+const LessonPage: NextPage<INextPage> = ({ topics, course, lesson }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -25,7 +38,11 @@ const LessonPage: NextPage<INextPage> = ({ topics, course }) => {
           <CourseTitle title='Some nice course' />
         </Grid>
         <Grid item xs={12} lg={9}>
-          <CoursePlayer />
+          <DynamicPlayer video={lesson.videoLink.split("=").at(-1)!} />
+          <Box mt={2} p={3} display='flex' flexDirection='column' gap={4}>
+            <SectionTitle title={lesson.title} />
+            <Typography>{lesson.description}</Typography>
+          </Box>
         </Grid>
         <Grid height='100%' item xs={12} lg={3}>
           <LessonsList course={course} topics={topics} />
@@ -53,10 +70,20 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       `/courses/${courseSlug}/topics`,
     );
 
+    const { data: lesson } = await client.get(
+      `/user/courses/${courseSlug}/lesson/${lessonSlug}`,
+      {
+        headers: {
+          Cookie: `token=${token};`,
+        },
+      },
+    );
+
     return {
       props: {
         course: courseSlug,
         topics,
+        lesson,
       },
     };
   } catch (err) {

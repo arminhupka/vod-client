@@ -1,12 +1,13 @@
-import { NextPage } from "next";
-import MainLayout from "../../../components/layouts/MainLayout";
 import { Alert, Button, TextField } from "@mui/material";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { OkResponseDto, ResetPasswordRequestDto } from "../../../api/api-types";
-import { useMutation } from "react-query";
+import { NextPage } from "next";
 import { ApiError } from "next/dist/server/api-utils";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+
+import { OkResponseDto, ResetPasswordRequestDto } from "../../../api/api-types";
 import { resetPasswordRequest } from "../../../api/user";
 import Loading from "../../../components/atoms/Loading/Loading";
+import MainLayout from "../../../components/layouts/MainLayout";
 
 const ResetPasswordPage: NextPage = () => {
   const { register, handleSubmit } = useForm<ResetPasswordRequestDto>();

@@ -1,9 +1,10 @@
+import Link from "next/link";
+
 import {
   StyledHeading,
   StyledLink,
   StyledWrapper,
 } from "./SectionTitle.styles";
-import Link from "next/link";
 
 interface IProps {
   title: string;

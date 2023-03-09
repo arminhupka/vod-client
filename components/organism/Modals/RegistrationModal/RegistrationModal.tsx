@@ -1,4 +1,4 @@
-import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
   Button,
@@ -7,13 +7,14 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { boolean, object, string } from "yup";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { OkResponseDto, RegisterUserDto } from "../../../../api/api-types";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation } from "react-query";
 import { ApiError } from "next/dist/server/api-utils";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { boolean, object, string } from "yup";
+
+import { OkResponseDto, RegisterUserDto } from "../../../../api/api-types";
 import { userRegister } from "../../../../api/user";
+import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
 import Loading from "../../../atoms/Loading/Loading";
 
 type TProps = Pick<IBaseModalProps, "open" | "onClose">;

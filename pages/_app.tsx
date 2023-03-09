@@ -14,15 +14,16 @@ import { theme } from "../theme/theme";
 
 type TAppProps = AppProps & {
   account: null | GetMeResponsesDto;
+  watched: string[];
 };
 
-function MyApp({ Component, pageProps, account }: TAppProps) {
+function MyApp({ Component, pageProps, account, watched }: TAppProps) {
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <AccountProvider account={account}>
+          <AccountProvider account={account} watched={watched}>
             <CartProvider>
               <Component {...pageProps} />
             </CartProvider>
@@ -41,6 +42,7 @@ MyApp.getInitialProps = async (context: AppContext) => {
   });
 
   let account: null | GetMeResponsesDto = null;
+  const watched = [];
 
   if (token) {
     try {
@@ -49,7 +51,17 @@ MyApp.getInitialProps = async (context: AppContext) => {
           Cookie: `token=${token}`,
         },
       });
+      const { data: watchedLessons } = await client.get<string[]>(
+        "/user/watched",
+        {
+          headers: {
+            Cookie: `token=${token}`,
+          },
+        },
+      );
+
       account = data || null;
+      watched.push(...watchedLessons);
     } catch {
       deleteCookie("token", { res: context.ctx.res, req: context.ctx.req });
     }
@@ -58,6 +70,7 @@ MyApp.getInitialProps = async (context: AppContext) => {
   return {
     ...ctx,
     account,
+    watched,
   };
 };
 

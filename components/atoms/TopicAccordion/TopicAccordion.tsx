@@ -1,6 +1,7 @@
 import {
   AccordionDetails,
   AccordionSummary,
+  Box,
   List,
   Typography,
 } from "@mui/material";
@@ -13,12 +14,26 @@ import { StyledAccordion } from "./TopicAccordion.styles";
 interface IProps {
   course: string;
   topic: GetCourseTopicsItemResponseDto;
+  lessonsCount: number;
 }
 
-const TopicAccordion = ({ topic, course }: IProps): ReactElement => (
-  <StyledAccordion>
+const TopicAccordion = ({
+  topic,
+  course,
+  lessonsCount,
+}: IProps): ReactElement => (
+  <StyledAccordion square elevation={0} disableGutters>
     <AccordionSummary>
-      <Typography>{topic.title}</Typography>
+      <Box
+        width='100%'
+        display='flex'
+        justifyContent='space-between'
+        alignItems='center'>
+        <Typography>{topic.title}</Typography>
+        <Typography variant='body2' fontWeight={600}>
+          {lessonsCount} lekcji
+        </Typography>
+      </Box>
     </AccordionSummary>
     <AccordionDetails sx={{ padding: 0 }}>
       <List disablePadding>

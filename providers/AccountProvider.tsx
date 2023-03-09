@@ -1,21 +1,17 @@
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+
 import { GetMeResponsesDto, OkResponseDto } from "../api/api-types";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
 import { client } from "../api/client";
 
 type accountContextType = {
   user: GetMeResponsesDto | null;
+  watched: string[];
   logout: () => Promise<void>;
 };
 
 const accountContentDefaultValue: accountContextType = {
   user: null,
+  watched: [],
   logout: async () => {},
 };
 
@@ -29,11 +25,12 @@ export const useAccountContext = () =>
 interface IAccountProvider {
   children: ReactNode;
   account: GetMeResponsesDto | null;
+  watched: string[];
 }
 
 export const AccountProvider = ({ children, account }: IAccountProvider) => {
   const [userAccount, setUserAccount] = useState<GetMeResponsesDto | null>(
-    null,
+    account,
   );
 
   const logout = async () =>
@@ -44,14 +41,11 @@ export const AccountProvider = ({ children, account }: IAccountProvider) => {
   const value = useMemo<accountContextType>(
     () => ({
       user: userAccount || null,
+      watched: [],
       logout,
     }),
     [userAccount],
   );
-
-  useEffect(() => {
-    setUserAccount(account);
-  }, [account]);
 
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>

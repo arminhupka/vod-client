@@ -5,7 +5,7 @@ import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 import { ReactElement } from "react";
 
-import { GetUserCourseDto } from "../../../api/api-types";
+import { GetUserCoursesDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
@@ -13,7 +13,7 @@ import MainLayout from "../../../components/layouts/MainLayout";
 import CoursesTable from "../../../components/organism/CoursesTable/CoursesTable";
 
 interface INextPage {
-  courses: GetUserCourseDto[];
+  courses: GetUserCoursesDto[];
 }
 
 const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
@@ -42,7 +42,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get<GetUserCourseDto[]>("/user/courses", {
+    const { data } = await client.get<GetUserCoursesDto[]>("/user/courses", {
       headers: {
         Cookie: `token=${token};`,
       },

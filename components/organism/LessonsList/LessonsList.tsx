@@ -14,7 +14,12 @@ const LessonsList = ({ topics, course }: IProps): ReactElement => (
   <StyledWrapper>
     <List disablePadding>
       {topics.map((item) => (
-        <TopicAccordion course={course} key={item._id} topic={item} />
+        <TopicAccordion
+          course={course}
+          key={item._id}
+          topic={item}
+          lessonsCount={item.lessons.length}
+        />
       ))}
     </List>
   </StyledWrapper>

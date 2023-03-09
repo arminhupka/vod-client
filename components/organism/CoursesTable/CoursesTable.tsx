@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { ReactElement } from "react";
 
-import { GetUserCourseDto } from "../../../api/api-types";
+import { GetUserCoursesDto } from "../../../api/api-types";
 
 interface IProps {
-  courses: GetUserCourseDto[];
+  courses: GetUserCoursesDto[];
 }
 
 const CoursesTable = ({ courses }: IProps): ReactElement => (

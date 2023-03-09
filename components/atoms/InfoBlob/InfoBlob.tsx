@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+
 import { StyledText, StyledWrapper } from "./InfoBlob.styles";
 
 interface IProps {
