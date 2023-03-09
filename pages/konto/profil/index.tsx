@@ -4,6 +4,7 @@ import { NextPage, NextPageContext } from "next";
 import { ReactElement } from "react";
 
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
+import UpdateProfileForm from "../../../components/forms/UpdateProfileForm/UpdateProfileForm";
 import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
 import MainLayout from "../../../components/layouts/MainLayout";
 
@@ -12,7 +13,7 @@ const MyAccountProfile: NextPage = (): ReactElement => (
     <AccountLayout>
       <SectionTitle title='Profil' />
       <Box mt={2}>
-        <p>some form</p>
+        <UpdateProfileForm />
       </Box>
     </AccountLayout>
   </MainLayout>
