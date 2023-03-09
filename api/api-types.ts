@@ -470,6 +470,19 @@ export interface UserCourseLessonDto {
   hasAttachments: boolean;
 }
 
+export interface UpdateUserDto {
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  vatNumber: string;
+  street: string;
+  country: string;
+  postCode: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 export interface CreateCouponDto {
   code: string;
   course: string;
@@ -1695,6 +1708,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/user/watched`,
         method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserControllerUpdateUser
+     * @summary Update current user
+     * @request PATCH:/user
+     */
+    userControllerUpdateUser: (data: UpdateUserDto, params: RequestParams = {}) =>
+      this.request<
+        GetMeResponsesDto,
+        | {
+            /** @example 400 */
+            statusCode: number;
+            /** @example "Bad Request" */
+            message: string;
+            /** @example "Bad Request" */
+            error?: string;
+          }
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+      >({
+        path: `/user`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
