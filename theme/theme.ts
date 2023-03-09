@@ -90,7 +90,6 @@ export const theme = createTheme({
           flexDirection: "column",
           minHeight: "100%",
           width: "100%",
-          background: "#000000",
         },
         "#__next": {
           display: "flex",

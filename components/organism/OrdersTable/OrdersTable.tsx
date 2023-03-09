@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import Link from "next/link";
 import { ReactElement } from "react";
@@ -31,6 +32,15 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
         </TableRow>
       </TableHead>
       <TableBody>
+        {!data.docs.length && (
+          <TableRow>
+            <TableCell colSpan={4}>
+              <Typography textAlign='center'>
+                Nie masz jeszcze żadnych zamówień
+              </Typography>
+            </TableCell>
+          </TableRow>
+        )}
         {data.docs.map((d) => (
           <TableRow key={d._id}>
             <TableCell>{d.orderId}</TableCell>

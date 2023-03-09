@@ -61,6 +61,7 @@ export interface CourseListItem {
   topicsCount: number;
   slug: string;
   featured: boolean;
+  daysAvailable: number;
 }
 
 export interface GetCoursesListResponseDto {
@@ -88,6 +89,7 @@ export interface GetCoursesAdminItem {
   featured: boolean;
   /** @format date-time */
   publishedAt: string;
+  daysAvailable: number;
   /** @format date-time */
   createdAt: string;
   /** @format date-time */

@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { CourseListItem } from "../api/api-types";
 
@@ -27,10 +34,25 @@ interface IProps {
 export const CartProvider = ({ children }: IProps) => {
   const [cart, setCart] = useState<CourseListItem[]>([]);
 
-  const addToCart = (item: CourseListItem) =>
+  const addToCart = (item: CourseListItem) => {
     setCart((prevState) => [...prevState, item]);
-  const removeFromCart = (id: string) =>
+    if (window.localStorage.getItem("cart")) {
+      window.localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  };
+
+  const removeFromCart = (id: string) => {
     setCart((prevState) => prevState.filter((item) => item._id !== id));
+    const localCart = localStorage.getItem("cart");
+    const parsedLocalCart: CourseListItem[] | null = localCart
+      ? JSON.parse(localCart)
+      : null;
+
+    if (parsedLocalCart) {
+      const filtered = parsedLocalCart.filter((item) => item._id !== id);
+      localStorage.setItem("cart", JSON.stringify(filtered));
+    }
+  };
 
   const value = useMemo<cartContextType>(
     () => ({
@@ -39,8 +61,12 @@ export const CartProvider = ({ children }: IProps) => {
       removeFromCart,
       total: cart.length,
     }),
-    [cart],
+    [addToCart, cart],
   );
+
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("cart")!));
+  }, []);
 
   return <CartContent.Provider value={value}>{children}</CartContent.Provider>;
 };

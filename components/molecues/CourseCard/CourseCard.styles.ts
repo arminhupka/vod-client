@@ -25,6 +25,9 @@ export const StyledCover = styled("img")(() => ({
 export const StyledInfoWrapper = styled(Box)(({ theme }) => ({
   flex: 1,
   padding: theme.spacing(2),
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
 }));
 
 export const StyledName = styled(Typography)(({ theme }) => ({

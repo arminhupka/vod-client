@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Button, Container, Typography } from "@mui/material";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -13,6 +6,8 @@ import useModalState from "../../../hooks/useModalState";
 import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import CartButton from "../../atoms/CartButton/CartButton";
+import Logo from "../../atoms/Logo/Logo";
+import CouponModal from "../Modals/CouponModal/CouponModal";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
 
@@ -46,21 +41,27 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useModalState();
+  const {
+    isOpen: isOpenCouponModal,
+    onOpen: onOpenCouponModal,
+    onClose: onCloseCouponModal,
+  } = useModalState();
   const { total } = useCartContext();
 
-  const { user, logout } = useAccountContext();
+  const { user } = useAccountContext();
 
   return (
     <>
       <RegistrationModal onClose={onClose} open={isOpen} />
       <LoginModal onClose={onCloseLoginModal} open={isOpenLoginModal} />
+      <CouponModal onClose={onCloseCouponModal} open={isOpenCouponModal} />
       <AppBar
         position={relative ? "relative" : "fixed"}
         elevation={relative ? 0 : 8}
         sx={{
           background: "#fff",
         }}>
-        {!withoutTopbar && (
+        {(!withoutTopbar || !!process.env.NEXT_PUBLIC_NOTIFICATION) && (
           <Box bgcolor='primary.main'>
             <Container
               sx={{
@@ -69,40 +70,60 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
                 justifyContent: "center",
               }}>
               <Typography fontWeight={600} fontSize={14}>
-                Some info
+                {process.env.NEXT_PUBLIC_NOTIFICATION}
               </Typography>
             </Container>
           </Box>
         )}
-        <Toolbar>
-          <Box>
-            <Typography color='primary'>OW VOD</Typography>
-          </Box>
-          <Box ml='auto' display='flex' alignItems='center' gap={2}>
-            <Link href='/koszyk' passHref>
-              <Box mr={1} display='flex' gap={2}>
-                <CartButton value={total} />
-              </Box>
-            </Link>
-            {!user && (
-              <>
-                <Button onClick={onOpen} variant='contained'>
-                  Rejestracja
-                </Button>
-                <Button variant='outlined' onClick={onOpenLoginModal}>
-                  Zaloguj
-                </Button>
-              </>
-            )}
-            {user && (
-              <Link href='/konto' passHref>
-                <Button component='div' variant='contained'>
-                  Moje Konto
-                </Button>
+        <Container>
+          <Box
+            display='flex'
+            justifyContent='space-between'
+            alignItems='center'>
+            <Logo />
+            <Box display='flex' gap={2}>
+              {links.map((l) => (
+                <Typography
+                  variant='body2'
+                  fontWeight={600}
+                  textTransform='uppercase'
+                  key={l.id}
+                  color='primary'>
+                  {l.name}
+                </Typography>
+              ))}
+            </Box>
+            <Box display='flex' alignItems='center' gap={2}>
+              <Link href='/koszyk' passHref>
+                <Box mr={1} display='flex' gap={2}>
+                  <CartButton value={total} />
+                </Box>
               </Link>
-            )}
+              {!user && (
+                <>
+                  <Button onClick={onOpenLoginModal} size='small'>
+                    Zaloguj
+                  </Button>
+                  <Button onClick={onOpen} variant='contained' size='small'>
+                    Rejestracja
+                  </Button>
+                </>
+              )}
+              {user && (
+                <>
+                  <Link href='/konto' passHref>
+                    <Button component='div' variant='outlined'>
+                      Moje Konto
+                    </Button>
+                  </Link>
+                  <Button variant='contained' onClick={onOpenCouponModal}>
+                    Aktywuj kupon
+                  </Button>
+                </>
+              )}
+            </Box>
           </Box>
-        </Toolbar>
+        </Container>
       </AppBar>
     </>
   );

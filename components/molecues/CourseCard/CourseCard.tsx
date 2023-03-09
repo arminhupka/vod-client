@@ -42,14 +42,18 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
           <InfoBlob message={convertDifficultLevel(difficultyLevel)} />
         )}
       </StyledBlobsWrapper>
-      <Link href={`/kursy/${slug}`}>
-        <StyledCoverWrapper>
-          <StyledCover src='https://i.imgur.com/uQ20Tuq.jpeg' />
-        </StyledCoverWrapper>
+      <Link href={`/kursy/${slug}`} passHref>
+        <a>
+          <StyledCoverWrapper>
+            <StyledCover src='https://i.imgur.com/uQ20Tuq.jpeg' />
+          </StyledCoverWrapper>
+        </a>
       </Link>
       <StyledInfoWrapper>
-        <Link href={`/kursy/${slug}`}>
-          <StyledName>{name}</StyledName>
+        <Link href={`/kursy/${slug}`} passHref>
+          <a>
+            <StyledName>{name}</StyledName>
+          </a>
         </Link>
         <StyledDescription>{shortDescription}</StyledDescription>
       </StyledInfoWrapper>

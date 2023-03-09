@@ -1,10 +1,4 @@
-import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
-import { useMutation } from "react-query";
-import { LoginDto, OkResponseDto } from "../../../../api/api-types";
-import { ApiError } from "next/dist/server/api-utils";
-import { userLogin } from "../../../../api/user";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Loading from "../../../atoms/Loading/Loading";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
   Button,
@@ -13,10 +7,17 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { boolean, object, string } from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+
+import { LoginDto, OkResponseDto } from "../../../../api/api-types";
+import { userLogin } from "../../../../api/user";
+import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
+import Loading from "../../../atoms/Loading/Loading";
 
 const FormSchema = object({
   email: string()
@@ -45,7 +46,6 @@ const LoginModal = ({ open, onClose }: TProps) => {
     isLoading,
     isSuccess,
     isError,
-    status,
     reset: resetMutation,
   } = useMutation<OkResponseDto, ApiError, LoginDto>(
     async (vars) => userLogin(vars),
@@ -77,8 +77,8 @@ const LoginModal = ({ open, onClose }: TProps) => {
   return (
     <BaseModal open={open} onClose={handleClose} title='Logowanie'>
       <>
-        {isLoading && <Loading />}
-        {!isLoading && (
+        {(isLoading || isSuccess) && <Loading />}
+        {!isLoading && !isSuccess && (
           <form onSubmit={handleSubmit(handleLogin)}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
