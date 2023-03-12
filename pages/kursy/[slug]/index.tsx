@@ -74,7 +74,9 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                   price={course.price}
                   salePrice={course.salePrice}
                   withoutPrice={userHaveCourse()}
-                  progress={getCourseProgress()}
+                  progress={getCourseProgress() || 0}
+                  youtubeLink={course.youtubePreview}
+                  userHasCourse={userHaveCourse()}
                 />
               </Grid>
               <Grid item xs={12}>

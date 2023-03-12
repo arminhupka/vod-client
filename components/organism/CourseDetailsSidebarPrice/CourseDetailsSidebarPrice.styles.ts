@@ -44,7 +44,7 @@ interface IStyledPrice extends TypographyProps {
 export const StyledPrice = styled(Typography)<IStyledPrice>(
   ({ theme, sale }) => ({
     fontSize: !sale ? 32 : 24,
-    fontWeight: 500,
+    fontWeight: 700,
     lineHeight: !sale ? "32px" : "24px",
     color: !sale ? theme.palette.text.primary : theme.palette.text.disabled,
     textDecoration: !sale ? "none" : "linethrough",

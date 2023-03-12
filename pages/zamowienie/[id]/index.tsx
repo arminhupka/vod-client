@@ -1,6 +1,7 @@
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 
 import { GetOrderResponseDto } from "../../../api/api-types";
@@ -20,6 +21,10 @@ const OrderDetailsPage: NextPage = () => {
       refetchInterval: 5000,
     },
   );
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify([]));
+  }, []);
 
   return (
     <MainLayout>

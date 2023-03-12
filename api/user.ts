@@ -1,8 +1,10 @@
 import {
+  GetMeResponsesDto,
   LoginDto,
   OkResponseDto,
   RegisterUserDto,
   ResetPasswordRequestDto,
+  UpdateUserDto,
 } from "./api-types";
 import { client } from "./client";
 
@@ -37,5 +39,12 @@ export const userRegister = async (
     firstName: form.firstName,
     lastName: form.lastName,
   });
+  return data;
+};
+
+export const updateUser = async (
+  form: UpdateUserDto,
+): Promise<GetMeResponsesDto> => {
+  const { data } = await client.patch("/user", form, { withCredentials: true });
   return data;
 };

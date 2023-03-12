@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import Link from "next/link";
 
 import {
@@ -14,12 +15,14 @@ interface IProps {
 
 const SectionTitle = ({ title, link, linkName }: IProps) => (
   <StyledWrapper>
-    <StyledHeading>{title}</StyledHeading>
-    {link && linkName && (
-      <Link href={link} passHref>
-        <StyledLink as='span'>{linkName}</StyledLink>
-      </Link>
-    )}
+    <Box>
+      <StyledHeading>{title}</StyledHeading>
+      {link && linkName && (
+        <Link href={link} passHref>
+          <StyledLink as='span'>{linkName}</StyledLink>
+        </Link>
+      )}
+    </Box>
   </StyledWrapper>
 );
 

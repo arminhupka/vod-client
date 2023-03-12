@@ -35,6 +35,8 @@ export const getServerSideProps = async () => {
   const { data } = await client.get<GetCoursesListResponseDto>("/courses", {
     params: {
       limit: 6,
+      orderBy: "published",
+      order: "desc",
     },
   });
 

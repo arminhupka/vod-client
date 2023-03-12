@@ -2,7 +2,6 @@ import { Box, Button } from "@mui/material";
 import { ReactElement } from "react";
 
 import { GetCourseResponseDto } from "../../../api/api-types";
-import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import { formatPrice } from "../../../utils/formatPrice";
 import CourseProgress from "../../atoms/CourseProgress/CourseProgress";
@@ -19,6 +18,8 @@ interface IProps {
   salePrice: number;
   withoutPrice: boolean;
   progress: number;
+  youtubeLink: string | null;
+  userHasCourse: boolean;
 }
 
 const CourseDetailsSidebarPrice = ({
@@ -27,9 +28,10 @@ const CourseDetailsSidebarPrice = ({
   course,
   withoutPrice,
   progress,
+  youtubeLink,
+  userHasCourse,
 }: IProps): ReactElement => {
   const { addToCart, cart } = useCartContext();
-  const { user } = useAccountContext();
 
   const handleAddToCart = () =>
     addToCart({
@@ -51,18 +53,20 @@ const CourseDetailsSidebarPrice = ({
 
   return (
     <StyledWrapper>
-      <Box
-        sx={{
-          ".ytp-impression-link": {
-            display: "none",
-          },
-        }}>
-        <iframe
-          width='100%'
-          height='200'
-          src='https://www.youtube.com/embed/VKNt7vTSGzU'
-          frameBorder='0'></iframe>
-      </Box>
+      {!!youtubeLink && (
+        <Box
+          sx={{
+            ".ytp-impression-link": {
+              display: "none",
+            },
+          }}>
+          <iframe
+            width='100%'
+            height='200'
+            src={youtubeLink}
+            frameBorder='0'></iframe>
+        </Box>
+      )}
       <StyledInnerWrapper solidBg>
         <StyledPricesWrapper>
           {salePrice && (
@@ -85,7 +89,7 @@ const CourseDetailsSidebarPrice = ({
           </Button>
         )}
       </StyledInnerWrapper>
-      {user && (
+      {userHasCourse && (
         <StyledInnerWrapper solidBg>
           <CourseProgress value={progress} />
           <Button fullWidth variant='contained'>
