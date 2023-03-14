@@ -4,7 +4,6 @@ import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
@@ -28,7 +27,6 @@ interface INextPage {
 const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
   const [file, setFile] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const router = useRouter();
 
   const form = useForm<UpdateCourseDto>();
 
@@ -38,7 +36,7 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
     UpdateCourseDto
   >(async (form) => await updateCourse(course._id, form), {
     onSuccess: async () => {
-      router.reload();
+      // router.reload();
     },
   });
 

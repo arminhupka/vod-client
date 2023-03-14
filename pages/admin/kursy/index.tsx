@@ -36,6 +36,7 @@ const AdminCoursesPage: NextPage<INextPage> = ({ courses }) => {
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
+  const { page = 1, limit = 15 } = ctx.query;
   const token = getCookie("token", { res: ctx.res, req: ctx.req });
 
   if (!token) {
@@ -51,6 +52,10 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     const { data } = await client.get<AdminGetCoursesResponseDto>(
       "/admin/courses",
       {
+        params: {
+          page,
+          limit,
+        },
         headers: {
           Cookie: `token=${token};`,
         },
