@@ -40,8 +40,8 @@ export interface CourseResponseDto {
 export interface UpdateCourseDto {
   /** @minLength 3 */
   name?: string;
-  price?: number | string | null;
-  salePrice?: number | string | null;
+  price?: number | string;
+  salePrice?: number | string;
   whatYouLearn?: string[];
   courseIncludes?: string[];
   description?: string;
@@ -379,7 +379,6 @@ export interface GetMeResponsesDto {
   billing: SimplyBillingResponseDto;
   watchedLessons: string[];
   courses: SimplyUserCurses[];
-  role: string;
 }
 
 export interface UserOrderListItem {
@@ -481,7 +480,9 @@ export interface UpdateUserDto {
   city?: string;
   postCode?: string;
   email?: string;
+  /** @minLength 6 */
   password?: string;
+  /** @minLength 6 */
   passwordConfirm?: string;
 }
 
@@ -2057,6 +2058,106 @@ export class Api<
       >({
         path: `/upload`,
         method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  admin = {
+    /**
+     * No description
+     *
+     * @tags Admin
+     * @name AdminControllerFindAllCourses
+     * @summary Get all courses
+     * @request GET:/admin/courses
+     * @secure
+     */
+    adminControllerFindAllCourses: (params: RequestParams = {}) =>
+      this.request<
+        AdminGetCoursesResponseDto,
+        {
+          /** @example 401 */
+          statusCode: number;
+          /** @example "Unauthorized" */
+          message: string;
+          /** @example "Unauthorized" */
+          error?: string;
+        }
+      >({
+        path: `/admin/courses`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin
+     * @name AdminControllerGetCourse
+     * @summary Get course details
+     * @request GET:/admin/courses/{id}
+     * @secure
+     */
+    adminControllerGetCourse: (id: string, params: RequestParams = {}) =>
+      this.request<
+        any,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
+        path: `/admin/courses/${id}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin
+     * @name AdminControllerGetCourseTopics
+     * @summary Get course topics
+     * @request GET:/admin/courses/{id}/topics
+     * @secure
+     */
+    adminControllerGetCourseTopics: (id: string, params: RequestParams = {}) =>
+      this.request<
+        AdminGetCourseTopicsItemResponseDto[],
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
+        path: `/admin/courses/${id}/topics`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,

@@ -68,13 +68,15 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
     form.setValue("description", course.description);
     form.setValue(
       "price",
-      course.price ? formatPrice(course.price).replace("zł", "").trim() : null,
+      course.price
+        ? formatPrice(course.price).replace("zł", "").trim()
+        : undefined,
     );
     form.setValue(
       "salePrice",
       course.salePrice
         ? formatPrice(course.salePrice).replace("zł", "").trim()
-        : null,
+        : undefined,
     );
     form.setValue("youtubePreview", course.youtubePreview || "");
     form.setValue("courseIncludes", course.courseIncludes);
