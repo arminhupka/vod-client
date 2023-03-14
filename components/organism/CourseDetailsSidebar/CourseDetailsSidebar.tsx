@@ -1,3 +1,12 @@
+import { Check } from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  Typography,
+} from "@mui/material";
 import { ReactElement } from "react";
 
 import {
@@ -6,25 +15,50 @@ import {
   StyledWrapper,
 } from "./CourseDetailsSidebar.styles";
 
-const CourseDetailsSidebar = (): ReactElement => (
+interface IProps {
+  whatYouLearn: string[];
+  courseIncludes: string[];
+}
+
+const CourseDetailsSidebar = ({
+  whatYouLearn,
+  courseIncludes,
+}: IProps): ReactElement => (
   <StyledWrapper>
     <StyledItemWrapper>
-      <StyledHeading>Dla kogo jest kurs</StyledHeading>
-      <ul style={{ paddingLeft: 0, listStylePosition: "inside" }}>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-      </ul>
+      <StyledHeading>Czego się nauczysz:</StyledHeading>
+      <List>
+        {whatYouLearn.map((item, idx) => (
+          <ListItem
+            disableGutters
+            key={idx}
+            sx={{ alignItems: "flex-start", gap: 2 }}>
+            <ListItemIcon sx={{ minWidth: "auto" }}>
+              <Check color='primary' />
+            </ListItemIcon>
+            <Typography fontSize={14}>{item}</Typography>
+          </ListItem>
+        ))}
+      </List>
     </StyledItemWrapper>
+    <Box my={2}>
+      <Divider />
+    </Box>
     <StyledItemWrapper>
-      <StyledHeading>Wymagania</StyledHeading>
-      <ul style={{ paddingLeft: 0, listStylePosition: "inside" }}>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-        <li>item</li>
-      </ul>
+      <StyledHeading>Kurs zawiera:</StyledHeading>
+      <List>
+        {courseIncludes.map((item, idx) => (
+          <ListItem
+            disableGutters
+            key={idx}
+            sx={{ alignItems: "flex-start", gap: 2 }}>
+            <ListItemIcon sx={{ minWidth: "auto" }}>
+              <Check color='primary' />
+            </ListItemIcon>
+            <Typography fontSize={14}>{item}</Typography>
+          </ListItem>
+        ))}
+      </List>
     </StyledItemWrapper>
   </StyledWrapper>
 );

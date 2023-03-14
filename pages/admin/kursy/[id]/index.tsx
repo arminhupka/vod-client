@@ -4,6 +4,7 @@ import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
@@ -27,6 +28,7 @@ interface INextPage {
 const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
   const [file, setFile] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm<UpdateCourseDto>();
 
@@ -36,28 +38,28 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
     UpdateCourseDto
   >(async (form) => await updateCourse(course._id, form), {
     onSuccess: async () => {
-      // router.reload();
+      setIsUploading(true);
+      router.reload();
     },
   });
 
   const handleCoursePublish = () => mutate({ status: "PUBLISHED" });
 
-  const handleSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const handleImageUpload = async () => {
-    if (!file) return;
-    setIsUploading(true);
-    await uploadImage(course._id, file);
-    setIsUploading(false);
-  };
-
   const handleSave: SubmitHandler<UpdateCourseDto> = async (form) => {
-    console.log(form);
     mutate(form);
+  };
+
+  const handleFileSelectAndUpload = async (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (e.target && e.target.files) {
+      const file = e.target.files[0];
+      setFile(file);
+      setIsUploading(true);
+      await uploadImage(course._id, file);
+      setIsUploading(false);
+      router.reload();
+    }
   };
 
   useEffect(() => {
@@ -75,6 +77,8 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
         : null,
     );
     form.setValue("youtubePreview", course.youtubePreview || "");
+    form.setValue("courseIncludes", course.courseIncludes);
+    form.setValue("whatYouLearn", course.whatYouLearn);
   }, []);
 
   return (
@@ -93,7 +97,10 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
           </Button>
         </Box>
         <FormProvider {...form}>
-          <UpdateCourseForm />
+          <UpdateCourseForm
+            cover={course.cover}
+            handleFileSelectAndUpload={handleFileSelectAndUpload}
+          />
         </FormProvider>
       </AdminLayout>
     </>
@@ -116,7 +123,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
 
   try {
     const { data: course } = await client.get<AdminGetCourseDetailsResponseDto>(
-      `/courses/${id}`,
+      `admin/courses/${id}`,
       {
         headers: {
           Cookie: `token=${token};`,

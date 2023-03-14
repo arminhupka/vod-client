@@ -45,7 +45,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
         </title>
       </Head>
       <MainLayout>
-        <Grid container spacing={2}>
+        <Grid container spacing={5}>
           <Grid item lg={12}>
             <CourseDetailsHeading
               name={course.name}
@@ -54,7 +54,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
             />
           </Grid>
           <Grid item lg={8}>
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
               <Grid item xs={12}>
                 <CourseCover alt={course.name} url={course.cover} />
               </Grid>
@@ -67,7 +67,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
             </Grid>
           </Grid>
           <Grid item lg={4}>
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
               <Grid item xs={12}>
                 <CourseDetailsSidebarPrice
                   course={course}
@@ -80,7 +80,10 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <CourseDetailsSidebar />
+                <CourseDetailsSidebar
+                  whatYouLearn={course.whatYouLearn}
+                  courseIncludes={course.courseIncludes}
+                />
               </Grid>
             </Grid>
           </Grid>
