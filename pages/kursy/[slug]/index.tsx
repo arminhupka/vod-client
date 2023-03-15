@@ -24,7 +24,8 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
   const { user } = useAccountContext();
 
   const userHaveCourse = () =>
-    !!user?.courses.find((item) => item.course === course._id);
+    //@ts-ignore
+    !!user?.courses.find((item) => item.course._id === course._id);
 
   const getCourseProgress = () => {
     const courseLessons = topics.map((topic) => topic.lessons).flat();
@@ -73,7 +74,6 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                   course={course}
                   price={course.price}
                   salePrice={course.salePrice}
-                  withoutPrice={userHaveCourse()}
                   progress={getCourseProgress() || 0}
                   youtubeLink={course.youtubePreview}
                   userHasCourse={userHaveCourse()}

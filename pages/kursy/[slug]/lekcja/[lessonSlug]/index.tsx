@@ -13,10 +13,6 @@ import SectionTitle from "../../../../../components/atoms/SectionTitle/SectionTi
 import LessonLayout from "../../../../../components/layouts/LessonLayout";
 import LessonsList from "../../../../../components/organism/LessonsList/LessonsList";
 
-// const DynamicHeader = dynamic(() => import('../components/header'), {
-//   loading: () => <p>Loading...</p>,
-// })
-
 const DynamicPlayer = dynamic(
   () => import("../../../../../components/atoms/CoursePlayer/CoursePlayer"),
 );

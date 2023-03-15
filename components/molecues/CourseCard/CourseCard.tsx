@@ -1,10 +1,11 @@
-import { ShoppingCart } from "@mui/icons-material";
+import { Movie, ShoppingCart } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
 import { CourseListItem } from "../../../api/api-types";
+import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import { convertDifficultLevel } from "../../../utils/convertDifficultLevel";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -34,6 +35,11 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
   } = props;
 
   const { addToCart, cart } = useCartContext();
+  const { user } = useAccountContext();
+
+  const userHaveCourse = () =>
+    //  @ts-ignore
+    !!user?.courses.find((item) => item.course._id === _id!);
 
   return (
     <StyledWrapper>
@@ -67,11 +73,11 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
       <StyledButtonWrapper>
         <StyledPrice>{formatPrice(salePrice || price)}</StyledPrice>
         <Button
-          disabled={!!cart.find((item) => item._id === _id)}
-          startIcon={<ShoppingCart />}
+          disabled={!!cart.find((item) => item._id === _id) || userHaveCourse()}
+          startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}
           variant='contained'
           onClick={() => addToCart(props)}>
-          Dodaj do koszyka
+          {userHaveCourse() ? "Przejdz do kursu" : "Dodaj do koszyka"}
         </Button>
       </StyledButtonWrapper>
     </StyledWrapper>

@@ -5,37 +5,29 @@ import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 
-import { AdminGetCoursesResponseDto } from "../../../api/api-types";
+import { CouponsListResponseDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AdminLayout from "../../../components/layouts/AdminLayout/AdminLayout";
-import AdminCoursesTable from "../../../components/organism/AdminCoursesTable/AdminCoursesTable";
-import NewCourseModal from "../../../components/organism/Modals/NewCourseModal/NewCourseModal";
-import useModalState from "../../../hooks/useModalState";
 
-interface INextPage {
-  courses: AdminGetCoursesResponseDto;
+interface IProps {
+  coupons: CouponsListResponseDto;
 }
 
-const AdminCoursesPage: NextPage<INextPage> = ({ courses }) => {
-  const { isOpen, onOpen, onClose } = useModalState();
-
+const AdminCouponsPage: NextPage<IProps> = ({ coupons }) => {
   return (
-    <>
-      <NewCourseModal onClose={onClose} open={isOpen} />
-      <AdminLayout>
-        <SectionTitle title='Kursy'>
-          <Button
-            onClick={onOpen}
-            variant='contained'
-            size='small'
-            startIcon={<Add />}>
-            Dodaj kurs
-          </Button>
-        </SectionTitle>
-        <AdminCoursesTable data={courses} />
-      </AdminLayout>
-    </>
+    <AdminLayout>
+      <SectionTitle title='Kupony'>
+        <Button variant='contained' size='small' startIcon={<Add />}>
+          Nowy kupon
+        </Button>
+      </SectionTitle>
+      <ul>
+        {coupons.docs.map((c) => (
+          <li key={c._id}>{c.code}</li>
+        ))}
+      </ul>
+    </AdminLayout>
   );
 };
 
@@ -53,22 +45,19 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get<AdminGetCoursesResponseDto>(
-      "/admin/courses",
-      {
-        params: {
-          page,
-          limit,
-        },
-        headers: {
-          Cookie: `token=${token};`,
-        },
+    const { data } = await client.get<CouponsListResponseDto>("/coupons", {
+      params: {
+        page,
+        limit,
       },
-    );
+      headers: {
+        Cookie: `token=${token};`,
+      },
+    });
 
     return {
       props: {
-        courses: data,
+        coupons: data,
       },
     };
   } catch (err) {
@@ -90,4 +79,5 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     };
   }
 };
-export default AdminCoursesPage;
+
+export default AdminCouponsPage;

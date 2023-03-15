@@ -9,3 +9,12 @@ export const CreateNewTopic = async (
   });
   return data;
 };
+
+export const DeleteTopic = async (
+  topicId: string,
+): Promise<TopicResponseDto> => {
+  const { data } = await client.delete<TopicResponseDto>(`/topics/${topicId}`, {
+    withCredentials: true,
+  });
+  return data;
+};

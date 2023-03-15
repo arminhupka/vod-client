@@ -22,7 +22,9 @@ const NewTopicModal = ({ open, onClose }: TProps): ReactElement => {
     TopicResponseDto,
     AxiosError<ApiError>,
     NewTopicDto
-  >(async (form) => await CreateNewTopic(form));
+  >(async (form) => await CreateNewTopic(form), {
+    onSuccess: () => router.push(router.asPath),
+  });
 
   const handleCreateTopic: SubmitHandler<NewTopicDto> = (form) => {
     form.course = id! as string;

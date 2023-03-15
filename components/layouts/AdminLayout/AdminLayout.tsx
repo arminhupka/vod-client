@@ -1,16 +1,13 @@
-import {
-  Backdrop,
-  CircularProgress,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { ReactElement, ReactNode } from "react";
 
 import {
   StyledBody,
   StyledDrawer,
+  StyledList,
+  StyledListItem,
+  StyledListItemText,
   StyledPageWrapper,
 } from "./AdminLayout.styles";
 
@@ -28,18 +25,33 @@ const AdminLayout = ({ children, isLoading }: IProps): ReactElement => (
     )}
     <StyledPageWrapper>
       <StyledDrawer>
-        <List>
-          <ListItem>
+        <StyledList>
+          <StyledListItem>
             <Link href='/admin/kursy' passHref>
-              <Typography component='a'>Kursy</Typography>
+              <StyledListItemText>Kursy</StyledListItemText>
             </Link>
-          </ListItem>
-          <ListItem>
+          </StyledListItem>
+          <StyledListItem>
             <Link href='/admin/zamowienia' passHref>
-              <Typography component='a'>Zamówienia</Typography>
+              <StyledListItemText>Zamówienia</StyledListItemText>
             </Link>
-          </ListItem>
-        </List>
+          </StyledListItem>
+          <StyledListItem>
+            <Link href='/admin/kupony' passHref>
+              <StyledListItemText>Kupony</StyledListItemText>
+            </Link>
+          </StyledListItem>
+          <StyledListItem>
+            <Link href='/admin/uzytkownicy' passHref>
+              <StyledListItemText>Użytkownicy</StyledListItemText>
+            </Link>
+          </StyledListItem>
+          <StyledListItem>
+            <Link href='/admin/bannery' passHref>
+              <StyledListItemText>Bannery</StyledListItemText>
+            </Link>
+          </StyledListItem>
+        </StyledList>
       </StyledDrawer>
       <StyledBody>{children}</StyledBody>
     </StyledPageWrapper>

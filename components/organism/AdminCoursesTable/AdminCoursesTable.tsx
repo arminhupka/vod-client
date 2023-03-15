@@ -1,7 +1,9 @@
-import { Check } from "@mui/icons-material";
+import { Check, Delete } from "@mui/icons-material";
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -10,11 +12,18 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
+import { AxiosError } from "axios";
+import { ApiError } from "next/dist/server/api-utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { useMutation } from "react-query";
 
-import { AdminGetCoursesResponseDto } from "../../../api/api-types";
+import {
+  AdminGetCoursesResponseDto,
+  CourseResponseDto,
+} from "../../../api/api-types";
+import { DeleteCourse } from "../../../api/courses";
 import { convertStatus } from "../../../utils/convertStatus";
 import { formatPrice } from "../../../utils/formatPrice";
 
@@ -46,58 +55,87 @@ const AdminCoursesTable = ({ data }: IProps): ReactElement => {
     router.reload();
   };
 
+  const { mutateAsync, isLoading } = useMutation<
+    CourseResponseDto,
+    AxiosError<ApiError>,
+    string
+  >(async (id) => await DeleteCourse(id));
+
+  const handleCourseDelete = async (id: string) => {
+    await mutateAsync(id);
+    await router.replace(router.asPath);
+  };
+
   return (
-    <Box>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Nazwa</TableCell>
-              <TableCell>Cena</TableCell>
-              <TableCell>Cena promocyjna</TableCell>
-              <TableCell>Polecany</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Opublikowano</TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.docs.map((c) => (
-              <TableRow key={c._id}>
-                <TableCell>{c.name}</TableCell>
-                <TableCell>{formatPrice(c.price) || "-"}</TableCell>
-                <TableCell>{formatPrice(c.salePrice) || "-"}</TableCell>
-                <TableCell>
-                  {c.featured ? <Check color='primary' /> : "-"}
-                </TableCell>
-                <TableCell>{convertStatus(c.status)}</TableCell>
-                <TableCell>
-                  {c.publishedAt
-                    ? new Date(c.publishedAt).toLocaleDateString("pl-PL")
-                    : "-"}
-                </TableCell>
-                <TableCell>
-                  <Link href={`/admin/kursy/${c._id}`} passHref>
-                    <Button component='a' size='small' variant='outlined'>
-                      Szczegóły
-                    </Button>
-                  </Link>
-                </TableCell>
+    <>
+      {isLoading && (
+        <Backdrop open sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+          <CircularProgress color='primary' />
+        </Backdrop>
+      )}
+      <Box>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nazwa</TableCell>
+                <TableCell>Cena</TableCell>
+                <TableCell>Cena promocyjna</TableCell>
+                <TableCell>Polecany</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Opublikowano</TableCell>
+                <TableCell />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component='div'
-        rowsPerPageOptions={[5, 10, 15]}
-        count={data.totalDocs}
-        rowsPerPage={data.limit}
-        page={data.page - 1}
-        onPageChange={(event, page) => handlePageChange(page + 1)}
-        onRowsPerPageChange={(event) => handleLimitChange(+event.target.value)}
-      />
-    </Box>
+            </TableHead>
+            <TableBody>
+              {data.docs.map((c) => (
+                <TableRow key={c._id}>
+                  <TableCell>{c.name}</TableCell>
+                  <TableCell>{formatPrice(c.price) || "-"}</TableCell>
+                  <TableCell>{formatPrice(c.salePrice) || "-"}</TableCell>
+                  <TableCell>
+                    {c.featured ? <Check color='primary' /> : "-"}
+                  </TableCell>
+                  <TableCell>{convertStatus(c.status)}</TableCell>
+                  <TableCell>
+                    {c.publishedAt
+                      ? new Date(c.publishedAt).toLocaleDateString("pl-PL")
+                      : "-"}
+                  </TableCell>
+                  <TableCell>
+                    <Box display='flex' gap={2}>
+                      <Link href={`/admin/kursy/${c._id}`} passHref>
+                        <Button component='a' size='small' variant='outlined'>
+                          Szczegóły
+                        </Button>
+                      </Link>
+                      <Button
+                        color='error'
+                        variant='contained'
+                        size='small'
+                        onClick={() => handleCourseDelete(c._id)}>
+                        <Delete />
+                      </Button>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component='div'
+          rowsPerPageOptions={[5, 10, 15]}
+          count={data.totalDocs}
+          rowsPerPage={data.limit}
+          page={data.page - 1}
+          onPageChange={(event, page) => handlePageChange(page + 1)}
+          onRowsPerPageChange={(event) =>
+            handleLimitChange(+event.target.value)
+          }
+        />
+      </Box>
+    </>
   );
 };
 

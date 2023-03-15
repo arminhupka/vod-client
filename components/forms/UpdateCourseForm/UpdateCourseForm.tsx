@@ -3,12 +3,15 @@ import Image from "next/image";
 import { ChangeEvent, MutableRefObject, ReactElement, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { AdminGetCourseTopicsItemResponseDto } from "../../../api/api-types";
 import useModalState from "../../../hooks/useModalState";
+import AdminTopicsList from "../../atoms/AdminTopicsList/AdminTopicsList";
 import FeatureList from "../../FeatureList/FeatureList";
 import NewTopicModal from "../../organism/Modals/NewTopicModal/NewTopicModal";
 
 interface IProps {
   cover: string | null;
+  topics: AdminGetCourseTopicsItemResponseDto[];
   handleFileSelectAndUpload: (
     e: ChangeEvent<HTMLInputElement>,
   ) => Promise<void>;
@@ -17,6 +20,7 @@ interface IProps {
 export const UpdateCourseForm = ({
   cover,
   handleFileSelectAndUpload,
+  topics,
 }: IProps): ReactElement => {
   const { register, setValue, watch } = useFormContext();
   const {
@@ -89,6 +93,7 @@ export const UpdateCourseForm = ({
                   <Paper elevation={12}>
                     <Box p={2}>
                       <Box
+                        mb={2}
                         display='flex'
                         alignItems='center'
                         justifyContent='space-between'>
@@ -101,6 +106,9 @@ export const UpdateCourseForm = ({
                           onClick={onOpenNewTopicModal}>
                           Dodaj temat
                         </Button>
+                      </Box>
+                      <Box>
+                        <AdminTopicsList data={topics} />
                       </Box>
                     </Box>
                   </Paper>

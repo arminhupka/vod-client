@@ -10,6 +10,7 @@ import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AccountLayout from "../../../components/layouts/AccountLayout/AccountLayout";
 import MainLayout from "../../../components/layouts/MainLayout";
+import CourseWideCard from "../../../components/molecues/CourseWideCard/CourseWideCard";
 import CoursesTable from "../../../components/organism/CoursesTable/CoursesTable";
 
 interface INextPage {
@@ -23,6 +24,9 @@ const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
         <SectionTitle title='Moje kursy' />
         <Box mt={2}>
           <CoursesTable courses={courses} />
+          {courses.map((c) => (
+            <CourseWideCard key={c.course._id} course={c} />
+          ))}
         </Box>
       </AccountLayout>
     </MainLayout>

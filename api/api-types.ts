@@ -40,8 +40,8 @@ export interface CourseResponseDto {
 export interface UpdateCourseDto {
   /** @minLength 3 */
   name?: string;
-  price?: number | string;
-  salePrice?: number | string;
+  price?: number;
+  salePrice?: number;
   whatYouLearn?: string[];
   courseIncludes?: string[];
   description?: string;
@@ -194,6 +194,7 @@ export interface NewLessonDto {
   course: string;
   topic: string;
   order: number;
+  videoLink: string;
 }
 
 export interface LessonResponseDto {
@@ -367,8 +368,12 @@ export interface SimplyBillingResponseDto {
   postCode: string;
 }
 
+export interface UserCoursesCourse {
+  _id: string;
+}
+
 export interface SimplyUserCurses {
-  course: string;
+  course: UserCoursesCourse;
   /** @format date-time */
   availableUntil: string;
 }
@@ -379,6 +384,7 @@ export interface GetMeResponsesDto {
   billing: SimplyBillingResponseDto;
   watchedLessons: string[];
   courses: SimplyUserCurses[];
+  role: "ADMIN" | "USER";
 }
 
 export interface UserOrderListItem {
@@ -432,6 +438,7 @@ export interface UserCourseDto {
   featured: boolean;
   lessonsCount: number;
   topicsCount: number;
+  cover: string;
 }
 
 export interface GetUserCoursesDto {
@@ -559,22 +566,16 @@ export interface FullRequestParams extends Omit<RequestInit, "body"> {
   cancelToken?: CancelToken;
 }
 
-export type RequestParams = Omit<
-  FullRequestParams,
-  "body" | "method" | "query" | "path"
->;
+export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
   baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null,
-  ) => Promise<RequestParams | void> | RequestParams | void;
+  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
   customFetch?: typeof fetch;
 }
 
-export interface HttpResponse<D extends unknown, E extends unknown = unknown>
-  extends Response {
+export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
   data: D;
   error: E;
 }
@@ -593,8 +594,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
   private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) =>
-    fetch(...fetchParams);
+  private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams);
 
   private baseApiParams: RequestParams = {
     credentials: "same-origin",
@@ -613,9 +613,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
   protected encodeQueryParam(key: string, value: any) {
     const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(
-      typeof value === "number" ? value : `${value}`,
-    )}`;
+    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
   }
 
   protected addQueryParam(query: QueryParamsType, key: string) {
@@ -629,15 +627,9 @@ export class HttpClient<SecurityDataType = unknown> {
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {};
-    const keys = Object.keys(query).filter(
-      (key) => "undefined" !== typeof query[key],
-    );
+    const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
     return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key),
-      )
+      .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
       .join("&");
   }
 
@@ -648,13 +640,8 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string"
-        ? JSON.stringify(input)
-        : input,
+      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
+    [ContentType.Text]: (input: any) => (input !== null && typeof input !== "string" ? JSON.stringify(input) : input),
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
@@ -671,10 +658,7 @@ export class HttpClient<SecurityDataType = unknown> {
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
   };
 
-  protected mergeRequestParams(
-    params1: RequestParams,
-    params2?: RequestParams,
-  ): RequestParams {
+  protected mergeRequestParams(params1: RequestParams, params2?: RequestParams): RequestParams {
     return {
       ...this.baseApiParams,
       ...params1,
@@ -687,9 +671,7 @@ export class HttpClient<SecurityDataType = unknown> {
     };
   }
 
-  protected createAbortSignal = (
-    cancelToken: CancelToken,
-  ): AbortSignal | undefined => {
+  protected createAbortSignal = (cancelToken: CancelToken): AbortSignal | undefined => {
     if (this.abortControllers.has(cancelToken)) {
       const abortController = this.abortControllers.get(cancelToken);
       if (abortController) {
@@ -733,27 +715,15 @@ export class HttpClient<SecurityDataType = unknown> {
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
     const responseFormat = format || requestParams.format;
 
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${
-        queryString ? `?${queryString}` : ""
-      }`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData
-            ? { "Content-Type": type }
-            : {}),
-        },
-        signal: cancelToken
-          ? this.createAbortSignal(cancelToken)
-          : requestParams.signal,
-        body:
-          typeof body === "undefined" || body === null
-            ? null
-            : payloadFormatter(body),
+    return this.customFetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
+      ...requestParams,
+      headers: {
+        ...(requestParams.headers || {}),
+        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
       },
-    ).then(async (response) => {
+      signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
+      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+    }).then(async (response) => {
       const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
@@ -791,9 +761,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Olga Wałek API Documentation
  */
-export class Api<
-  SecurityDataType extends unknown,
-> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   /**
    * No description
    *
@@ -816,10 +784,7 @@ export class Api<
      * @summary Create new course
      * @request POST:/courses
      */
-    coursesControllerCreateCourse: (
-      data: NewCourseDto,
-      params: RequestParams = {},
-    ) =>
+    coursesControllerCreateCourse: (data: NewCourseDto, params: RequestParams = {}) =>
       this.request<
         CourseResponseDto,
         {
@@ -848,14 +813,12 @@ export class Api<
      * @request GET:/courses
      */
     coursesControllerGetCourses: (params: RequestParams = {}) =>
-      this.request<AdminGetCoursesResponseDto | GetCoursesListResponseDto, any>(
-        {
-          path: `/courses`,
-          method: "GET",
-          format: "json",
-          ...params,
-        },
-      ),
+      this.request<AdminGetCoursesResponseDto | GetCoursesListResponseDto, any>({
+        path: `/courses`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
 
     /**
      * No description
@@ -865,11 +828,7 @@ export class Api<
      * @summary Update course
      * @request PATCH:/courses/{id}
      */
-    coursesControllerUpdateCourse: (
-      id: string,
-      data: UpdateCourseDto,
-      params: RequestParams = {},
-    ) =>
+    coursesControllerUpdateCourse: (id: string, data: UpdateCourseDto, params: RequestParams = {}) =>
       this.request<
         CourseResponseDto,
         {
@@ -949,10 +908,7 @@ export class Api<
      * @summary Get course lessons by id or slug
      * @request GET:/courses/{id}/lessons
      */
-    coursesControllerGetCourseLessons: (
-      id: string,
-      params: RequestParams = {},
-    ) =>
+    coursesControllerGetCourseLessons: (id: string, params: RequestParams = {}) =>
       this.request<
         AdminGetCourseLessonsItemResponseDto | GetCourseLessonsItemResponseDto,
         {
@@ -978,10 +934,7 @@ export class Api<
      * @summary Get course topics by id or slug
      * @request GET:/courses/{id}/topics
      */
-    coursesControllerGetCourseTopics: (
-      id: string,
-      params: RequestParams = {},
-    ) =>
+    coursesControllerGetCourseTopics: (id: string, params: RequestParams = {}) =>
       this.request<
         AdminGetCourseTopicsItemResponseDto | GetCourseTopicsItemResponseDto,
         {
@@ -1009,10 +962,7 @@ export class Api<
      * @request POST:/lessons
      * @secure
      */
-    lessonsControllerCreateLesson: (
-      data: NewLessonDto,
-      params: RequestParams = {},
-    ) =>
+    lessonsControllerCreateLesson: (data: NewLessonDto, params: RequestParams = {}) =>
       this.request<
         LessonResponseDto,
         | {
@@ -1050,11 +1000,7 @@ export class Api<
      * @request PATCH:/lessons/{id}
      * @secure
      */
-    lessonsControllerUpdateLesson: (
-      id: string,
-      data: UpdateLessonDto,
-      params: RequestParams = {},
-    ) =>
+    lessonsControllerUpdateLesson: (id: string, data: UpdateLessonDto, params: RequestParams = {}) =>
       this.request<
         LessonResponseDto,
         | {
@@ -1120,10 +1066,7 @@ export class Api<
      * @request PUT:/lessons/{id}/watched
      * @secure
      */
-    lessonsControllerSetWatchedLesson: (
-      id: string,
-      params: RequestParams = {},
-    ) =>
+    lessonsControllerSetWatchedLesson: (id: string, params: RequestParams = {}) =>
       this.request<
         OkResponseDto,
         | {
@@ -1198,11 +1141,7 @@ export class Api<
      * @request PATCH:/topics/{id}
      * @secure
      */
-    topicsControllerUpdateTopic: (
-      id: string,
-      data: UpdateTopicDto,
-      params: RequestParams = {},
-    ) =>
+    topicsControllerUpdateTopic: (id: string, data: UpdateTopicDto, params: RequestParams = {}) =>
       this.request<
         TopicResponseDto,
         | {
@@ -1379,10 +1318,7 @@ export class Api<
      * @summary User register
      * @request POST:/users
      */
-    usersControllerRegister: (
-      data: RegisterUserDto,
-      params: RequestParams = {},
-    ) =>
+    usersControllerRegister: (data: RegisterUserDto, params: RequestParams = {}) =>
       this.request<OkResponseDto, any>({
         path: `/users`,
         method: "POST",
@@ -1400,10 +1336,7 @@ export class Api<
      * @summary Activating user account
      * @request GET:/users/activate/{token}
      */
-    usersControllerActivateAccount: (
-      token: string,
-      params: RequestParams = {},
-    ) =>
+    usersControllerActivateAccount: (token: string, params: RequestParams = {}) =>
       this.request<
         OkResponseDto,
         {
@@ -1429,10 +1362,7 @@ export class Api<
      * @summary Request password change
      * @request POST:/users/reset-password
      */
-    usersControllerResetPasswordRequest: (
-      data: ResetPasswordRequestDto,
-      params: RequestParams = {},
-    ) =>
+    usersControllerResetPasswordRequest: (data: ResetPasswordRequestDto, params: RequestParams = {}) =>
       this.request<OkResponseDto, any>({
         path: `/users/reset-password`,
         method: "POST",
@@ -1450,11 +1380,7 @@ export class Api<
      * @summary Reset password with token
      * @request POST:/users/reset-password/{token}
      */
-    usersControllerResetPasswordWithToken: (
-      token: string,
-      data: ResetPasswordDto,
-      params: RequestParams = {},
-    ) =>
+    usersControllerResetPasswordWithToken: (token: string, data: ResetPasswordDto, params: RequestParams = {}) =>
       this.request<
         OkResponseDto,
         {
@@ -1483,10 +1409,7 @@ export class Api<
      * @summary Create Stripe checkout session and order
      * @request POST:/stripe/create-session
      */
-    stripeControllerSession: (
-      data: CreateSessionDto,
-      params: RequestParams = {},
-    ) =>
+    stripeControllerSession: (data: CreateSessionDto, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/stripe/create-session`,
         method: "POST",
@@ -1557,7 +1480,7 @@ export class Api<
      */
     authControllerLogout: (params: RequestParams = {}) =>
       this.request<
-        void,
+        OkResponseDto,
         {
           /** @example 401 */
           statusCode: number;
@@ -1731,11 +1654,7 @@ export class Api<
      * @summary Get course lesson
      * @request GET:/user/courses/{course}/lesson/{id}
      */
-    userControllerGetCourseLesson: (
-      id: string,
-      course: string,
-      params: RequestParams = {},
-    ) =>
+    userControllerGetCourseLesson: (id: string, course: string, params: RequestParams = {}) =>
       this.request<
         UserCourseLessonDto,
         | {
@@ -1811,10 +1730,7 @@ export class Api<
      * @summary Update current user
      * @request PATCH:/user
      */
-    userControllerUpdateUser: (
-      data: UpdateUserDto,
-      params: RequestParams = {},
-    ) =>
+    userControllerUpdateUser: (data: UpdateUserDto, params: RequestParams = {}) =>
       this.request<
         GetMeResponsesDto,
         | {
@@ -1852,10 +1768,7 @@ export class Api<
      * @request POST:/coupons
      * @secure
      */
-    couponsControllerCreate: (
-      data: CreateCouponDto,
-      params: RequestParams = {},
-    ) =>
+    couponsControllerCreate: (data: CreateCouponDto, params: RequestParams = {}) =>
       this.request<
         CouponResponseDto,
         | {
@@ -1965,10 +1878,7 @@ export class Api<
      * @request POST:/coupons/activate
      * @secure
      */
-    couponsControllerActivate: (
-      data: ActivateCourseDto,
-      params: RequestParams = {},
-    ) =>
+    couponsControllerActivate: (data: ActivateCourseDto, params: RequestParams = {}) =>
       this.request<
         CouponResponseDto,
         | {

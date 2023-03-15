@@ -12,6 +12,7 @@ import { useMutation } from "react-query";
 import { updateCourse } from "../../../../api/admin";
 import {
   AdminGetCourseDetailsResponseDto,
+  AdminGetCourseTopicsItemResponseDto,
   UpdateCourseDto,
 } from "../../../../api/api-types";
 import { client } from "../../../../api/client";
@@ -23,9 +24,10 @@ import { formatPrice } from "../../../../utils/formatPrice";
 
 interface INextPage {
   course: AdminGetCourseDetailsResponseDto;
+  topics: AdminGetCourseTopicsItemResponseDto[];
 }
 
-const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
+const AdminCourseDetails: NextPage<INextPage> = ({ course, topics }) => {
   const [file, setFile] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const router = useRouter();
@@ -101,6 +103,7 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course }) => {
         <FormProvider {...form}>
           <UpdateCourseForm
             cover={course.cover}
+            topics={topics}
             handleFileSelectAndUpload={handleFileSelectAndUpload}
           />
         </FormProvider>
@@ -133,9 +136,18 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       },
     );
 
+    const { data: topics } = await client.get<
+      AdminGetCourseTopicsItemResponseDto[]
+    >(`admin/courses/${id}/topics`, {
+      headers: {
+        Cookie: `token=${token};`,
+      },
+    });
+
     return {
       props: {
         course,
+        topics,
       },
     };
   } catch (err) {
