@@ -5,26 +5,41 @@ import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 
-import { CouponsListResponseDto } from "../../../api/api-types";
+import {
+  CouponsListResponseDto,
+  GetCoursesAdminItem,
+} from "../../../api/api-types";
 import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AdminLayout from "../../../components/layouts/AdminLayout/AdminLayout";
 import AdminCouponsTable from "../../../components/molecues/AdminCouponsTable/AdminCouponsTable";
+import NewCouponModal from "../../../components/organism/Modals/NewCouponModal/NewCouponModal";
+import useModalState from "../../../hooks/useModalState";
 
 interface IProps {
   coupons: CouponsListResponseDto;
+  courses: GetCoursesAdminItem[];
 }
 
-const AdminCouponsPage: NextPage<IProps> = ({ coupons }) => {
+const AdminCouponsPage: NextPage<IProps> = ({ coupons, courses }) => {
+  const { onClose, isOpen, onOpen } = useModalState();
+
   return (
-    <AdminLayout>
-      <SectionTitle title='Kupony'>
-        <Button variant='contained' size='small' startIcon={<Add />}>
-          Nowy kupon
-        </Button>
-      </SectionTitle>
-      <AdminCouponsTable data={coupons} />
-    </AdminLayout>
+    <>
+      <NewCouponModal courses={courses} onClose={onClose} open={isOpen} />
+      <AdminLayout>
+        <SectionTitle title='Kupony'>
+          <Button
+            variant='contained'
+            size='small'
+            startIcon={<Add />}
+            onClick={onOpen}>
+            Nowy kupon
+          </Button>
+        </SectionTitle>
+        <AdminCouponsTable data={coupons} />
+      </AdminLayout>
+    </>
   );
 };
 
@@ -42,19 +57,35 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data } = await client.get<CouponsListResponseDto>("/coupons", {
-      params: {
-        page,
-        limit,
+    const { data: coupons } = await client.get<CouponsListResponseDto>(
+      "/coupons",
+      {
+        params: {
+          page,
+          limit,
+        },
+        headers: {
+          Cookie: `token=${token};`,
+        },
       },
-      headers: {
-        Cookie: `token=${token};`,
+    );
+
+    const { data: courses } = await client.get<GetCoursesAdminItem[]>(
+      "/admin/c",
+      {
+        params: {
+          status: "PUBLISHED",
+        },
+        headers: {
+          Cookie: `token=${token};`,
+        },
       },
-    });
+    );
 
     return {
       props: {
-        coupons: data,
+        coupons,
+        courses,
       },
     };
   } catch (err) {
