@@ -9,6 +9,7 @@ import { CouponsListResponseDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AdminLayout from "../../../components/layouts/AdminLayout/AdminLayout";
+import AdminCouponsTable from "../../../components/molecues/AdminCouponsTable/AdminCouponsTable";
 
 interface IProps {
   coupons: CouponsListResponseDto;
@@ -22,11 +23,7 @@ const AdminCouponsPage: NextPage<IProps> = ({ coupons }) => {
           Nowy kupon
         </Button>
       </SectionTitle>
-      <ul>
-        {coupons.docs.map((c) => (
-          <li key={c._id}>{c.code}</li>
-        ))}
-      </ul>
+      <AdminCouponsTable data={coupons} />
     </AdminLayout>
   );
 };

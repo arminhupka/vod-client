@@ -540,7 +540,9 @@ export interface CouponsListResponseDto {
   docs: CouponResponseDto[];
 }
 
-export type ActivateCourseDto = object;
+export interface ActivateCourseDto {
+  code: string;
+}
 
 export type CreateOrderDto = object;
 
@@ -2068,6 +2070,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/admin/courses/${id}/topics`,
         method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin
+     * @name AdminControllerGetAllCourses
+     * @summary Get all courses without pagination
+     * @request GET:/admin/c
+     * @secure
+     */
+    adminControllerGetAllCourses: (
+      query: {
+        status: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        GetCoursesAdminItem[],
+        {
+          /** @example 401 */
+          statusCode: number;
+          /** @example "Unauthorized" */
+          message: string;
+          /** @example "Unauthorized" */
+          error?: string;
+        }
+      >({
+        path: `/admin/c`,
+        method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,

@@ -72,7 +72,7 @@ export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   width: "100%",
   padding: `${theme.spacing(2)}`,
   color: theme.palette.common.black,
-  fontWeight: 700,
+  fontWeight: 500,
 }));
 
 StyledListItemText.defaultProps = {
