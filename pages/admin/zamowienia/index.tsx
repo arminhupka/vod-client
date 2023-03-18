@@ -3,14 +3,14 @@ import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
 
-import { GetOrdersResponseDto } from "../../../api/api-types";
+import { GetAdminOrdersResponseDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AdminLayout from "../../../components/layouts/AdminLayout/AdminLayout";
 import AdminOrdersTable from "../../../components/organism/AdminOrdersTable/AdminOrdersTable";
 
 interface INextPageProps {
-  orders: GetOrdersResponseDto;
+  orders: GetAdminOrdersResponseDto;
 }
 
 const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
@@ -36,15 +36,18 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
-    const { data: orders } = await client.get<GetOrdersResponseDto>("/orders", {
-      params: {
-        page,
-        limit,
+    const { data: orders } = await client.get<GetAdminOrdersResponseDto>(
+      "/orders",
+      {
+        params: {
+          page,
+          limit,
+        },
+        headers: {
+          Cookie: `token=${token};`,
+        },
       },
-      headers: {
-        Cookie: `token=${token};`,
-      },
-    });
+    );
 
     return {
       props: {

@@ -289,7 +289,10 @@ export interface OrderListItemBilling {
   firstName: string;
   lastName: string;
   isCompany: boolean;
+  vatNumber: string;
   companyName: string;
+  street: string;
+  city: string;
 }
 
 export interface OrdersListItemDto {
@@ -309,7 +312,7 @@ export interface OrdersListItemDto {
   updatedAt: string;
 }
 
-export interface GetOrdersResponseDto {
+export interface GetAdminOrdersResponseDto {
   totalDocs: number;
   limit: number;
   totalPages: number;
@@ -319,7 +322,7 @@ export interface GetOrdersResponseDto {
   hasNextPage: boolean;
   prevPage: boolean;
   nextPage: boolean;
-  docs: UserOrderListItem[];
+  docs: OrdersListItemDto[];
 }
 
 export interface RegisterUserDto {
@@ -400,12 +403,35 @@ export interface UserOrderListItem {
   /** @format date-time */
   paidAt: string;
   orderId: string;
+  orderNumber: number;
   total: number;
   totalTax: number;
   totalSum: number;
 }
 
-export type OrderBilling = object;
+export interface GetOrdersResponseDto {
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: boolean;
+  nextPage: boolean;
+  docs: UserOrderListItem[];
+}
+
+export interface OrderBilling {
+  firstName: string;
+  lastName: string;
+  isCompany: boolean;
+  companyName: string;
+  vatNumber: string;
+  street: string;
+  country: string;
+  postCode: string;
+}
 
 export interface ProductItem {
   _id: string;
@@ -427,6 +453,7 @@ export interface GetOrderResponseDto {
   billing: OrderBilling;
   orderItems: OrderItem[];
   orderId: string;
+  orderNumber: number;
   /** @format date-time */
   createdAt: string;
   /** @format date-time */
@@ -1273,7 +1300,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     ordersControllerGetOrders: (params: RequestParams = {}) =>
       this.request<
-        GetOrdersResponseDto,
+        GetAdminOrdersResponseDto,
         {
           /** @example 401 */
           statusCode: number;

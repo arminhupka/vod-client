@@ -13,11 +13,11 @@ import {
 import { useRouter } from "next/router";
 import { ChangeEvent, ReactElement } from "react";
 
-import { GetOrdersResponseDto } from "../../../api/api-types";
+import { GetAdminOrdersResponseDto } from "../../../api/api-types";
 import { formatPrice } from "../../../utils/formatPrice";
 
 interface IProps {
-  data: GetOrdersResponseDto;
+  data: GetAdminOrdersResponseDto;
 }
 
 enum OrderStatus {
