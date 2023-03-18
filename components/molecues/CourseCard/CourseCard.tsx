@@ -73,11 +73,11 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
       <StyledButtonWrapper>
         <StyledPrice>{formatPrice(salePrice || price)}</StyledPrice>
         <Button
-          disabled={!!cart.find((item) => item._id === _id) || userHaveCourse()}
+          disabled={!!cart.find((item) => item._id === _id)}
           startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}
           variant='contained'
           onClick={() => addToCart(props)}>
-          {userHaveCourse() ? "Przejdz do kursu" : "Dodaj do koszyka"}
+          {userHaveCourse() ? "Przedluż dostep" : "Dodaj do koszyka"}
         </Button>
       </StyledButtonWrapper>
     </StyledWrapper>
