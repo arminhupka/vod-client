@@ -25,7 +25,6 @@ export const StyledInnerWrapper = styled(Box)<IStyledInnerWrapper>(
     flexDirection: "column",
     gap: 8,
     background: solidBg ? alpha(theme.palette.primary.main, 0.05) : "",
-    borderBottom: "1px solid",
     borderColor: alpha(theme.palette.primary.main, 0.1),
   }),
 );

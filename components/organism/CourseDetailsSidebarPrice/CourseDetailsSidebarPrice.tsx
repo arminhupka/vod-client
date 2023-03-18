@@ -102,13 +102,6 @@ const CourseDetailsSidebarPrice = ({
           </Button>
         </StyledInnerWrapper>
       )}
-      <StyledInnerWrapper>
-        <ul>
-          <li>item</li>
-          <li>item</li>
-          <li>item</li>
-        </ul>
-      </StyledInnerWrapper>
     </StyledWrapper>
   );
 };
