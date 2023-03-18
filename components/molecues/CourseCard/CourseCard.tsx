@@ -32,6 +32,7 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
     price,
     _id,
     cover,
+    daysAvailable,
   } = props;
 
   const { addToCart, cart } = useCartContext();
@@ -79,7 +80,9 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
           startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}
           variant='contained'
           onClick={() => addToCart(props)}>
-          {userHaveCourse() ? "Przedluż dostep" : "Dodaj do koszyka"}
+          {userHaveCourse()
+            ? `Przedluż o ${daysAvailable} dni`
+            : "Dodaj do koszyka"}
         </Button>
       </StyledButtonWrapper>
     </StyledWrapper>
