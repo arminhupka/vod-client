@@ -44,6 +44,14 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
     return Math.ceil((finishedCount / courseLessonsCount) * 100);
   };
 
+  const userLastViewedLesson = (): string | undefined => {
+    if (user) {
+      const userCourse = user.courses.find((c) => c.course._id === course._id);
+      const userWatchedCourseLessons = userCourse?.watchedLessons.at(-1);
+      return userWatchedCourseLessons?._id || topics[0].lessons[0]._id;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -83,6 +91,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                   progress={getCourseProgress() || 0}
                   youtubeLink={course.youtubePreview}
                   userHasCourse={userHaveCourse()}
+                  lastLesson={userLastViewedLesson()}
                 />
               </Grid>
               <Grid item xs={12}>

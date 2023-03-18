@@ -1,5 +1,6 @@
 import { Movie } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
+import Link from "next/link";
 import { ReactElement } from "react";
 
 import { GetCourseResponseDto } from "../../../api/api-types";
@@ -20,6 +21,7 @@ interface IProps {
   progress: number;
   youtubeLink: string | null;
   userHasCourse: boolean;
+  lastLesson?: string;
 }
 
 const CourseDetailsSidebarPrice = ({
@@ -29,6 +31,7 @@ const CourseDetailsSidebarPrice = ({
   progress,
   youtubeLink,
   userHasCourse,
+  lastLesson,
 }: IProps): ReactElement => {
   const { addToCart, cart } = useCartContext();
 
@@ -97,9 +100,15 @@ const CourseDetailsSidebarPrice = ({
       {userHasCourse && (
         <StyledInnerWrapper solidBg>
           <CourseProgress value={progress} />
-          <Button fullWidth variant='contained' startIcon={<Movie />}>
-            Przejdź do kursu
-          </Button>
+          <Link href={`/kursy/${course.slug}/lekcja/${lastLesson}`} passHref>
+            <Button
+              component='a'
+              fullWidth
+              variant='contained'
+              startIcon={<Movie />}>
+              Przejdź do kursu
+            </Button>
+          </Link>
         </StyledInnerWrapper>
       )}
     </StyledWrapper>

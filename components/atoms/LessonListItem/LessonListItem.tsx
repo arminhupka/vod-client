@@ -1,4 +1,4 @@
-import { Checkbox, ListItemText } from "@mui/material";
+import { Box, Checkbox, ListItemText } from "@mui/material";
 import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 
@@ -31,7 +31,9 @@ const LessonListItem = ({ title, id, course }: IProps): ReactElement => {
     <StyledListItem>
       <Checkbox onChange={handleSetWatched} checked={shouldBeChecked} />
       <Link href={`/kursy/${course}/lekcja/${id}`} passHref>
-        <ListItemText>{title}</ListItemText>
+        <Box component='a'>
+          <ListItemText>{title}</ListItemText>
+        </Box>
       </Link>
     </StyledListItem>
   );
