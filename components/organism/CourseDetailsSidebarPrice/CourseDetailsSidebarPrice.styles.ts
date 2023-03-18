@@ -1,11 +1,4 @@
-import {
-  alpha,
-  Box,
-  BoxProps,
-  styled,
-  Typography,
-  TypographyProps,
-} from "@mui/material";
+import { alpha, Box, styled, Typography, TypographyProps } from "@mui/material";
 
 export const StyledWrapper = styled(Box)(({ theme }) => ({
   border: "1px solid",
@@ -14,20 +7,14 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-interface IStyledInnerWrapper extends BoxProps {
-  solidBg?: boolean;
-}
-
-export const StyledInnerWrapper = styled(Box)<IStyledInnerWrapper>(
-  ({ solidBg, theme }) => ({
-    padding: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    background: solidBg ? alpha(theme.palette.primary.main, 0.05) : "",
-    borderColor: alpha(theme.palette.primary.main, 0.1),
-  }),
-);
+export const StyledInnerWrapper = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  display: "flex",
+  flexDirection: "column",
+  gap: 8,
+  background: alpha(theme.palette.secondary.main, 0.02),
+  borderColor: alpha(theme.palette.primary.main, 0.1),
+}));
 
 export const StyledPricesWrapper = styled(Box)(({ theme }) => ({
   padding: `${theme.spacing(2)} 0`,

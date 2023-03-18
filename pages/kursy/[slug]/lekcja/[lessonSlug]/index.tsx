@@ -28,7 +28,7 @@ const LessonPage: NextPage<INextPage> = ({ topics, course, lesson }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <LessonLayout withoutTopbar>
+    <LessonLayout withoutTopbar fullWidth>
       <Grid height='100%' container={!isMobile}>
         <Grid item xs={12}>
           <CourseTitle title='Some nice course' />

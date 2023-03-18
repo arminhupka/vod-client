@@ -6,11 +6,16 @@ import Header from "../organism/Header/Header";
 interface IProps {
   children: ReactNode;
   withoutTopbar?: boolean;
+  fullWidth?: boolean;
 }
 
-const LessonLayout = ({ children, withoutTopbar }: IProps): ReactElement => (
+const LessonLayout = ({
+  children,
+  withoutTopbar,
+  fullWidth,
+}: IProps): ReactElement => (
   <Box height='100%' display='flex' flexDirection='column' overflow='hidden'>
-    <Header relative withoutTopbar={withoutTopbar} />
+    <Header relative withoutTopbar={withoutTopbar} fullWidth={fullWidth} />
     <Box component='main' flex={1}>
       {children}
     </Box>

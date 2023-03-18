@@ -1,6 +1,8 @@
 import { Container, Grid } from "@mui/material";
 import { ReactElement } from "react";
 
+import FooterCompany from "../../molecues/FooterElements/FooterCompany/FooterCompany";
+import FooterNav from "../../molecues/FooterElements/FooterNav/FooterNav";
 import {
   StyledCopy,
   StyledCopyText,
@@ -14,16 +16,16 @@ const Footer = (): ReactElement => (
       <StyledMain>
         <Grid container spacing={5}>
           <Grid item xs={12} md={12} lg={6}>
-            logo
+            <FooterCompany />
           </Grid>
           <Grid item xs={12} md={12} lg={2}>
-            Row 1
+            <FooterNav />
           </Grid>
           <Grid item xs={12} md={12} lg={2}>
-            Row 2
+            <FooterNav />
           </Grid>
           <Grid item xs={12} md={12} lg={2}>
-            Row 3
+            <FooterNav />
           </Grid>
         </Grid>
       </StyledMain>

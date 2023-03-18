@@ -22,6 +22,7 @@ interface IProps {
   youtubeLink: string | null;
   userHasCourse: boolean;
   lastLesson?: string;
+  disableButton?: boolean;
 }
 
 const CourseDetailsSidebarPrice = ({
@@ -32,6 +33,7 @@ const CourseDetailsSidebarPrice = ({
   youtubeLink,
   userHasCourse,
   lastLesson,
+  disableButton,
 }: IProps): ReactElement => {
   const { addToCart, cart } = useCartContext();
 
@@ -75,7 +77,7 @@ const CourseDetailsSidebarPrice = ({
         </Box>
       )}
       {!userHasCourse && (
-        <StyledInnerWrapper solidBg>
+        <StyledInnerWrapper>
           <StyledPricesWrapper>
             {salePrice && (
               <>
@@ -90,7 +92,7 @@ const CourseDetailsSidebarPrice = ({
           <Button
             fullWidth
             variant='contained'
-            disabled={isInCart()}
+            disabled={isInCart() || disableButton}
             onClick={handleAddToCart}>
             Dodaj do koszyka
           </Button>
@@ -98,14 +100,15 @@ const CourseDetailsSidebarPrice = ({
       )}
 
       {userHasCourse && (
-        <StyledInnerWrapper solidBg>
+        <StyledInnerWrapper>
           <CourseProgress value={progress} />
           <Link href={`/kursy/${course.slug}/lekcja/${lastLesson}`} passHref>
             <Button
               component='a'
               fullWidth
               variant='contained'
-              startIcon={<Movie />}>
+              startIcon={<Movie />}
+              disabled={disableButton}>
               Przejdź do kursu
             </Button>
           </Link>

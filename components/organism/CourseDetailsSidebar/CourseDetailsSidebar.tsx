@@ -26,7 +26,7 @@ const CourseDetailsSidebar = ({
 }: IProps): ReactElement => (
   <StyledWrapper>
     <StyledItemWrapper>
-      <StyledHeading>Czego się nauczysz:</StyledHeading>
+      <StyledHeading as='h2'>Czego się nauczysz:</StyledHeading>
       <List>
         {whatYouLearn.map((item, idx) => (
           <ListItem
@@ -45,7 +45,7 @@ const CourseDetailsSidebar = ({
       <Divider />
     </Box>
     <StyledItemWrapper>
-      <StyledHeading>Kurs zawiera:</StyledHeading>
+      <StyledHeading as='h2'>Kurs zawiera:</StyledHeading>
       <List>
         {courseIncludes.map((item, idx) => (
           <ListItem

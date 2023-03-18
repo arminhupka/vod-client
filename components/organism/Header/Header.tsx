@@ -32,9 +32,14 @@ const links = [
 interface IProps {
   relative?: boolean;
   withoutTopbar?: boolean;
+  fullWidth?: boolean;
 }
 
-const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
+const Header = ({
+  relative,
+  withoutTopbar,
+  fullWidth,
+}: IProps): ReactElement => {
   const { isOpen, onOpen, onClose } = useModalState();
   const {
     isOpen: isOpenLoginModal,
@@ -75,15 +80,19 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
             </Container>
           </Box>
         )}
-        <Box px={3}>
-          <Box display='flex' alignItems='center'>
+        <Container maxWidth={!fullWidth ? "lg" : false}>
+          <Box
+            display='flex'
+            alignItems='center'
+            justifyContent='space-between'>
             <Logo />
-            <Box ml={10} display='flex' gap={2}>
+            <Box display='flex' gap={2}>
               {links.map((l) => (
                 <Typography
                   variant='body2'
                   fontWeight={600}
                   textTransform='uppercase'
+                  fontFamily='Playfair Display'
                   key={l.id}
                   sx={{
                     color: "#333",
@@ -92,7 +101,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
                 </Typography>
               ))}
             </Box>
-            <Box ml='auto' display='flex' alignItems='center' gap={2}>
+            <Box display='flex' alignItems='center' gap={2}>
               <Link href='/koszyk' passHref>
                 <Box component='a' mr={1} display='flex' gap={2}>
                   <CartButton value={total} />
@@ -125,7 +134,7 @@ const Header = ({ relative, withoutTopbar }: IProps): ReactElement => {
               )}
             </Box>
           </Box>
-        </Box>
+        </Container>
       </AppBar>
     </>
   );

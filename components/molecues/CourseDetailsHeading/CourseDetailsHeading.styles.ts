@@ -1,6 +1,10 @@
 import { Box, styled, Typography } from "@mui/material";
 
-export const StyledWrapper = styled(Box)(() => ({}));
+export const StyledWrapper = styled(Box)(({ theme }) => ({
+  paddingBottom: theme.spacing(2),
+  borderBottom: "1px solid",
+  borderBottomColor: theme.palette.grey[300],
+}));
 
 export const StyledBlobsWrapper = styled(Box)(() => ({
   display: "flex",

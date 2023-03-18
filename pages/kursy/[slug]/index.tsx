@@ -48,7 +48,11 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
     if (user) {
       const userCourse = user.courses.find((c) => c.course._id === course._id);
       const userWatchedCourseLessons = userCourse?.watchedLessons.at(-1);
-      return userWatchedCourseLessons?._id || topics[0].lessons[0]._id;
+      return (
+        userWatchedCourseLessons?._id ||
+        (topics.length && topics[0].lessons[0]._id) ||
+        undefined
+      );
     }
   };
 
@@ -60,7 +64,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
         </title>
       </Head>
       <MainLayout>
-        <Grid container spacing={5}>
+        <Grid container spacing={3}>
           <Grid item lg={12}>
             <CourseDetailsHeading
               name={course.name}
@@ -69,7 +73,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
             />
           </Grid>
           <Grid item lg={8}>
-            <Grid container spacing={5}>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <CourseCover alt={course.name} url={course.cover} />
               </Grid>
@@ -82,7 +86,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
             </Grid>
           </Grid>
           <Grid item lg={4}>
-            <Grid container spacing={5}>
+            <Grid container spacing={3}>
               <Grid item xs={12}>
                 <CourseDetailsSidebarPrice
                   course={course}
@@ -92,6 +96,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                   youtubeLink={course.youtubePreview}
                   userHasCourse={userHaveCourse()}
                   lastLesson={userLastViewedLesson()}
+                  disableButton={!userLastViewedLesson()}
                 />
               </Grid>
               <Grid item xs={12}>

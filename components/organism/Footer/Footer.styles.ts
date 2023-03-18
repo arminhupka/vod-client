@@ -6,13 +6,13 @@ export const StyledFooter = styled("footer")(({ theme }) => ({
 }));
 
 export const StyledMain = styled(Box)(({ theme }) => ({
-  padding: `${theme.spacing(5)} 0`,
+  padding: `${theme.spacing(8)} 0`,
   borderBottom: "1px solid",
   borderColor: alpha(theme.palette.common.white, 0.2),
 }));
 
 export const StyledCopy = styled(Box)(({ theme }) => ({
-  padding: `${theme.spacing(5)} 0`,
+  padding: `${theme.spacing(4)} 0`,
 }));
 
 export const StyledCopyText = styled(Typography)(({ theme }) => ({
