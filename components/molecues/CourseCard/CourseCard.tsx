@@ -1,5 +1,5 @@
 import { Movie, ShoppingCart } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
@@ -49,19 +49,21 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
           <InfoBlob message={convertDifficultLevel(difficultyLevel)} />
         )}
       </StyledBlobsWrapper>
-      <Link href={`/kursy/${slug}`} passHref>
-        <a>
-          <StyledCoverWrapper>
-            <Image
-              alt={`${name} - ${process.env.NEXT_PUBLIC_APP_NAME}`}
-              src={cover || "/placeholder.png"}
-              layout='fill'
-              objectFit='cover'
-              objectPosition='center'
-            />
-          </StyledCoverWrapper>
-        </a>
-      </Link>
+      <Box overflow='hidden'>
+        <Link href={`/kursy/${slug}`} passHref>
+          <a>
+            <StyledCoverWrapper>
+              <Image
+                alt={`${name} - ${process.env.NEXT_PUBLIC_APP_NAME}`}
+                src={cover || "/placeholder.png"}
+                layout='fill'
+                objectFit='cover'
+                objectPosition='center'
+              />
+            </StyledCoverWrapper>
+          </a>
+        </Link>
+      </Box>
       <StyledInfoWrapper>
         <Link href={`/kursy/${slug}`} passHref>
           <a>

@@ -10,6 +10,7 @@ import Logo from "../../atoms/Logo/Logo";
 import CouponModal from "../Modals/CouponModal/CouponModal";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
+import ResetPasswordModal from "../Modals/ResetPasswordModal/ResetPasswordModal";
 
 const links = [
   {
@@ -46,20 +47,41 @@ const Header = ({
     onOpen: onOpenLoginModal,
     onClose: onCloseLoginModal,
   } = useModalState();
+
   const {
     isOpen: isOpenCouponModal,
     onOpen: onOpenCouponModal,
     onClose: onCloseCouponModal,
   } = useModalState();
+
+  const {
+    isOpen: isOpenResetPasswordModal,
+    onOpen: onOpenResetPasswordModal,
+    onClose: onCloseResetPasswordModal,
+  } = useModalState();
+
   const { total } = useCartContext();
 
   const { user } = useAccountContext();
 
+  const handleOpenResetPasswordModal = () => {
+    onCloseLoginModal();
+    onOpenResetPasswordModal();
+  };
+
   return (
     <>
       <RegistrationModal onClose={onClose} open={isOpen} />
-      <LoginModal onClose={onCloseLoginModal} open={isOpenLoginModal} />
+      <LoginModal
+        onClose={onCloseLoginModal}
+        open={isOpenLoginModal}
+        onResetPasswordClick={handleOpenResetPasswordModal}
+      />
       <CouponModal onClose={onCloseCouponModal} open={isOpenCouponModal} />
+      <ResetPasswordModal
+        onClose={onCloseResetPasswordModal}
+        open={isOpenResetPasswordModal}
+      />
       <AppBar
         position={relative ? "relative" : "fixed"}
         elevation={relative ? 0 : 8}

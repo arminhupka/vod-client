@@ -47,7 +47,7 @@ const AdminOrdersTable = ({ data }: IProps): ReactElement => {
       }
 
       case OrderStatus.CANCELED: {
-        return <Chip label='Anulowane' color='warning' />;
+        return <Chip label='Anulowane' color='error' />;
       }
 
       case OrderStatus.REFUNDED: {

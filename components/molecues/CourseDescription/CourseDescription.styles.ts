@@ -45,14 +45,10 @@ export const StyledShowMoreButton = styled(Button)(({ theme }) => ({
   position: "absolute",
   bottom: theme.spacing(4),
   left: "50%",
-  background: theme.palette.common.white,
   zIndex: 1,
   transform: `translateX(-50%)`,
-  "&:hover": {
-    background: theme.palette.common.white,
-  },
 }));
 
 StyledShowMoreButton.defaultProps = {
-  variant: "outlined",
+  variant: "contained",
 };

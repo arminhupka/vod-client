@@ -9,11 +9,15 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
   borderRadius: theme.spacing(1),
   background: "#fff",
   boxShadow: theme.shadows[9],
+  "&:hover a > div": {
+    transform: "scale(1.1)",
+  },
 }));
 
 export const StyledCoverWrapper = styled(Box)(() => ({
   height: 200,
   position: "relative",
+  transition: ".3s transform",
 }));
 
 export const StyledCover = styled("img")(() => ({

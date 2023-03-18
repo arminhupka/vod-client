@@ -8,7 +8,7 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledInnerWrapper = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: `${theme.spacing(2)}`,
   display: "flex",
   flexDirection: "column",
   gap: 8,
@@ -17,7 +17,7 @@ export const StyledInnerWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledPricesWrapper = styled(Box)(({ theme }) => ({
-  padding: `${theme.spacing(2)} 0`,
+  padding: `${theme.spacing(2)}`,
   display: "flex",
   alignItems: "flex-end",
   gap: 8,

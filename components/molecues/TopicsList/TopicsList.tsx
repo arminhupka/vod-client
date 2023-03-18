@@ -1,5 +1,5 @@
 import { ExpandMore } from "@mui/icons-material";
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List } from "@mui/material";
 
 import { GetCourseTopicsItemResponseDto } from "../../../api/api-types";
 import NoDataLabel from "../../atoms/NoDataLabel/NoDataLabel";
@@ -7,7 +7,11 @@ import {
   StyledAccordion,
   StyledDetails,
   StyledHeading,
+  StyledListItem,
+  StyledListItemText,
   StyledSummary,
+  StyledSummaryText,
+  StyledSummaryWrapper,
   StyledTopicName,
 } from "./TopicsList.styles";
 
@@ -22,17 +26,22 @@ const TopicsList = ({ topics }: IProps) => (
       <>
         <StyledHeading>Lista tematów i lekcji</StyledHeading>
         {topics.map((t) => (
-          <StyledAccordion key={t._id} elevation={0} square>
+          <StyledAccordion key={t._id} elevation={0} square disableGutters>
             <StyledSummary expandIcon={<ExpandMore />}>
-              <StyledTopicName fontWeight={700}>{t.title}</StyledTopicName>
+              <StyledSummaryWrapper>
+                <StyledTopicName fontWeight={700}>{t.title}</StyledTopicName>
+                <StyledSummaryText>{t.summary}</StyledSummaryText>
+              </StyledSummaryWrapper>
             </StyledSummary>
             <StyledDetails>
               <List disablePadding>
                 {!!t.lessons.length &&
-                  t.lessons.map((l) => (
-                    <ListItem key={l._id} disableGutters>
-                      <ListItemText>{l.title}</ListItemText>
-                    </ListItem>
+                  t.lessons.map((l, i) => (
+                    <StyledListItem key={l._id}>
+                      <StyledListItemText>
+                        {i + 1}. {l.title}
+                      </StyledListItemText>
+                    </StyledListItem>
                   ))}
               </List>
             </StyledDetails>

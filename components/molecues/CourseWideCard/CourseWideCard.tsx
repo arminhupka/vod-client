@@ -18,7 +18,12 @@ interface IProps {
 const CourseWideCard = ({ course }: IProps): ReactElement => (
   <StyledWrapper>
     <StyledCoverWrapper>
-      <Image src={course.course.cover} layout='fill' />
+      <Image
+        src={course.course.cover}
+        layout='fill'
+        objectFit='cover'
+        objectPosition='center'
+      />
     </StyledCoverWrapper>
     <StyledInfoWrapper>
       <StyledHeading>{course.course.name}</StyledHeading>

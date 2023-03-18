@@ -29,7 +29,11 @@ const FormSchema = object({
 
 type TProps = Pick<IBaseModalProps, "open" | "onClose">;
 
-const LoginModal = ({ open, onClose }: TProps) => {
+interface IProps extends TProps {
+  onResetPasswordClick: () => void;
+}
+
+const LoginModal = ({ open, onClose, onResetPasswordClick }: IProps) => {
   const router = useRouter();
   const {
     register,
@@ -118,6 +122,14 @@ const LoginModal = ({ open, onClose }: TProps) => {
               <Grid item xs={12}>
                 <Button type='submit' fullWidth variant='contained'>
                   Zaloguj
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='outlined'
+                  onClick={onResetPasswordClick}>
+                  Nie pamiętasz hasła?
                 </Button>
               </Grid>
             </Grid>
