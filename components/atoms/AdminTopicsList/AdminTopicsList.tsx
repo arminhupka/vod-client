@@ -18,11 +18,13 @@ import { ReactElement, useState } from "react";
 import { useMutation } from "react-query";
 
 import {
+  AdminGetCourseLessonsItemResponseDto,
   AdminGetCourseTopicsItemResponseDto,
   TopicResponseDto,
 } from "../../../api/api-types";
 import { DeleteTopic } from "../../../api/topics";
 import useModalState from "../../../hooks/useModalState";
+import EditLessonModal from "../../organism/Modals/EditLessonModal/EditLessonModal";
 import NewLessonModal from "../../organism/Modals/NewLessonModal/NewLessonModal";
 import {
   StyledButton,
@@ -39,6 +41,13 @@ const AdminTopicsList = ({ data }: IProps): ReactElement => {
   const router = useRouter();
   const [topicId, setTopicId] = useState<string | null>(null);
   const { isOpen, onClose, onOpen } = useModalState();
+  const {
+    isOpen: isOpenEditLessonModal,
+    onClose: onCloseEditLessonModal,
+    onOpen: onOpenEditLessonModal,
+  } = useModalState();
+  const [lessonToEdit, setLessonToEdit] =
+    useState<null | AdminGetCourseLessonsItemResponseDto>(null);
 
   const handleModalClose = () => {
     onClose();
@@ -58,6 +67,20 @@ const AdminTopicsList = ({ data }: IProps): ReactElement => {
     onSuccess: () => router.replace(router.asPath),
   });
 
+  const handleEditButton = (lessonId: string) => {
+    const lessons = data.map((item) => item.lessons).flat();
+    const lesson = lessons.find((l) => l._id === lessonId);
+    if (lesson) {
+      setLessonToEdit(lesson);
+      onOpenEditLessonModal();
+    }
+  };
+
+  const handleEditLessonModalClose = () => {
+    onCloseEditLessonModal();
+    setLessonToEdit(null);
+  };
+
   return (
     <>
       {isLoading && (
@@ -70,6 +93,11 @@ const AdminTopicsList = ({ data }: IProps): ReactElement => {
         onClose={handleModalClose}
         open={isOpen}
       />
+      <EditLessonModal
+        lesson={lessonToEdit}
+        onClose={handleEditLessonModalClose}
+        open={isOpenEditLessonModal}
+      />
       {data.map((t) => (
         <Accordion key={t._id} square>
           <AccordionSummary>
@@ -81,7 +109,9 @@ const AdminTopicsList = ({ data }: IProps): ReactElement => {
               <List disablePadding>
                 {t.lessons.map((l) => (
                   <StyledListItem key={l._id}>
-                    <StyledButton type='button'>
+                    <StyledButton
+                      type='button'
+                      onClick={() => handleEditButton(l._id)}>
                       <Edit fontSize='small' />
                     </StyledButton>
                     <StyledListText>{l.title}</StyledListText>

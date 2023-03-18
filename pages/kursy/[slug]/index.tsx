@@ -29,12 +29,18 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
 
   const getCourseProgress = () => {
     const courseLessons = topics.map((topic) => topic.lessons).flat();
+    const allUserWatchedLessons =
+      user?.courses
+        .map((c) => c.watchedLessons)
+        .flat()
+        .map((l) => l._id) || [];
+
     const finishedLessons = courseLessons.filter(
-      (lesson) => !user?.watchedLessons.includes(lesson._id),
-    ).length;
+      (lesson) => !allUserWatchedLessons?.includes(lesson._id),
+    );
 
     const courseLessonsCount = courseLessons.length;
-    const finishedCount = courseLessonsCount - finishedLessons;
+    const finishedCount = courseLessonsCount - finishedLessons.length;
     return Math.ceil((finishedCount / courseLessonsCount) * 100);
   };
 
