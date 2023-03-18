@@ -1,4 +1,3 @@
-import { Receipt as InvoiceIcon } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -62,12 +61,6 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
                     Szczegóły
                   </Button>
                 </Link>
-                <Button
-                  startIcon={<InvoiceIcon />}
-                  variant='contained'
-                  size='small'>
-                  Faktura
-                </Button>
               </Box>
             </TableCell>
           </TableRow>
