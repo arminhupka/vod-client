@@ -15,6 +15,9 @@ import { ReactElement } from "react";
 
 import { GetOrdersResponseDto } from "../../../api/api-types";
 import { formatPrice } from "../../../utils/formatPrice";
+import OrderStatus, {
+  OrderStatusEnum,
+} from "../../atoms/OrderStatus/OrderStatus";
 
 interface IProps {
   data: GetOrdersResponseDto;
@@ -27,6 +30,7 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
         <TableRow>
           <TableCell>Numer zamówienia</TableCell>
           <TableCell>Całkowity koszt</TableCell>
+          <TableCell>Status</TableCell>
           <TableCell>Data płatności</TableCell>
           <TableCell />
         </TableRow>
@@ -47,6 +51,9 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
             <TableCell>{formatPrice(d.totalSum)}</TableCell>
             <TableCell>
               {new Date(d.paidAt).toLocaleDateString("pl-PL")}
+            </TableCell>
+            <TableCell>
+              <OrderStatus status={d.status as OrderStatusEnum} />
             </TableCell>
             <TableCell>
               <Box display='flex' gap={1}>

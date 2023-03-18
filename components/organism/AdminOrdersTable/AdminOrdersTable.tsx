@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Chip,
   Table,
   TableBody,
   TableCell,
@@ -15,46 +14,17 @@ import { ChangeEvent, ReactElement } from "react";
 
 import { GetAdminOrdersResponseDto } from "../../../api/api-types";
 import { formatPrice } from "../../../utils/formatPrice";
+import OrderStatus, {
+  OrderStatusEnum,
+} from "../../atoms/OrderStatus/OrderStatus";
 
 interface IProps {
   data: GetAdminOrdersResponseDto;
 }
 
-enum OrderStatus {
-  NEW = "NEW",
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETE = "COMPLETE",
-  CANCELED = "CANCELED",
-  REFUNDED = "REFUNDED",
-}
-
 const AdminOrdersTable = ({ data }: IProps): ReactElement => {
   const router = useRouter();
   const currentQuery = router.query;
-
-  const generateStatusChip = (status: OrderStatus) => {
-    switch (status) {
-      case OrderStatus.NEW: {
-        return <Chip label='Nowy' color='info' />;
-      }
-
-      case OrderStatus.IN_PROGRESS: {
-        return <Chip label='Przetwarzanie' color='warning' />;
-      }
-
-      case OrderStatus.COMPLETE: {
-        return <Chip label='Zrealizowane' color='success' />;
-      }
-
-      case OrderStatus.CANCELED: {
-        return <Chip label='Anulowane' color='error' />;
-      }
-
-      case OrderStatus.REFUNDED: {
-        return <Chip label='Zwrócone' color='error' />;
-      }
-    }
-  };
 
   const handlePageChange = async (page: number) => {
     await router.push(router.asPath, {
@@ -99,7 +69,7 @@ const AdminOrdersTable = ({ data }: IProps): ReactElement => {
                   {o.billing.firstName} {o.billing.lastName}
                 </TableCell>
                 <TableCell>
-                  {generateStatusChip(o.status as OrderStatus)}
+                  <OrderStatus status={o.status as OrderStatusEnum} />.
                 </TableCell>
                 <TableCell>{formatPrice(o.totalSum)}</TableCell>
                 <TableCell>
