@@ -249,6 +249,22 @@ export interface NewOrderDto {
   orderItems: string[];
 }
 
+export interface OrderBillingDto {
+  firstName: string;
+  lastName: string;
+  isCompany: boolean;
+  companyName: string;
+  vatNumber: string;
+  street: string;
+  country: string;
+  city: string;
+  postCode: string;
+  companyStreet: string;
+  companyCountry: string;
+  companyPostCode: string;
+  companyPostCity: string;
+}
+
 export interface OrderProductDto {
   _id: string;
   name: string;
@@ -270,7 +286,7 @@ export interface OrderUserDto {
 
 export interface OrderDto {
   _id: string;
-  billing: object;
+  billing: OrderBillingDto;
   orderNumber: number;
   orderId: string;
   orderItems: OrderItemDto[];
@@ -367,8 +383,13 @@ export interface SimplyBillingResponseDto {
   companyName: string;
   vatNumber: string;
   street: string;
+  city: string;
   country: string;
   postCode: string;
+  companyStreet: string;
+  companyCountry: string;
+  companyPostCode: string;
+  companyCity: string;
 }
 
 export interface UserCoursesCourse {
@@ -430,7 +451,12 @@ export interface OrderBilling {
   vatNumber: string;
   street: string;
   country: string;
+  city: string;
   postCode: string;
+  companyStreet: string;
+  companyCountry: string;
+  companyPostCode: string;
+  companyPostCity: string;
 }
 
 export interface ProductItem {
@@ -525,6 +551,10 @@ export interface UpdateUserDto {
   password?: string;
   /** @minLength 6 */
   passwordConfirm?: string;
+  companyStreet?: string;
+  companyCountry?: string;
+  companyCity?: string;
+  companyPostCode?: string;
 }
 
 export interface CreateCouponDto {
