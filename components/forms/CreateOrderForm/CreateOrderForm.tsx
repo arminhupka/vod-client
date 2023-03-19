@@ -1,79 +1,154 @@
 import { Box, Divider, Grid, TextField, Typography } from "@mui/material";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 
+import { UpdateUserDto } from "../../../api/api-types";
+import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import CartTotal from "../../atoms/CartTotal/CartTotal";
 
 const CreateOrderForm = (): ReactElement => {
   const { cart } = useCartContext();
+  const { user } = useAccountContext();
+
+  const formMethods = useForm<UpdateUserDto>();
+
+  useEffect(() => {
+    if (user) {
+      formMethods.setValue("firstName", user.billing.firstName);
+      formMethods.setValue("lastName", user.billing.lastName);
+      formMethods.setValue("street", user.billing.street);
+      formMethods.setValue("postCode", user.billing.postCode);
+      formMethods.setValue("city", user.billing.city);
+      formMethods.setValue("country", user.billing.country);
+      formMethods.setValue("companyName", user.billing.companyName);
+      formMethods.setValue("vatNumber", user.billing.vatNumber);
+      formMethods.setValue("companyStreet", user.billing.companyStreet);
+      formMethods.setValue("companyPostCode", user.billing.companyPostCode);
+      formMethods.setValue("companyCity", user.billing.companyCity);
+      formMethods.setValue("companyCountry", user.billing.companyCountry);
+    }
+  }, []);
 
   return (
-    <Box mt={2}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} lg={8}>
+    <FormProvider {...formMethods}>
+      <Box mt={2}>
+        <form>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography
-                variant='h2'
-                fontSize={24}
-                fontFamily='Playfair Display'>
-                Twoje dane
-              </Typography>
+            <Grid item xs={12} lg={8}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography
+                    variant='h2'
+                    fontSize={24}
+                    fontFamily='Playfair Display'>
+                    Twoje dane
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label='Imię'
+                    {...formMethods.register("firstName")}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label='Nazwisko'
+                    {...formMethods.register("lastName")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label='Adres'
+                    {...formMethods.register("street")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Kod pocztowy'
+                    {...formMethods.register("postCode")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Miasto'
+                    {...formMethods.register("city")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Kraj'
+                    {...formMethods.register("country")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    variant='h2'
+                    fontSize={24}
+                    fontFamily='Playfair Display'>
+                    Dane do faktury
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label='Nazwa firmy'
+                    {...formMethods.register("companyName")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label='Numer NIP'
+                    {...formMethods.register("vatNumber")}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label='Adres'
+                    {...formMethods.register("companyStreet")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Kod pocztowy'
+                    {...formMethods.register("companyPostCode")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Miasto'
+                    {...formMethods.register("companyCity")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    label='Kraj'
+                    {...formMethods.register("companyCountry")}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label='Imię' />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField fullWidth label='Nazwisko' />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label='Adres' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Kod pocztowy' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Miasto' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Kraj' />
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography
-                variant='h2'
-                fontSize={24}
-                fontFamily='Playfair Display'>
-                Dane do faktury
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label='Nazwa firmy' />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label='Numer NIP' />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label='Adres' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Kod pocztowy' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Miasto' />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField fullWidth label='Kraj' />
+            <Grid item xs={12} lg={4}>
+              <CartTotal cartItems={cart} />
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <CartTotal cartItems={cart} />
-        </Grid>
-      </Grid>
-    </Box>
+        </form>
+      </Box>
+    </FormProvider>
   );
 };
 
