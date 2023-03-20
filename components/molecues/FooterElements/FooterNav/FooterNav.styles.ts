@@ -1,4 +1,4 @@
-import { Box, ListItemText, styled, Typography } from "@mui/material";
+import { Box, Link, styled, Typography } from "@mui/material";
 
 export const StyledWrapper = styled(Box)(() => ({}));
 
@@ -11,9 +11,10 @@ StyledHeading.defaultProps = {
   as: "h3",
 };
 
-export const StyledListText = styled(ListItemText)(({ theme }) => ({
+export const StyledListLink = styled(Link)(({ theme }) => ({
   color: theme.palette.grey[400],
   transition: ".3s color",
+  textDecoration: "none",
   "&:hover": {
     color: theme.palette.grey[100],
   },
@@ -21,3 +22,5 @@ export const StyledListText = styled(ListItemText)(({ theme }) => ({
     fontWeight: 500,
   },
 }));
+
+StyledListLink.defaultProps = {};

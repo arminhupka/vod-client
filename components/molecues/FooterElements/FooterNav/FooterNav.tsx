@@ -1,29 +1,35 @@
 import { List, ListItem } from "@mui/material";
+import Link from "next/link";
 import { ReactElement } from "react";
 
 import {
   StyledHeading,
-  StyledListText,
+  StyledListLink,
   StyledWrapper,
 } from "./FooterNav.styles";
 
-const FooterNav = (): ReactElement => (
+interface IProps {
+  title: string;
+  links: {
+    name: string;
+    url: string;
+  }[];
+}
+
+const FooterNav = ({ title, links }: IProps): ReactElement => (
   <StyledWrapper>
-    <StyledHeading>Menu Name</StyledHeading>
-    <List disablePadding>
-      <ListItem dense disableGutters>
-        <StyledListText>Menu 1</StyledListText>
-      </ListItem>
-      <ListItem dense disableGutters>
-        <StyledListText>Menu 2</StyledListText>
-      </ListItem>
-      <ListItem dense disableGutters>
-        <StyledListText>Menu 3</StyledListText>
-      </ListItem>
-      <ListItem dense disableGutters>
-        <StyledListText>Menu 4</StyledListText>
-      </ListItem>
-    </List>
+    <StyledHeading>{title}</StyledHeading>
+    {links?.length && (
+      <List disablePadding>
+        {links.map((l) => (
+          <ListItem key={l.name} dense disableGutters>
+            <Link href={l.url} passHref>
+              <StyledListLink>{l.name}</StyledListLink>
+            </Link>
+          </ListItem>
+        ))}
+      </List>
+    )}
   </StyledWrapper>
 );
 
