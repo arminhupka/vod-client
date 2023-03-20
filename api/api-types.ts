@@ -1558,7 +1558,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     reviewsControllerNewReview: (data: NewReviewDto, params: RequestParams = {}) =>
       this.request<
-        NewReviewDto,
+        ReviewDto,
         | {
             /** @example 400 */
             statusCode: number;
@@ -1581,6 +1581,49 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Reviews
+     * @name ReviewsControllerDeleteReview
+     * @request DELETE:/reviews/{id}
+     * @secure
+     */
+    reviewsControllerDeleteReview: (id: string, params: RequestParams = {}) =>
+      this.request<
+        ReviewDto,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
+        path: `/reviews/${id}`,
+        method: "DELETE",
+        secure: true,
         format: "json",
         ...params,
       }),
