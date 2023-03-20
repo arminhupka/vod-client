@@ -1,5 +1,11 @@
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { List } from "@mui/material";
 import { ReactElement } from "react";
+
+import {
+  StyledDrawer,
+  StyledListItem,
+  StyledListItemText,
+} from "./MainDrawer.styles";
 
 interface IProps {
   open: boolean;
@@ -7,13 +13,19 @@ interface IProps {
 }
 
 const MainDrawer = ({ open, onClose }: IProps): ReactElement => (
-  <Drawer open={open} onClose={onClose}>
-    <List>
-      <ListItem>
-        <ListItemText>Strona główna</ListItemText>
-      </ListItem>
+  <StyledDrawer open={open} onClose={onClose}>
+    <List disablePadding>
+      <StyledListItem>
+        <StyledListItemText>Strona główna</StyledListItemText>
+      </StyledListItem>
+      <StyledListItem>
+        <StyledListItemText>Kursy</StyledListItemText>
+      </StyledListItem>
+      <StyledListItem>
+        <StyledListItemText>Warsztaty</StyledListItemText>
+      </StyledListItem>
     </List>
-  </Drawer>
+  </StyledDrawer>
 );
 
 export default MainDrawer;

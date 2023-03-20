@@ -6,6 +6,7 @@ import {
   Container,
   IconButton,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import { ReactElement } from "react";
 import useModalState from "../../../hooks/useModalState";
 import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
+import AvatarMenu from "../../atoms/AvatarMenu/AvatarMenu";
 import CartButton from "../../atoms/CartButton/CartButton";
 import Logo from "../../atoms/Logo/Logo";
 import MainDrawer from "../../molecues/MainDrawer/MainDrawer";
@@ -52,7 +54,7 @@ const Header = ({
   fullWidth,
 }: IProps): ReactElement => {
   const theme = useTheme();
-  const isMobile = theme.breakpoints.up("md");
+  const isMobile = useMediaQuery(theme.breakpoints.not("lg"));
 
   const { isOpen, onOpen, onClose } = useModalState();
   const {
@@ -162,7 +164,7 @@ const Header = ({
                   </Button>
                 </>
               )}
-              {user && (
+              {!isMobile && user && (
                 <>
                   <Link href='/konto' passHref>
                     <Button component='div' variant='outlined' size='small'>
@@ -176,6 +178,9 @@ const Header = ({
                     Aktywuj kupon
                   </Button>
                 </>
+              )}
+              {isMobile && user && (
+                <AvatarMenu onShowActivateCouponModal={onOpenCouponModal} />
               )}
               {isMobile && (
                 <IconButton onClick={onOpenDrawer}>
