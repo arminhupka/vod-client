@@ -1,7 +1,7 @@
 import { Box, styled } from "@mui/material";
 
 export const StyledWrapper = styled(Box)(() => ({
-  height: 500,
+  height: "100%",
   position: "relative",
   background: "blue",
 }));

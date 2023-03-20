@@ -43,7 +43,7 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
     !!user?.courses.find((item) => item.course._id === _id!);
 
   return (
-    <StyledWrapper>
+    <StyledWrapper overflow='hidden'>
       <StyledBlobsWrapper>
         {featured && <InfoBlob message='Polecany' />}
         {difficultyLevel && (
