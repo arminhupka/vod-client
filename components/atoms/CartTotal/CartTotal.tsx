@@ -14,6 +14,7 @@ import {
 } from "../../../api/api-types";
 import { payWithPayU } from "../../../api/payments";
 import { updateUser } from "../../../api/user";
+import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import { formatPrice } from "../../../utils/formatPrice";
 import OverlayLoader from "../OverlayLoader/OverlayLoader";
@@ -31,6 +32,7 @@ interface IProps {
 
 const CartTotal = ({ cartItems }: IProps): ReactElement => {
   const router = useRouter();
+  const { user } = useAccountContext();
   const { cart } = useCartContext();
   const updateUserForm = useFormContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -114,8 +116,13 @@ const CartTotal = ({ cartItems }: IProps): ReactElement => {
         </StyledList>
         {isCheckoutPage && (
           <Link href='/platnosc' passHref>
-            <Button component='a' size='large' variant='contained' fullWidth>
-              Przejdź do płatności
+            <Button
+              component='a'
+              size='large'
+              variant='contained'
+              fullWidth
+              disabled={!user}>
+              {user ? "Przejdź do płatności" : "Zaloguj się aby kontynuować"}
             </Button>
           </Link>
         )}

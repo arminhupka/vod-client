@@ -1,4 +1,5 @@
-import { NextPage } from "next";
+import { getCookie } from "cookies-next";
+import { NextPage, NextPageContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -31,6 +32,23 @@ const PaymentPage: NextPage = () => {
       </MainLayout>
     </>
   );
+};
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const token = getCookie("token", { res: ctx.res, req: ctx.req });
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: true,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default PaymentPage;
