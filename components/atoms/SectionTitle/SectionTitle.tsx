@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Link from "next/link";
 import { ReactNode } from "react";
 
@@ -15,18 +15,23 @@ interface IProps {
   children?: ReactNode;
 }
 
-const SectionTitle = ({ title, link, linkName, children }: IProps) => (
-  <StyledWrapper>
-    <StyledHeading>{title}</StyledHeading>
-    <Box>
-      {children}
-      {link && linkName && (
-        <Link href={link} passHref>
-          <StyledLink as='span'>{linkName}</StyledLink>
-        </Link>
-      )}
-    </Box>
-  </StyledWrapper>
-);
+const SectionTitle = ({ title, link, linkName, children }: IProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
+  return (
+    <StyledWrapper>
+      <StyledHeading small={isMobile}>{title}</StyledHeading>
+      <Box>
+        {children}
+        {link && linkName && (
+          <Link href={link} passHref>
+            <StyledLink as='span'>{linkName}</StyledLink>
+          </Link>
+        )}
+      </Box>
+    </StyledWrapper>
+  );
+};
 
 export default SectionTitle;

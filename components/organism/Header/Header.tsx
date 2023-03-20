@@ -154,7 +154,7 @@ const Header = ({
                   <CartButton value={total} />
                 </Box>
               </Link>
-              {!user && (
+              {!isMobile && !user && (
                 <>
                   <Button onClick={onOpenLoginModal} size='small'>
                     Zaloguj
@@ -179,8 +179,12 @@ const Header = ({
                   </Button>
                 </>
               )}
-              {isMobile && user && (
-                <AvatarMenu onShowActivateCouponModal={onOpenCouponModal} />
+              {isMobile && (
+                <AvatarMenu
+                  onShowActivateCouponModal={onOpenCouponModal}
+                  onOpenLoginModal={onOpenLoginModal}
+                  onOpenRegisterModal={onOpen}
+                />
               )}
               {isMobile && (
                 <IconButton onClick={onOpenDrawer}>

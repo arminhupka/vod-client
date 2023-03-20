@@ -20,12 +20,7 @@ const HomePage: NextPage<INextPage> = ({ courses }) => (
     <MainLayout>
       <Box>
         <Hero />
-        <CoursesGrid
-          title='Najnowsze kursy'
-          link='/kursy'
-          linkName='Zobacz wszystkie'
-          courses={courses.docs || []}
-        />
+        <CoursesGrid title='Najnowsze kursy' courses={courses.docs || []} />
       </Box>
     </MainLayout>
   </>

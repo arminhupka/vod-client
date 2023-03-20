@@ -1,14 +1,23 @@
-import { Box, Button, IconButton, Menu, MenuItem } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import { Box, Button, IconButton, Menu } from "@mui/material";
 import Link from "next/link";
 import { MouseEvent, ReactElement, useState } from "react";
 
-import { StyledAvatar } from "./AvatarMenu.styles";
+import { useAccountContext } from "../../../providers/AccountProvider";
+import { StyledAvatar, StyledMenuItem } from "./AvatarMenu.styles";
 
 interface IProps {
   onShowActivateCouponModal: () => void;
+  onOpenLoginModal: () => void;
+  onOpenRegisterModal: () => void;
 }
 
-const AvatarMenu = ({ onShowActivateCouponModal }: IProps): ReactElement => {
+const AvatarMenu = ({
+  onShowActivateCouponModal,
+  onOpenRegisterModal,
+  onOpenLoginModal,
+}: IProps): ReactElement => {
+  const { user } = useAccountContext();
   const [avatarRef, setAvatarRef] = useState<null | HTMLElement>(null);
 
   const handleOpenMenu = (event: MouseEvent<HTMLElement>) => {
@@ -22,32 +31,80 @@ const AvatarMenu = ({ onShowActivateCouponModal }: IProps): ReactElement => {
     handleCloseMenu();
   };
 
+  const handleOpenLoginModal = () => {
+    onOpenLoginModal();
+    handleCloseMenu();
+  };
+
+  const handleOpenRegisterModal = () => {
+    onOpenRegisterModal();
+    handleCloseMenu();
+  };
+
+  const userShortName = `${user?.billing.firstName.at(
+    0,
+  )}${user?.billing.lastName.at(0)}`.toUpperCase();
+
   return (
     <Box>
       <IconButton sx={{ padding: 0 }} onClick={handleOpenMenu}>
-        <StyledAvatar>AH</StyledAvatar>
+        <StyledAvatar>{!user ? <AccountCircle /> : userShortName}</StyledAvatar>
       </IconButton>
       <Menu
         open={!!avatarRef}
         anchorEl={avatarRef}
         keepMounted
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
         onClose={handleCloseMenu}>
-        <MenuItem>
-          <Link href='/konto/kursy' passHref>
-            <Button component='a' fullWidth variant='outlined' size='small'>
-              Moje konto
-            </Button>
-          </Link>
-        </MenuItem>
-        <MenuItem>
-          <Button
-            fullWidth
-            variant='contained'
-            size='small'
-            onClick={handleActivateCoupon}>
-            Aktywuj kupon
-          </Button>
-        </MenuItem>
+        {!user && (
+          <>
+            <StyledMenuItem>
+              <Button
+                fullWidth
+                variant='outlined'
+                size='small'
+                onClick={handleOpenLoginModal}>
+                Zaloguj
+              </Button>
+            </StyledMenuItem>
+            <StyledMenuItem>
+              <Button
+                fullWidth
+                variant='contained'
+                size='small'
+                onClick={handleOpenRegisterModal}>
+                Rejestracja
+              </Button>
+            </StyledMenuItem>
+          </>
+        )}
+        {user && (
+          <>
+            <StyledMenuItem>
+              <Link href='/konto/kursy' passHref>
+                <Button component='a' fullWidth variant='outlined' size='small'>
+                  Moje konto
+                </Button>
+              </Link>
+            </StyledMenuItem>
+            <StyledMenuItem>
+              <Button
+                fullWidth
+                variant='contained'
+                size='small'
+                onClick={handleActivateCoupon}>
+                Aktywuj kupon
+              </Button>
+            </StyledMenuItem>
+          </>
+        )}
       </Menu>
     </Box>
   );

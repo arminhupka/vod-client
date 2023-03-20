@@ -1,15 +1,21 @@
 import { Box, styled } from "@mui/material";
 
-export const StyledModalWrapper = styled(Box)(({ theme }) => ({
+export const StyledMainWrapper = styled(Box)(({ theme }) => ({
   position: "absolute",
+  left: "50%",
+  padding: theme.spacing(2),
   width: "100%",
   maxWidth: 550,
-  top: "5%",
-  left: "50%",
+  transform: "translateX(-50%)",
+  [theme.breakpoints.up("md")]: {
+    top: "5%",
+  },
+}));
+
+export const StyledModalWrapper = styled(Box)(({ theme }) => ({
   background: "#fff",
   borderRadius: theme.spacing(1),
   overflow: "hidden",
-  transform: "translateX(-50%)",
 }));
 
 export const StyledHeaderWrapper = styled(Box)(({ theme }) => ({

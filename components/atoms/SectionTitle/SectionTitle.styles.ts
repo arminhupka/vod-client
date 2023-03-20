@@ -1,4 +1,11 @@
-import { alpha, Box, Link, styled, Typography } from "@mui/material";
+import {
+  alpha,
+  Box,
+  Link,
+  styled,
+  Typography,
+  TypographyProps,
+} from "@mui/material";
 
 export const StyledWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -8,12 +15,20 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
   borderColor: alpha(theme.palette.primary.main, 0.2),
 }));
 
-export const StyledHeading = styled(Typography)(({ theme }) => ({
-  fontFamily: "Playfair Display",
-  fontSize: 36,
-  fontWeight: 600,
-  marginBottom: theme.spacing(1),
-}));
+interface IStyledHeading extends TypographyProps {
+  small?: boolean;
+}
+
+export const StyledHeading = styled(Typography)<IStyledHeading>(
+  ({ theme, small }) => ({
+    fontFamily: "Playfair Display",
+    fontSize: small
+      ? theme.typography.h5.fontSize
+      : theme.typography.h3.fontSize,
+    fontWeight: 600,
+    marginBottom: theme.spacing(1),
+  }),
+);
 
 export const StyledLink = styled(Link)(({ theme }) => ({
   fontWeight: 600,

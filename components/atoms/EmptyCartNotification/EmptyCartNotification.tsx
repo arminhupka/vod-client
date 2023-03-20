@@ -19,7 +19,7 @@ const EmptyCartNotification = (): ReactElement => (
         }}
       />
     </StyledIconWrapper>
-    <StyledHeading>Twój koszyk jest pusty</StyledHeading>
+    <StyledHeading textAlign='center'>Twój koszyk jest pusty</StyledHeading>
     <StyledTypo textAlign='center'>
       Zanim przejdziesz do płatności musisz dodać jakiś kurs do koszyka.
     </StyledTypo>

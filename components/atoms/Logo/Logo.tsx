@@ -33,6 +33,7 @@ const Logo = ({ isBig, white }: IProps): ReactElement => {
             width={sizes.w}
             height={sizes.h}
             objectFit='contain'
+            style={{ flex: 1 }}
           />
         </a>
       </Link>
