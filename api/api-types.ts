@@ -186,6 +186,33 @@ export interface AdminGetCourseTopicsItemResponseDto {
   lessons: AdminGetCourseLessonsItemResponseDto[];
 }
 
+export interface ReviewCourseDto {
+  _id: string;
+  name: string;
+}
+
+export interface ReviewUserBillingDto {
+  firstName: string;
+  lastName: string;
+}
+
+export interface ReviewUserDto {
+  _id: string;
+  billing: ReviewUserBillingDto;
+}
+
+export interface ReviewDto {
+  _id: string;
+  title: string;
+  review: string;
+  course: ReviewCourseDto;
+  user: ReviewUserDto;
+  /** @format date-time */
+  createdAt: string;
+  /** @format date-time */
+  updatedAt: string;
+}
+
 export interface NewLessonDto {
   /** @minLength 3 */
   title: string;
@@ -368,6 +395,12 @@ export interface ResetPasswordDto {
 export interface CreateSessionDto {
   /** Courses ID */
   courses: string[];
+}
+
+export interface NewReviewDto {
+  course: string;
+  title: string;
+  review: string;
 }
 
 export interface LoginDto {
@@ -1017,6 +1050,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Courses
+     * @name CoursesControllerGetCourseReviews
+     * @summary Get course reviews
+     * @request GET:/courses/{id}/reviews
+     */
+    coursesControllerGetCourseReviews: (id: string, params: RequestParams = {}) =>
+      this.request<ReviewDto[], any>({
+        path: `/courses/${id}/reviews`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
   };
   lessons = {
     /**
@@ -1495,6 +1544,44 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<void, any>({
         path: `/stripe/webhook`,
         method: "POST",
+        ...params,
+      }),
+  };
+  reviews = {
+    /**
+     * No description
+     *
+     * @tags Reviews
+     * @name ReviewsControllerNewReview
+     * @request POST:/reviews
+     * @secure
+     */
+    reviewsControllerNewReview: (data: NewReviewDto, params: RequestParams = {}) =>
+      this.request<
+        NewReviewDto,
+        | {
+            /** @example 400 */
+            statusCode: number;
+            /** @example "Bad Request" */
+            message: string;
+            /** @example "Bad Request" */
+            error?: string;
+          }
+        | {
+            /** @example 409 */
+            statusCode: number;
+            /** @example "Conflict" */
+            message: string;
+            /** @example "Conflict" */
+            error?: string;
+          }
+      >({
+        path: `/reviews`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
   };
