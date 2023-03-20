@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import { NextPage, NextPageContext } from "next";
 import Head from "next/head";
 
@@ -21,6 +21,8 @@ interface INextPage {
 }
 
 const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.not("lg"));
   const { user } = useAccountContext();
 
   const userHaveCourse = () =>
@@ -64,50 +66,90 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
         </title>
       </Head>
       <MainLayout>
-        <Grid container spacing={3}>
-          <Grid item lg={12}>
-            <CourseDetailsHeading
-              name={course.name}
-              isFeatured={course.featured}
-              difficultLevel={course.difficultyLevel}
-            />
+        {isMobile && (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <CourseDetailsHeading
+                name={course.name}
+                isFeatured={course.featured}
+                difficultLevel={course.difficultyLevel}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseDetailsSidebarPrice
+                course={course}
+                price={course.price}
+                salePrice={course.salePrice}
+                progress={getCourseProgress() || 0}
+                youtubeLink={course.youtubePreview}
+                userHasCourse={userHaveCourse()}
+                lastLesson={userLastViewedLesson()}
+                disableButton={!userLastViewedLesson()}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseCover alt={course.name} url={course.cover} />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseInfoTabs
+                description={course.description}
+                topics={topics}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CourseDetailsSidebar
+                whatYouLearn={course.whatYouLearn}
+                courseIncludes={course.courseIncludes}
+              />
+            </Grid>
           </Grid>
-          <Grid item lg={8}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <CourseCover alt={course.name} url={course.cover} />
+        )}
+        {!isMobile && (
+          <Grid container spacing={3}>
+            <Grid item lg={12}>
+              <CourseDetailsHeading
+                name={course.name}
+                isFeatured={course.featured}
+                difficultLevel={course.difficultyLevel}
+              />
+            </Grid>
+            <Grid item lg={8}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <CourseCover alt={course.name} url={course.cover} />
+                </Grid>
+                <Grid item xs={12}>
+                  <CourseInfoTabs
+                    description={course.description}
+                    topics={topics}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <CourseInfoTabs
-                  description={course.description}
-                  topics={topics}
-                />
+            </Grid>
+            <Grid item lg={4}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <CourseDetailsSidebarPrice
+                    course={course}
+                    price={course.price}
+                    salePrice={course.salePrice}
+                    progress={getCourseProgress() || 0}
+                    youtubeLink={course.youtubePreview}
+                    userHasCourse={userHaveCourse()}
+                    lastLesson={userLastViewedLesson()}
+                    disableButton={!userLastViewedLesson()}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <CourseDetailsSidebar
+                    whatYouLearn={course.whatYouLearn}
+                    courseIncludes={course.courseIncludes}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item lg={4}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <CourseDetailsSidebarPrice
-                  course={course}
-                  price={course.price}
-                  salePrice={course.salePrice}
-                  progress={getCourseProgress() || 0}
-                  youtubeLink={course.youtubePreview}
-                  userHasCourse={userHaveCourse()}
-                  lastLesson={userLastViewedLesson()}
-                  disableButton={!userLastViewedLesson()}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CourseDetailsSidebar
-                  whatYouLearn={course.whatYouLearn}
-                  courseIncludes={course.courseIncludes}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+        )}
       </MainLayout>
     </>
   );
