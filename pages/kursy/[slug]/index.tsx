@@ -5,6 +5,7 @@ import Head from "next/head";
 import {
   GetCourseResponseDto,
   GetCourseTopicsItemResponseDto,
+  ReviewDto,
 } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import CourseCover from "../../../components/atoms/CourseCover/CourseCover";
@@ -18,9 +19,14 @@ import { useAccountContext } from "../../../providers/AccountProvider";
 interface INextPage {
   course: GetCourseResponseDto;
   topics: GetCourseTopicsItemResponseDto[];
+  reviews: ReviewDto[];
 }
 
-const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
+const CourseDetailsPage: NextPage<INextPage> = ({
+  course,
+  topics,
+  reviews,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.not("lg"));
   const { user } = useAccountContext();
@@ -94,6 +100,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
               <CourseInfoTabs
                 description={course.description}
                 topics={topics}
+                reviews={reviews}
               />
             </Grid>
             <Grid item xs={12}>
@@ -122,6 +129,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({ course, topics }) => {
                   <CourseInfoTabs
                     description={course.description}
                     topics={topics}
+                    reviews={reviews}
                   />
                 </Grid>
               </Grid>
@@ -161,9 +169,14 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   const { data: courseData } = await client.get<GetCourseResponseDto>(
     `/courses/${slug}`,
   );
+
   const { data: topicsData } = await client.get<
     GetCourseTopicsItemResponseDto[]
   >(`/courses/${slug}/topics`);
+
+  const { data: reviewsData } = await client.get<ReviewDto[]>(
+    `/courses/${slug}/reviews`,
+  );
 
   if (!courseData || !topicsData) {
     return {
@@ -178,6 +191,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
     props: {
       course: courseData,
       topics: topicsData,
+      reviews: reviewsData,
     },
   };
 };
