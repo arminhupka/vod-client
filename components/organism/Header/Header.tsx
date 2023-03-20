@@ -1,4 +1,13 @@
-import { AppBar, Box, Button, Container, Typography } from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -7,6 +16,7 @@ import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
 import CartButton from "../../atoms/CartButton/CartButton";
 import Logo from "../../atoms/Logo/Logo";
+import MainDrawer from "../../molecues/MainDrawer/MainDrawer";
 import CouponModal from "../Modals/CouponModal/CouponModal";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
@@ -41,6 +51,9 @@ const Header = ({
   withoutTopbar,
   fullWidth,
 }: IProps): ReactElement => {
+  const theme = useTheme();
+  const isMobile = theme.breakpoints.up("md");
+
   const { isOpen, onOpen, onClose } = useModalState();
   const {
     isOpen: isOpenLoginModal,
@@ -60,6 +73,12 @@ const Header = ({
     onClose: onCloseResetPasswordModal,
   } = useModalState();
 
+  const {
+    isOpen: isOpenDrawer,
+    onOpen: onOpenDrawer,
+    onClose: onCloseDrawer,
+  } = useModalState();
+
   const { total } = useCartContext();
 
   const { user } = useAccountContext();
@@ -71,6 +90,7 @@ const Header = ({
 
   return (
     <>
+      <MainDrawer open={isOpenDrawer} onClose={onCloseDrawer} />
       <RegistrationModal onClose={onClose} open={isOpen} />
       <LoginModal
         onClose={onCloseLoginModal}
@@ -108,21 +128,24 @@ const Header = ({
             alignItems='center'
             justifyContent='space-between'>
             <Logo />
-            <Box display='flex' gap={2}>
-              {links.map((l) => (
-                <Typography
-                  variant='body2'
-                  fontWeight={600}
-                  textTransform='uppercase'
-                  fontFamily='Playfair Display'
-                  key={l.id}
-                  sx={{
-                    color: "#333",
-                  }}>
-                  {l.name}
-                </Typography>
-              ))}
-            </Box>
+            {!isMobile && (
+              <Box display='flex' gap={2}>
+                {links.map((l) => (
+                  <Typography
+                    variant='body2'
+                    fontWeight={600}
+                    textTransform='uppercase'
+                    fontFamily='Playfair Display'
+                    key={l.id}
+                    sx={{
+                      color: "#333",
+                    }}>
+                    {l.name}
+                  </Typography>
+                ))}
+              </Box>
+            )}
+
             <Box display='flex' alignItems='center' gap={2}>
               <Link href='/koszyk' passHref>
                 <Box component='a' mr={1} display='flex' gap={2}>
@@ -153,6 +176,11 @@ const Header = ({
                     Aktywuj kupon
                   </Button>
                 </>
+              )}
+              {isMobile && (
+                <IconButton onClick={onOpenDrawer}>
+                  <Menu />
+                </IconButton>
               )}
             </Box>
           </Box>
