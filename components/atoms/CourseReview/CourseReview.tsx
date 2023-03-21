@@ -53,6 +53,7 @@ const CourseReview = ({ review }: IProps): ReactElement => {
   );
 
   const isUserReview = user?._id === review.user._id;
+  const isAdmin = user?.role === "ADMIN";
 
   return (
     <>
@@ -66,6 +67,11 @@ const CourseReview = ({ review }: IProps): ReactElement => {
             </StyledUserName>
             <StyledLastUpdate>Dodano {reviewUpdateDate}</StyledLastUpdate>
           </StyledReviewUserWrapper>
+          {isAdmin && !isUserReview && (
+            <Button size='small' color='error' onClick={handleReviewDelete}>
+              Usuń komentarz
+            </Button>
+          )}
           {isUserReview && (
             <StyledHeaderButtonsWrapper>
               <Button size='small'>Edytuj komentarz</Button>
