@@ -32,7 +32,7 @@ const CourseInfoTabs = ({
         <Tabs value={currentPanel} onChange={handleChange}>
           <Tab label='Opis kursu' id='0' />
           <Tab label='Lista lekcji' id='1' />
-          <Tab label='Recenzje' id='2' />
+          <Tab label={`Recenzje (${reviews.length})`} id='2' />
         </Tabs>
       </Box>
       <Box mt={4}>

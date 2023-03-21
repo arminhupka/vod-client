@@ -1,25 +1,34 @@
-import { alpha, Box, styled } from "@mui/material";
+import { alpha, Box, styled, Typography } from "@mui/material";
 
 export const StyledWrapper = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
-  background: alpha(theme.palette.primary.main, 0.02),
-  borderColor: alpha(theme.palette.primary.main, 0.1),
-  borderRadius: theme.spacing(1),
-  boxShadow: theme.shadows[1],
+  borderBottom: "1px solid",
+  borderBottomColor: alpha(theme.palette.primary.main, 0.1),
 }));
 
-export const StyledBlockquote = styled("blockquote")(({ theme }) => ({
-  margin: 0,
+export const StyledReviewHeader = styled(Box)(({ theme }) => ({
   display: "flex",
-  flexDirection: "column",
+  alignItems: "center",
+  gap: theme.spacing(2),
 }));
 
-export const StyledCite = styled("cite")(({ theme }) => ({
-  paddingTop: theme.spacing(1),
-  marginTop: theme.spacing(1),
+export const StyledReviewUserWrapper = styled(Box)(() => ({}));
+
+export const StyledUserName = styled(Typography)(() => ({
   fontFamily: "Playfair Display",
+}));
+
+export const StyledLastUpdate = styled(Typography)(({ theme }) => ({
   fontSize: theme.typography.body2.fontSize,
-  color: theme.palette.grey[800],
-  borderTop: "1px solid",
-  borderColor: theme.palette.primary.light,
+  fontWeight: 500,
+  color: theme.palette.grey[500],
+}));
+
+export const StyledReviewDescription = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  lineHeight: "155%",
+}));
+
+export const StyledHeaderButtonsWrapper = styled(Box)(() => ({
+  marginLeft: "auto",
 }));
