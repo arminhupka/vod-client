@@ -49,10 +49,10 @@ const OrdersTable = ({ data }: IProps): ReactElement => (
             <TableCell>{d.orderId}</TableCell>
             <TableCell>{formatPrice(d.totalSum)}</TableCell>
             <TableCell>
-              {new Date(d.paidAt).toLocaleDateString("pl-PL")}
+              <OrderStatus status={d.status as OrderStatusEnum} />
             </TableCell>
             <TableCell>
-              <OrderStatus status={d.status as OrderStatusEnum} />
+              {new Date(Date.now()).toLocaleDateString("pl-PL")}
             </TableCell>
             <TableCell>
               <Box display='flex' gap={1}>

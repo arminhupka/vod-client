@@ -2,12 +2,14 @@ import { Button } from "@mui/material";
 import { AxiosError } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { useMutation } from "react-query";
 
 import { ReviewDto } from "../../../api/api-types";
 import { DeleteReview } from "../../../api/reviews";
+import useModalState from "../../../hooks/useModalState";
 import { useAccountContext } from "../../../providers/AccountProvider";
+import EditReviewModal from "../../organism/Modals/EditReviewModal/EditReviewModal";
 import { StyledAvatar } from "../AvatarMenu/AvatarMenu.styles";
 import OverlayLoader from "../OverlayLoader/OverlayLoader";
 import {
@@ -27,6 +29,9 @@ interface IProps {
 const CourseReview = ({ review }: IProps): ReactElement => {
   const router = useRouter();
   const { user } = useAccountContext();
+  const { onOpen, onClose, isOpen } = useModalState();
+
+  const [rev, setRev] = useState<ReviewDto | null>(null);
 
   const { mutate, isLoading } = useMutation<
     ReviewDto,
@@ -45,6 +50,16 @@ const CourseReview = ({ review }: IProps): ReactElement => {
 
   const handleReviewDelete = () => mutate(review._id);
 
+  const handleOpenEditButton = (review: ReviewDto) => {
+    setRev(review);
+    onOpen();
+  };
+
+  const handleCloseEditModal = () => {
+    onClose();
+    setRev(null);
+  };
+
   const reviewUsername = `${review.user.billing.firstName[0]}${review.user.billing.lastName[0]}`;
   const reviewFirstName = review.user.billing.firstName;
   const reviewLastName = review.user.billing.lastName;
@@ -57,6 +72,11 @@ const CourseReview = ({ review }: IProps): ReactElement => {
 
   return (
     <>
+      <EditReviewModal
+        review={rev}
+        onClose={handleCloseEditModal}
+        open={isOpen}
+      />
       <OverlayLoader open={isLoading} />
       <StyledWrapper>
         <StyledReviewHeader>
@@ -74,7 +94,6 @@ const CourseReview = ({ review }: IProps): ReactElement => {
           )}
           {isUserReview && (
             <StyledHeaderButtonsWrapper>
-              <Button size='small'>Edytuj komentarz</Button>
               <Button size='small' color='error' onClick={handleReviewDelete}>
                 Usuń komentarz
               </Button>

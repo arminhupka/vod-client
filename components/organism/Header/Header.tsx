@@ -134,10 +134,9 @@ const Header = ({
               <Box display='flex' gap={2}>
                 {links.map((l) => (
                   <Typography
-                    variant='body2'
                     fontWeight={600}
                     textTransform='uppercase'
-                    fontFamily='Playfair Display'
+                    fontFamily='Maven Pro'
                     key={l.id}
                     sx={{
                       color: "#333",

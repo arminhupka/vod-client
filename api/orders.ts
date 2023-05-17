@@ -7,3 +7,7 @@ export const getOrder = async (id: string): Promise<GetOrderResponseDto> => {
   });
   return data;
 };
+
+export const getInvoice = async (id: string) => {
+  return await client.get(`/order/${id}/invoice`);
+};

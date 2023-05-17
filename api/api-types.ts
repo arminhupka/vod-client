@@ -403,6 +403,11 @@ export interface NewReviewDto {
   review: string;
 }
 
+export interface UpdateReviewDto {
+  title: string;
+  review: string;
+}
+
 export interface LoginDto {
   email: string;
   password: string;
@@ -1423,6 +1428,49 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Orders
+     * @name OrdersControllerGetInvoice
+     * @summary Download invoice
+     * @request GET:/orders/{id}/invoice
+     * @secure
+     */
+    ordersControllerGetInvoice: (id: string, params: RequestParams = {}) =>
+      this.request<
+        any,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
+        path: `/orders/${id}/invoice`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
   };
   users = {
     /**
@@ -1624,6 +1672,51 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/reviews/${id}`,
         method: "DELETE",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Reviews
+     * @name ReviewsControllerUpdateReview
+     * @request PATCH:/reviews/{id}
+     * @secure
+     */
+    reviewsControllerUpdateReview: (id: string, data: UpdateReviewDto, params: RequestParams = {}) =>
+      this.request<
+        ReviewDto,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+        | {
+            /** @example 404 */
+            statusCode: number;
+            /** @example "Not Found" */
+            message: string;
+            /** @example "Not Found" */
+            error?: string;
+          }
+      >({
+        path: `/reviews/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

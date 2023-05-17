@@ -41,17 +41,7 @@ const CartTotal = ({ cartItems }: IProps): ReactElement => {
   const isCheckoutPage = router.pathname.startsWith("/koszyk");
 
   const calculateTax = (total: number): number => {
-    return Math.ceil(total * (23 / 100));
-  };
-
-  const getTax = (): number => {
-    if (cartItems.length) {
-      return calculateTax(
-        cartItems.map((i) => i.salePrice || i.price).reduce((p, c) => (p += c)),
-      );
-    } else {
-      return 0;
-    }
+    return Math.ceil(total * (100 / 123));
   };
 
   const getTotal = (): number => {
@@ -63,6 +53,9 @@ const CartTotal = ({ cartItems }: IProps): ReactElement => {
       return 0;
     }
   };
+
+  const netPrice = calculateTax(getTotal());
+  const tax = getTotal() - netPrice;
 
   const { mutateAsync } = useMutation<any, any, string[]>(
     async (variables) => payWithPayU(variables),
@@ -99,13 +92,11 @@ const CartTotal = ({ cartItems }: IProps): ReactElement => {
         <StyledList>
           <StyledListItem>
             <StyledListKey>Suma częściowa</StyledListKey>
-            <StyledListValue>
-              {formatPrice(getTotal() - getTax())}
-            </StyledListValue>
+            <StyledListValue>{formatPrice(netPrice)}</StyledListValue>
           </StyledListItem>
           <StyledListItem>
             <StyledListKey>Podatek</StyledListKey>
-            <StyledListValue>{formatPrice(getTax())}</StyledListValue>
+            <StyledListValue>{formatPrice(tax)}</StyledListValue>
           </StyledListItem>
         </StyledList>
         <StyledList>

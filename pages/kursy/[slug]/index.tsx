@@ -98,6 +98,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
             </Grid>
             <Grid item xs={12}>
               <CourseInfoTabs
+                courseId={course._id}
                 description={course.description}
                 topics={topics}
                 reviews={reviews}
@@ -127,6 +128,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
                 </Grid>
                 <Grid item xs={12}>
                   <CourseInfoTabs
+                    courseId={course._id}
                     description={course.description}
                     topics={topics}
                     reviews={reviews}
