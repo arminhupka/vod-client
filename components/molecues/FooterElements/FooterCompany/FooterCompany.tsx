@@ -7,9 +7,10 @@ const FooterCompany = (): ReactElement => (
   <StyledWrapper>
     <Logo isBig white />
     <StyledDescription>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec velit
-      id leo viverra dapibus. Duis eu euismod lorem. Duis nisi mauris, fermentum
-      non condimentum vitae, vestibulum in sapien.
+      Dąż do perfekcji, bazując na solidnym fundamencie eksperckiej wiedzy i
+      praktycznych umiejętności. Na nowo pokochaj sztukę makijażu i chętnie
+      publikuj swoje prace. Twoje wysokiej jakości zdjęcia przyciągną nowe
+      klientki, rozwijając biznes na Twoich zasadach!
     </StyledDescription>
   </StyledWrapper>
 );

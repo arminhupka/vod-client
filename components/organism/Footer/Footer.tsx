@@ -11,24 +11,24 @@ import {
 } from "./Footer.styles";
 
 const navigations = [
-  {
-    id: 0,
-    title: "Moje konto",
-    links: [
-      {
-        name: "Konto",
-        url: "/konto",
-      },
-      {
-        name: "Kursy",
-        url: "/konto/kursy",
-      },
-      {
-        name: "Zamówienia",
-        url: "/konto/zamowienia",
-      },
-    ],
-  },
+  // {
+  //   id: 0,
+  //   title: "Moje konto",
+  //   links: [
+  //     {
+  //       name: "Konto",
+  //       url: "/konto",
+  //     },
+  //     {
+  //       name: "Kursy",
+  //       url: "/konto/kursy",
+  //     },
+  //     {
+  //       name: "Zamówienia",
+  //       url: "/konto/zamowienia",
+  //     },
+  //   ],
+  // },
   {
     id: 1,
     title: "Platforma",
@@ -68,7 +68,7 @@ const Footer = (): ReactElement => (
     <Container>
       <StyledMain>
         <Grid container spacing={5}>
-          <Grid item xs={12} md={12} lg={6}>
+          <Grid item xs={12} md={12} lg={6} marginRight='auto'>
             <FooterCompany />
           </Grid>
           {navigations.map((nav) => (

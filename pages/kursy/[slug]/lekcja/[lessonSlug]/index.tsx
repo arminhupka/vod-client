@@ -36,7 +36,7 @@ const LessonPage: NextPage<INextPage> = ({
 
   return (
     <LessonLayout withoutTopbar fullWidth>
-      <Grid height='100%' container={!isMobile}>
+      <Grid container={!isMobile}>
         <Grid item xs={12}>
           <CourseTitle title={courseData.name} />
         </Grid>
@@ -47,7 +47,7 @@ const LessonPage: NextPage<INextPage> = ({
             <Typography>{lesson.description}</Typography>
           </Box>
         </Grid>
-        <Grid height='100%' item xs={12} lg={3}>
+        <Grid item xs={12} lg={3}>
           <LessonsList course={course} topics={topics} />
         </Grid>
       </Grid>
