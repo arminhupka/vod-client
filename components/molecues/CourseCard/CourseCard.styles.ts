@@ -15,9 +15,9 @@ export const StyledWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledCoverWrapper = styled(Box)(() => ({
-  height: 200,
   position: "relative",
   transition: ".3s transform",
+  aspectRatio: "16/9",
 }));
 
 export const StyledCover = styled("img")(() => ({
