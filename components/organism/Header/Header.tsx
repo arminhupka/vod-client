@@ -54,7 +54,7 @@ const Header = ({
   fullWidth,
 }: IProps): ReactElement => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.not("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { isOpen, onOpen, onClose } = useModalState();
   const {
