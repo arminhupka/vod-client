@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import {
   GetCourseTopicsItemResponseDto,
   UserCourseLessonDto,
+  UserCourseResponseDto,
 } from "../../../../../api/api-types";
 import { client } from "../../../../../api/client";
 import CourseTitle from "../../../../../components/atoms/CourseTitle/CourseTitle";
@@ -21,9 +22,15 @@ interface INextPage {
   course: string;
   topics: GetCourseTopicsItemResponseDto[];
   lesson: UserCourseLessonDto;
+  courseData: UserCourseResponseDto;
 }
 
-const LessonPage: NextPage<INextPage> = ({ topics, course, lesson }) => {
+const LessonPage: NextPage<INextPage> = ({
+  topics,
+  course,
+  lesson,
+  courseData,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -31,7 +38,7 @@ const LessonPage: NextPage<INextPage> = ({ topics, course, lesson }) => {
     <LessonLayout withoutTopbar fullWidth>
       <Grid height='100%' container={!isMobile}>
         <Grid item xs={12}>
-          <CourseTitle title='Some nice course' />
+          <CourseTitle title={courseData.name} />
         </Grid>
         <Grid item xs={12} lg={9}>
           <DynamicPlayer video={lesson.videoLink.split("=").at(-1)!} />
@@ -52,6 +59,8 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   const { slug: courseSlug, lessonSlug } = ctx.query;
   const token = getCookie("token", { res: ctx.res, req: ctx.req });
 
+  console.log(token);
+
   if (!token) {
     return {
       redirect: {
@@ -62,6 +71,15 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   }
 
   try {
+    const { data: course } = await client.get<UserCourseResponseDto>(
+      `/user/courses/${courseSlug}`,
+      {
+        headers: {
+          Cookie: `token=${token};`,
+        },
+      },
+    );
+
     const { data: topics } = await client.get<GetCourseTopicsItemResponseDto>(
       `/courses/${courseSlug}/topics`,
     );
@@ -80,6 +98,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
         course: courseSlug,
         topics,
         lesson,
+        courseData: course,
       },
     };
   } catch (err) {
