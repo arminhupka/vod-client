@@ -27,12 +27,17 @@ interface INextPage {
   topics: AdminGetCourseTopicsItemResponseDto[];
 }
 
+type TUpdateCourseDto = Omit<UpdateCourseDto, "price" | "salePrice"> & {
+  price?: string | null;
+  salePrice?: string | null;
+};
+
 const AdminCourseDetails: NextPage<INextPage> = ({ course, topics }) => {
   const [file, setFile] = useState<Blob | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const router = useRouter();
 
-  const form = useForm<UpdateCourseDto>();
+  const form = useForm<TUpdateCourseDto>();
 
   const { mutate, isLoading } = useMutation<
     AdminGetCourseDetailsResponseDto,
@@ -47,8 +52,12 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course, topics }) => {
 
   const handleCoursePublish = () => mutate({ status: "PUBLISHED" });
 
-  const handleSave: SubmitHandler<UpdateCourseDto> = async (form) => {
-    mutate(form);
+  const handleSave: SubmitHandler<TUpdateCourseDto> = async (form) => {
+    mutate({
+      ...form,
+      price: form.price ? +form.price : null,
+      salePrice: form.salePrice ? +form.salePrice : null,
+    });
   };
 
   const handleFileSelectAndUpload = async (
@@ -70,15 +79,11 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course, topics }) => {
     form.setValue("description", course.description);
     form.setValue(
       "price",
-      course.price
-        ? +formatPrice(course.price).replace("zł", "").trim()
-        : undefined,
+      course.price ? formatPrice(course.price) : undefined,
     );
     form.setValue(
       "salePrice",
-      course.salePrice
-        ? +formatPrice(course.salePrice).replace("zł", "").trim()
-        : undefined,
+      course.salePrice ? formatPrice(course.salePrice).trim() : undefined,
     );
     form.setValue("youtubePreview", course.youtubePreview || "");
     form.setValue("courseIncludes", course.courseIncludes);

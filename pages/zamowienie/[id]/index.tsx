@@ -70,8 +70,8 @@ const OrderDetailsPage: NextPage = () => {
     <MainLayout>
       <SectionTitle title='Status zamówienia' />
       <UserOrder isLoading={orderIsLoading} />
-      {isSuccess && !orderError && <SuccessMessage />}
-      {orderError && <ErrorMessage />}
+      {isSuccess && !orderIsLoading && !orderError && <SuccessMessage />}
+      {orderError && !orderIsLoading && <ErrorMessage />}
     </MainLayout>
   );
 };

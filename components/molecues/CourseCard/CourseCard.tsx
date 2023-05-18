@@ -74,7 +74,7 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
         <StyledDescription>{shortDescription}</StyledDescription>
       </StyledInfoWrapper>
       <StyledButtonWrapper>
-        <StyledPrice>{formatPrice(salePrice || price)}</StyledPrice>
+        <StyledPrice>{formatPrice(salePrice || price, true)}</StyledPrice>
         <Button
           disabled={!!cart.find((item) => item._id === _id)}
           startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}
