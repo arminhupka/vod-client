@@ -1,4 +1,4 @@
-import { Menu } from "@mui/icons-material";
+import { Logout, Menu } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -10,8 +10,12 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { useQuery } from "react-query";
 
+import { OkResponseDto } from "../../../api/api-types";
+import { logout } from "../../../api/auth";
 import useModalState from "../../../hooks/useModalState";
 import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
@@ -85,9 +89,24 @@ const Header = ({
 
   const { user } = useAccountContext();
 
+  const router = useRouter();
+
+  const logoutQuery = useQuery<OkResponseDto>(
+    "logout",
+    async () => await logout(),
+    {
+      enabled: false,
+      onSuccess: () => router.reload(),
+    },
+  );
+
   const handleOpenResetPasswordModal = () => {
     onCloseLoginModal();
     onOpenResetPasswordModal();
+  };
+
+  const handleLogout = async (): Promise<void> => {
+    await logoutQuery.refetch();
   };
 
   return (
@@ -166,7 +185,7 @@ const Header = ({
               {!isMobile && user && (
                 <>
                   <Link href='/konto' passHref>
-                    <Button component='div' variant='outlined' size='small'>
+                    <Button component='a' variant='outlined' size='small'>
                       Moje Konto
                     </Button>
                   </Link>
@@ -176,6 +195,9 @@ const Header = ({
                     size='small'>
                     Aktywuj kupon
                   </Button>
+                  <IconButton onClick={handleLogout}>
+                    <Logout />
+                  </IconButton>
                 </>
               )}
               {isMobile && (
