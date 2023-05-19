@@ -49,6 +49,7 @@ export interface UpdateCourseDto {
   status?: "DRAFT" | "PUBLISHED";
   featured?: boolean;
   youtubePreview?: string;
+  daysAvailable?: number;
 }
 
 export interface CourseListItem {
@@ -125,6 +126,7 @@ export interface GetCourseResponseDto {
   lessonsCount: number;
   topicsCount: number;
   youtubePreview: string | null;
+  daysAvailable: number;
   slug: string;
   cover: string;
   featured: boolean;
@@ -145,6 +147,7 @@ export interface AdminGetCourseDetailsResponseDto {
   lessonsCount: number;
   topicsCount: number;
   youtubePreview: string | null;
+  daysAvailable: number;
   slug: string;
   /** @format date-time */
   publishedAt: string;

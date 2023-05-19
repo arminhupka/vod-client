@@ -3,7 +3,10 @@ import Image from "next/image";
 import { ChangeEvent, MutableRefObject, ReactElement, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { AdminGetCourseTopicsItemResponseDto } from "../../../api/api-types";
+import {
+  AdminGetCourseTopicsItemResponseDto,
+  UpdateCourseDto,
+} from "../../../api/api-types";
 import useModalState from "../../../hooks/useModalState";
 import AdminTopicsList from "../../atoms/AdminTopicsList/AdminTopicsList";
 import FeatureList from "../../FeatureList/FeatureList";
@@ -22,7 +25,7 @@ export const UpdateCourseForm = ({
   handleFileSelectAndUpload,
   topics,
 }: IProps): ReactElement => {
-  const { register, setValue, watch } = useFormContext();
+  const { register, setValue, watch } = useFormContext<UpdateCourseDto>();
   const {
     isOpen: isOpenNewTopicModal,
     onOpen: onOpenNewTopicModal,
@@ -136,7 +139,11 @@ export const UpdateCourseForm = ({
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField fullWidth label='Dni dostępu' />
+                <TextField
+                  fullWidth
+                  label='Dni dostępu'
+                  {...register("daysAvailable")}
+                />
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -173,7 +180,7 @@ export const UpdateCourseForm = ({
                   title='Czego się nauczysz'
                   register='whatYouLearn'
                   setValue={setValue}
-                  values={watchLearn}
+                  values={watchLearn || []}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -181,7 +188,7 @@ export const UpdateCourseForm = ({
                   title='Kurs zawiera'
                   register='courseIncludes'
                   setValue={setValue}
-                  values={watchCourseIncludes}
+                  values={watchCourseIncludes || []}
                 />
               </Grid>
             </Grid>

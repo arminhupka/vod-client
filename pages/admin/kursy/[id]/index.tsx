@@ -88,6 +88,7 @@ const AdminCourseDetails: NextPage<INextPage> = ({ course, topics }) => {
     form.setValue("youtubePreview", course.youtubePreview || "");
     form.setValue("courseIncludes", course.courseIncludes);
     form.setValue("whatYouLearn", course.whatYouLearn);
+    form.setValue("daysAvailable", course.daysAvailable);
   }, []);
 
   return (
