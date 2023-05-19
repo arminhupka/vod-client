@@ -63,10 +63,10 @@ export const UpdateCourseForm = ({
                       </Typography>
                       {cover && (
                         <Box
-                          height={250}
                           position='relative'
                           overflow='hidden'
-                          borderRadius={1}>
+                          borderRadius={1}
+                          sx={{ aspectRatio: "16/9" }}>
                           <Image
                             src={cover}
                             alt='image'
