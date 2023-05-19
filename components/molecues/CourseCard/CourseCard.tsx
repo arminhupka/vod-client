@@ -38,7 +38,9 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
   const { addToCart, cart } = useCartContext();
   const { user } = useAccountContext();
 
-  const userHaveCourse = () => true;
+  const userHaveCourse = () =>
+    !!user?.courses.find((item) => item.course?._id === _id!);
+
   return (
     <StyledWrapper overflow='hidden'>
       <StyledBlobsWrapper>
