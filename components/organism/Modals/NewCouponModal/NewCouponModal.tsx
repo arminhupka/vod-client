@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Alert,
   Box,
@@ -10,11 +11,13 @@ import {
   TextField,
 } from "@mui/material";
 import { AxiosError } from "axios";
+import { nanoid } from "nanoid";
 import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { MutableRefObject, ReactElement, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import * as yup from "yup";
 
 import {
   CouponResponseDto,
@@ -31,9 +34,19 @@ interface IProps extends TProps {
   courses: GetCoursesAdminItem[];
 }
 
+const FormSchema = yup.object().shape({
+  course: yup.string(),
+  code: yup.string(),
+  availableUntil: yup.date(),
+  courseAvailableDays: yup.number(),
+});
+
 const NewCouponModal = ({ open, onClose, courses }: IProps): ReactElement => {
   const router = useRouter();
-  const { register, handleSubmit, reset } = useForm<CreateCouponDto>();
+  const { register, handleSubmit, reset, setValue, setFocus, formState } =
+    useForm<CreateCouponDto>({
+      resolver: yupResolver(FormSchema),
+    });
 
   const { mutate, isLoading, error } = useMutation<
     CouponResponseDto,
@@ -47,8 +60,19 @@ const NewCouponModal = ({ open, onClose, courses }: IProps): ReactElement => {
     },
   });
 
+  const codeInputRef = useRef() as MutableRefObject<HTMLInputElement>;
+
   const handleCreateCoupon: SubmitHandler<CreateCouponDto> = (form) =>
     mutate(form);
+
+  const handleGenerateCouponCode = (): void => {
+    setFocus("code");
+    const id = nanoid(16);
+    setValue("code", id.toUpperCase(), {
+      shouldTouch: true,
+      shouldDirty: true,
+    });
+  };
 
   return (
     <BaseModal title='Nowy kupon' onClose={onClose} open={open}>
@@ -89,11 +113,24 @@ const NewCouponModal = ({ open, onClose, courses }: IProps): ReactElement => {
                   fullWidth
                   label='Wazny to'
                   type='date'
+                  InputLabelProps={{ shrink: true }}
                   {...register("availableUntil")}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button fullWidth variant='contained' type='submit'>
+                <Button
+                  variant='outlined'
+                  fullWidth
+                  onClick={handleGenerateCouponCode}>
+                  Wygeneruj kod
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  type='submit'
+                  disabled={!formState.isValid}>
                   Stwórz kupon
                 </Button>
               </Grid>
