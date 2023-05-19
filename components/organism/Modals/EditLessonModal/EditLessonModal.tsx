@@ -11,9 +11,11 @@ import {
   LessonResponseDto,
   UpdateLessonDto,
 } from "../../../../api/api-types";
-import { updateLesson } from "../../../../api/lessons";
+import { deleteLesson, updateLesson } from "../../../../api/lessons";
+import useModalState from "../../../../hooks/useModalState";
 import BaseModal, { IBaseModalProps } from "../../../atoms/BaseModal/BaseModal";
 import Loading from "../../../atoms/Loading/Loading";
+import ConfirmModal from "../ConfirmModal/ConfirmModal";
 
 type TProps = Pick<IBaseModalProps, "onClose" | "open">;
 
@@ -23,6 +25,11 @@ interface IProps extends TProps {
 
 const EditLessonModal = ({ lesson, onClose, open }: IProps): ReactElement => {
   const router = useRouter();
+  const {
+    isOpen: isOpenConfirmModal,
+    onOpen: onOpenConfirmModal,
+    onClose: onCloseConfirmModal,
+  } = useModalState();
 
   const {
     register,
@@ -40,7 +47,18 @@ const EditLessonModal = ({ lesson, onClose, open }: IProps): ReactElement => {
     onSuccess: () => router.replace(router.asPath),
   });
 
-  const handleOnClose = () => {
+  const deleteMutation = useMutation<LessonResponseDto, AxiosError<ApiError>>(
+    async () => await deleteLesson(lesson?._id ?? ""),
+    {
+      onSuccess: () => {
+        onCloseConfirmModal();
+        onClose();
+        router.replace(router.asPath);
+      },
+    },
+  );
+
+  const handleOnClose = (): void => {
     onClose();
     reset();
   };
@@ -48,6 +66,8 @@ const EditLessonModal = ({ lesson, onClose, open }: IProps): ReactElement => {
   const handleFormSubmit: SubmitHandler<UpdateLessonDto> = (form) => {
     mutation.mutate(form);
   };
+
+  const handleModalConfirmation = (): void => deleteMutation.mutate();
 
   useEffect(() => {
     if (lesson) {
@@ -60,8 +80,14 @@ const EditLessonModal = ({ lesson, onClose, open }: IProps): ReactElement => {
   return (
     <BaseModal title='Edycja lekcji' onClose={handleOnClose} open={open}>
       <>
-        {mutation.isLoading && <Loading />}
-        {!mutation.isLoading && (
+        <ConfirmModal
+          title={`Chcesz usunąć lekcje ${lesson?.title}`}
+          onClose={onCloseConfirmModal}
+          open={isOpenConfirmModal}
+          onConfirm={handleModalConfirmation}
+        />
+        {(mutation.isLoading || deleteMutation.isLoading) && <Loading />}
+        {!mutation.isLoading && !deleteMutation.isLoading && (
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -99,6 +125,15 @@ const EditLessonModal = ({ lesson, onClose, open }: IProps): ReactElement => {
               <Grid item xs={12}>
                 <Button type='submit' variant='contained' fullWidth>
                   Zapisz lekcje
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant='outlined'
+                  color='error'
+                  fullWidth
+                  onClick={onOpenConfirmModal}>
+                  Usuń lekcje
                 </Button>
               </Grid>
             </Grid>

@@ -22,3 +22,10 @@ export const updateLesson = async (
 
   return data;
 };
+
+export const deleteLesson = async (id: string): Promise<LessonResponseDto> => {
+  const { data } = await client.delete<LessonResponseDto>(`/lessons/${id}`, {
+    withCredentials: true,
+  });
+  return data;
+};
