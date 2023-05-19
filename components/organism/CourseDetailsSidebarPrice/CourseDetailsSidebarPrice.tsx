@@ -81,13 +81,17 @@ const CourseDetailsSidebarPrice = ({
           <StyledPricesWrapper>
             {salePrice && (
               <>
-                <StyledPrice as='ins'>{formatPrice(salePrice)}</StyledPrice>
+                <StyledPrice as='ins'>
+                  {formatPrice(salePrice, true)}
+                </StyledPrice>
                 <StyledPrice sale as='del'>
                   {formatPrice(price)}
                 </StyledPrice>
               </>
             )}
-            {!salePrice && <StyledPrice>{formatPrice(price)}</StyledPrice>}
+            {!salePrice && (
+              <StyledPrice>{formatPrice(price, true)}</StyledPrice>
+            )}
           </StyledPricesWrapper>
           <Button
             fullWidth

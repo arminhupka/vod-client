@@ -92,17 +92,19 @@ const CartTotal = ({ cartItems }: IProps): ReactElement => {
         <StyledList>
           <StyledListItem>
             <StyledListKey>Suma częściowa</StyledListKey>
-            <StyledListValue>{formatPrice(netPrice)}</StyledListValue>
+            <StyledListValue>{formatPrice(netPrice, true)}</StyledListValue>
           </StyledListItem>
           <StyledListItem>
             <StyledListKey>Podatek</StyledListKey>
-            <StyledListValue>{formatPrice(tax)}</StyledListValue>
+            <StyledListValue>{formatPrice(tax, true)}</StyledListValue>
           </StyledListItem>
         </StyledList>
         <StyledList>
           <StyledListItem>
             <StyledListKey large>Do zapłaty</StyledListKey>
-            <StyledListValue large>{formatPrice(getTotal())}</StyledListValue>
+            <StyledListValue large>
+              {formatPrice(getTotal(), true)}
+            </StyledListValue>
           </StyledListItem>
         </StyledList>
         {isCheckoutPage && (

@@ -34,7 +34,7 @@ const CartList = ({ courses }: IProps): ReactElement => (
               name={item.name}
               courseSlug={item.slug}
               days={item.daysAvailable}
-              price={formatPrice(item.salePrice || item.price)}
+              price={formatPrice(item.salePrice || item.price, true)}
             />
           ))}
         </TableBody>

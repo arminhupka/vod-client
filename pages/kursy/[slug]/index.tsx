@@ -34,8 +34,6 @@ const CourseDetailsPage: NextPage<INextPage> = ({
   const userHaveCourse = () =>
     !!user?.courses.find((item) => item.course?._id === course._id!);
 
-  console.log(userHaveCourse());
-
   const getCourseProgress = () => {
     const courseLessons = topics.map((topic) => topic.lessons).flat();
     const allUserWatchedLessons =
