@@ -80,6 +80,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
                 name={course.name}
                 isFeatured={course.featured}
                 difficultLevel={course.difficultyLevel}
+                daysAvailable={course.daysAvailable}
               />
             </Grid>
             <Grid item xs={12}>
@@ -120,6 +121,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
                 name={course.name}
                 isFeatured={course.featured}
                 difficultLevel={course.difficultyLevel}
+                daysAvailable={course.daysAvailable}
               />
             </Grid>
             <Grid item lg={8}>

@@ -35,10 +35,26 @@ export const StyledInfoWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledName = styled(Typography)(({ theme }) => ({
+  position: "relative",
   marginBottom: theme.spacing(1),
   fontSize: 22,
   fontWeight: 600,
   fontFamily: "Playfair Display",
+  "&:before": {
+    position: "absolute",
+    content: '""',
+    display: "block",
+    width: 0,
+    left: 0,
+    bottom: 0,
+    height: 2,
+    background: theme.palette.primary.main,
+    transition: "all .3s",
+  },
+
+  "&:hover:before": {
+    width: "100%",
+  },
 }));
 
 export const StyledBlobsWrapper = styled("div")(({ theme }) => ({

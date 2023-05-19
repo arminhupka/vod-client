@@ -39,10 +39,15 @@ export const AccountProvider = ({
 
   const [lessonWatched, setLessonWatched] = useState<string[]>(watched);
 
-  const logout = async () =>
-    client
-      .get<OkResponseDto>("/auth/logout", { withCredentials: true })
-      .then(() => setUserAccount(null));
+  const logout = async (): Promise<void> => {
+    try {
+      client
+        .get<OkResponseDto>("/auth/logout", { withCredentials: true })
+        .then(() => setUserAccount(null));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const value = useMemo<accountContextType>(
     () => ({

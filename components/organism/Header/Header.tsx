@@ -12,10 +12,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-import { useQuery } from "react-query";
 
-import { OkResponseDto } from "../../../api/api-types";
-import { logout } from "../../../api/auth";
 import useModalState from "../../../hooks/useModalState";
 import { useAccountContext } from "../../../providers/AccountProvider";
 import { useCartContext } from "../../../providers/CartProvider";
@@ -87,18 +84,9 @@ const Header = ({
 
   const { total } = useCartContext();
 
-  const { user } = useAccountContext();
+  const { user, logout } = useAccountContext();
 
   const router = useRouter();
-
-  const logoutQuery = useQuery<OkResponseDto>(
-    "logout",
-    async () => await logout(),
-    {
-      enabled: false,
-      onSuccess: () => router.reload(),
-    },
-  );
 
   const handleOpenResetPasswordModal = () => {
     onCloseLoginModal();
@@ -106,7 +94,8 @@ const Header = ({
   };
 
   const handleLogout = async (): Promise<void> => {
-    await logoutQuery.refetch();
+    await logout();
+    await router.reload();
   };
 
   return (
