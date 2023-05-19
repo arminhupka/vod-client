@@ -32,8 +32,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
   const { user } = useAccountContext();
 
   const userHaveCourse = () =>
-    //@ts-ignore
-    !!user?.courses.find((item) => item.course._id === course._id);
+    !!user?.courses.find((item) => item.course?._id === course._id!);
 
   const getCourseProgress = () => {
     const courseLessons = topics.map((topic) => topic.lessons).flat();
