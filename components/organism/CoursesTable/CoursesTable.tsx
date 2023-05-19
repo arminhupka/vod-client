@@ -35,17 +35,18 @@ const CoursesTable = ({ courses }: IProps): ReactElement => (
           </TableCell>
         </TableRow>
       )}
-      {courses.map((item) => (
-        <TableRow key={item.course._id}>
-          <TableCell>{item.course.name}</TableCell>
-          <TableCell>
-            {new Date(item.availableUntil).toLocaleDateString("pl-PL")}
-          </TableCell>
-          <TableCell>
-            <Button startIcon={<PlayArrow />}>Zobacz kurs</Button>
-          </TableCell>
-        </TableRow>
-      ))}
+      {courses.length > 0 &&
+        courses.map((item) => (
+          <TableRow key={item.course?._id}>
+            <TableCell>{item.course?.name}</TableCell>
+            <TableCell>
+              {new Date(item.availableUntil).toLocaleDateString("pl-PL")}
+            </TableCell>
+            <TableCell>
+              <Button startIcon={<PlayArrow />}>Zobacz kurs</Button>
+            </TableCell>
+          </TableRow>
+        ))}
     </TableBody>
   </Table>
 );

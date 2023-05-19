@@ -23,9 +23,9 @@ const MyAccountCourses: NextPage<INextPage> = ({ courses }): ReactElement => {
       <AccountLayout>
         <SectionTitle title='Moje kursy' />
         <Box mt={2}>
-          <CoursesTable courses={courses} />
+          <CoursesTable courses={courses || []} />
           {courses.map((c) => (
-            <CourseWideCard key={c.course._id} course={c} />
+            <CourseWideCard key={c.course?._id} course={c} />
           ))}
         </Box>
       </AccountLayout>
