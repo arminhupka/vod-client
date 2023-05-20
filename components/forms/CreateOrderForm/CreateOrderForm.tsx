@@ -1,5 +1,13 @@
-import { Box, Divider, Grid, TextField, Typography } from "@mui/material";
-import { ReactElement, useEffect } from "react";
+import {
+  Box,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { ReactElement, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { UpdateUserDto } from "../../../api/api-types";
@@ -8,10 +16,14 @@ import { useCartContext } from "../../../providers/CartProvider";
 import CartTotal from "../../atoms/CartTotal/CartTotal";
 
 const CreateOrderForm = (): ReactElement => {
+  const [isCompany, setIsCompany] = useState<boolean>(false);
+
   const { cart } = useCartContext();
   const { user } = useAccountContext();
 
   const formMethods = useForm<UpdateUserDto>();
+
+  const handleSelectIsCompany = () => setIsCompany(!isCompany);
 
   useEffect(() => {
     if (user) {
@@ -88,58 +100,69 @@ const CreateOrderForm = (): ReactElement => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography
-                    variant='h2'
-                    fontSize={24}
-                    fontFamily='Playfair Display'>
-                    Dane do faktury
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label='Nazwa firmy'
-                    {...formMethods.register("companyName")}
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    onChange={handleSelectIsCompany}
+                    label='Zamówienie na firmę'
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label='Numer NIP'
-                    {...formMethods.register("vatNumber")}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label='Adres'
-                    {...formMethods.register("companyStreet")}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField
-                    fullWidth
-                    label='Kod pocztowy'
-                    {...formMethods.register("companyPostCode")}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField
-                    fullWidth
-                    label='Miasto'
-                    {...formMethods.register("companyCity")}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField
-                    fullWidth
-                    label='Kraj'
-                    {...formMethods.register("companyCountry")}
-                  />
-                </Grid>
+                {isCompany && (
+                  <>
+                    <Grid item xs={12}>
+                      <Divider />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        variant='h2'
+                        fontSize={24}
+                        fontFamily='Playfair Display'>
+                        Dane do faktury
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label='Nazwa firmy'
+                        {...formMethods.register("companyName")}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label='Numer NIP'
+                        {...formMethods.register("vatNumber")}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label='Adres'
+                        {...formMethods.register("companyStreet")}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        fullWidth
+                        label='Kod pocztowy'
+                        {...formMethods.register("companyPostCode")}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        fullWidth
+                        label='Miasto'
+                        {...formMethods.register("companyCity")}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        fullWidth
+                        label='Kraj'
+                        {...formMethods.register("companyCountry")}
+                      />
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </Grid>
             <Grid item xs={12} lg={4}>

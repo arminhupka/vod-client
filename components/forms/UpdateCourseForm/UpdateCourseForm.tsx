@@ -25,7 +25,8 @@ export const UpdateCourseForm = ({
   handleFileSelectAndUpload,
   topics,
 }: IProps): ReactElement => {
-  const { register, setValue, watch } = useFormContext<UpdateCourseDto>();
+  const { register, setValue, watch, getValues } =
+    useFormContext<UpdateCourseDto>();
   const {
     isOpen: isOpenNewTopicModal,
     onOpen: onOpenNewTopicModal,
@@ -126,6 +127,9 @@ export const UpdateCourseForm = ({
                 <TextField
                   fullWidth
                   label='Krótki opis'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("shortDescription")),
+                  }}
                   {...register("shortDescription")}
                 />
               </Grid>
@@ -135,6 +139,9 @@ export const UpdateCourseForm = ({
                   multiline
                   rows={4}
                   label='Opis'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("description")),
+                  }}
                   {...register("description")}
                 />
               </Grid>
@@ -142,6 +149,9 @@ export const UpdateCourseForm = ({
                 <TextField
                   fullWidth
                   label='Dni dostępu'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("daysAvailable")),
+                  }}
                   {...register("daysAvailable")}
                 />
               </Grid>
@@ -149,6 +159,9 @@ export const UpdateCourseForm = ({
                 <TextField
                   fullWidth
                   label='Cena'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("price")),
+                  }}
                   {...register("price", {
                     setValueAs: (v: string) => {
                       return v ? +v.replace(",", ".") * 100 : undefined;
@@ -160,6 +173,9 @@ export const UpdateCourseForm = ({
                 <TextField
                   fullWidth
                   label='Cena promocyjna'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("salePrice")),
+                  }}
                   {...register("salePrice", {
                     setValueAs: (v: string) => {
                       return v ? +v.replace(",", ".") * 100 : undefined;
@@ -172,6 +188,9 @@ export const UpdateCourseForm = ({
                   fullWidth
                   label='Link do prezentacji'
                   helperText='Film musi być filmem publicznym na YouTube'
+                  InputLabelProps={{
+                    shrink: Boolean(getValues("youtubePreview")),
+                  }}
                   {...register("youtubePreview")}
                 />
               </Grid>

@@ -41,7 +41,7 @@ const LessonPage: NextPage<INextPage> = ({
           <CourseTitle title={courseData.name} />
         </Grid>
         <Grid item xs={12} lg={9}>
-          <DynamicPlayer video={lesson.videoLink.split("=").at(-1)!} />
+          <DynamicPlayer video={lesson.videoLink} />
           <Box mt={2} p={3} display='flex' flexDirection='column' gap={4}>
             <SectionTitle title={lesson.title} />
             <Typography>{lesson.description}</Typography>

@@ -10,13 +10,17 @@ interface IProps {
 }
 
 const CoursePlayer = ({ video }: IProps): ReactElement => {
-  console.log(video);
   return (
     <StyledWrapper>
       <Plyr
         source={{
           type: "video",
-          sources: [{ provider: "youtube", src: video }],
+          sources: [
+            {
+              provider: "vimeo",
+              src: video,
+            },
+          ],
         }}
       />
     </StyledWrapper>
