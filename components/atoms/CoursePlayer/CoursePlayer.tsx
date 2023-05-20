@@ -7,9 +7,10 @@ import { StyledWrapper } from "./CoursePlayer.styles";
 
 interface IProps {
   video: string;
+  onEnd: () => void | Promise<void>;
 }
 
-const CoursePlayer = ({ video }: IProps): ReactElement => {
+const CoursePlayer = ({ video, onEnd }: IProps): ReactElement => {
   const [play, setPlay] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,6 +26,9 @@ const CoursePlayer = ({ video }: IProps): ReactElement => {
         height='100%'
         controls
         playing={play}
+        onEnded={() => {
+          if (onEnd) onEnd();
+        }}
       />
     </StyledWrapper>
   );

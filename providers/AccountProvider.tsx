@@ -7,12 +7,14 @@ type accountContextType = {
   user: GetMeResponsesDto | null;
   watched: string[];
   logout: () => Promise<void>;
+  addLessonToWatched: (id: string) => void;
 };
 
 const accountContentDefaultValue: accountContextType = {
   user: null,
   watched: [],
   logout: async () => {},
+  addLessonToWatched: (id: string) => {},
 };
 
 const AccountContext = createContext<accountContextType>(
@@ -49,11 +51,16 @@ export const AccountProvider = ({
     }
   };
 
+  const addLessonToWatched = (id: string): void => {
+    setLessonWatched((prevState) => [...prevState, id]);
+  };
+
   const value = useMemo<accountContextType>(
     () => ({
       user: userAccount || null,
       watched: lessonWatched,
       logout,
+      addLessonToWatched,
     }),
     [lessonWatched, userAccount],
   );

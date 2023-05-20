@@ -1,4 +1,9 @@
-import { LessonResponseDto, NewLessonDto, UpdateLessonDto } from "./api-types";
+import {
+  LessonResponseDto,
+  NewLessonDto,
+  OkResponseDto,
+  UpdateLessonDto,
+} from "./api-types";
 import { client } from "./client";
 
 export const newLesson = async (
@@ -27,5 +32,16 @@ export const deleteLesson = async (id: string): Promise<LessonResponseDto> => {
   const { data } = await client.delete<LessonResponseDto>(`/lessons/${id}`, {
     withCredentials: true,
   });
+  return data;
+};
+
+export const addLessonToWatched = async (
+  id: string,
+): Promise<OkResponseDto> => {
+  const { data } = await client.put<OkResponseDto>(
+    `/lessons/${id}/watched`,
+    {},
+    { withCredentials: true },
+  );
   return data;
 };
