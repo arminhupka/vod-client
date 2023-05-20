@@ -1,7 +1,7 @@
 import "plyr-react/plyr.css";
 
-import Plyr from "plyr-react";
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 import { StyledWrapper } from "./CoursePlayer.styles";
 
@@ -10,18 +10,21 @@ interface IProps {
 }
 
 const CoursePlayer = ({ video }: IProps): ReactElement => {
+  const [play, setPlay] = useState<boolean>(false);
+
+  useEffect(() => {
+    setPlay(true);
+  }, []);
+
   return (
     <StyledWrapper>
-      <Plyr
-        source={{
-          type: "video",
-          sources: [
-            {
-              provider: "vimeo",
-              src: video,
-            },
-          ],
-        }}
+      <ReactPlayer
+        className='vimeo-player'
+        url={video}
+        width='100%'
+        height='100%'
+        controls
+        playing={play}
       />
     </StyledWrapper>
   );
