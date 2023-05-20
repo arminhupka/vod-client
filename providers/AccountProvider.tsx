@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { GetMeResponsesDto, OkResponseDto } from "../api/api-types";
 import { client } from "../api/client";
@@ -8,13 +15,15 @@ type accountContextType = {
   watched: string[];
   logout: () => Promise<void>;
   addLessonToWatched: (id: string) => void;
+  addCourse: (id: string, availableUntilDate: string) => void;
 };
 
 const accountContentDefaultValue: accountContextType = {
   user: null,
   watched: [],
   logout: async () => {},
-  addLessonToWatched: (id: string) => {},
+  addLessonToWatched: () => {},
+  addCourse: (): void => {},
 };
 
 const AccountContext = createContext<accountContextType>(
@@ -55,15 +64,42 @@ export const AccountProvider = ({
     setLessonWatched((prevState) => [...prevState, id]);
   };
 
+  const addCourse = (courseId: string, availableUntilDate: string): void => {
+    setUserAccount((prevState) => {
+      if (prevState) {
+        return {
+          ...prevState,
+          courses: [
+            ...prevState.courses,
+            {
+              course: {
+                _id: courseId,
+              },
+              watchedLessons: [],
+              availableUntil: availableUntilDate,
+            },
+          ],
+        };
+      }
+
+      return null;
+    });
+  };
+
   const value = useMemo<accountContextType>(
     () => ({
       user: userAccount || null,
       watched: lessonWatched,
       logout,
       addLessonToWatched,
+      addCourse,
     }),
-    [lessonWatched, userAccount],
+    [lessonWatched, userAccount, addCourse, logout, addLessonToWatched],
   );
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
