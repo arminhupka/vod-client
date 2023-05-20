@@ -14,9 +14,15 @@ const LessonLayout = ({
   withoutTopbar,
   fullWidth,
 }: IProps): ReactElement => (
-  <Box display='flex' flexDirection='column' overflow='hidden'>
+  <Box display='flex' flexDirection='column' overflow='hidden' minHeight='100%'>
     <Header relative withoutTopbar={withoutTopbar} fullWidth={fullWidth} />
-    <Box component='main' flex={1}>
+    <Box
+      component='main'
+      flex={1}
+      bgcolor='red'
+      height='100%'
+      display='flex'
+      flexDirection='column'>
       {children}
     </Box>
   </Box>

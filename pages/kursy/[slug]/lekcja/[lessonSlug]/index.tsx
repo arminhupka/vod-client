@@ -36,11 +36,9 @@ const LessonPage: NextPage<INextPage> = ({
 
   return (
     <LessonLayout withoutTopbar fullWidth>
-      <Grid container={!isMobile}>
-        <Grid item xs={12}>
-          <CourseTitle title={courseData.name} />
-        </Grid>
-        <Grid item xs={12} lg={9}>
+      <CourseTitle title={courseData.name} />
+      <Grid container={!isMobile} minHeight='100vh' bgcolor='#fff'>
+        <Grid item={!isMobile} xs={12} lg={9}>
           <DynamicPlayer video={lesson.videoLink} />
           <Box mt={2} p={3} display='flex' flexDirection='column' gap={4}>
             <SectionTitle title={lesson.title} />
