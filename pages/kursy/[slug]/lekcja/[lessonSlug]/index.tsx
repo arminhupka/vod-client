@@ -1,7 +1,6 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
-import dynamic from "next/dynamic";
 
 import {
   GetCourseTopicsItemResponseDto,
@@ -9,14 +8,12 @@ import {
   UserCourseResponseDto,
 } from "../../../../../api/api-types";
 import { client } from "../../../../../api/client";
+import CoursePlayer from "../../../../../components/atoms/CoursePlayer/CoursePlayer";
 import CourseTitle from "../../../../../components/atoms/CourseTitle/CourseTitle";
 import SectionTitle from "../../../../../components/atoms/SectionTitle/SectionTitle";
 import LessonLayout from "../../../../../components/layouts/LessonLayout";
 import LessonsList from "../../../../../components/organism/LessonsList/LessonsList";
-
-const DynamicPlayer = dynamic(
-  () => import("../../../../../components/atoms/CoursePlayer/CoursePlayer"),
-);
+import useIsFirstRender from "../../../../../hooks/useIsFirstRender";
 
 interface INextPage {
   course: string;
@@ -33,13 +30,14 @@ const LessonPage: NextPage<INextPage> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isFirst = useIsFirstRender();
 
   return (
     <LessonLayout withoutTopbar fullWidth>
       <CourseTitle title={courseData.name} />
       <Grid container={!isMobile} minHeight='100vh' bgcolor='#fff'>
         <Grid item={!isMobile} xs={12} lg={9}>
-          <DynamicPlayer video={lesson.videoLink} />
+          <CoursePlayer video={lesson.videoLink} />
           <Box mt={2} p={3} display='flex' flexDirection='column' gap={4}>
             <SectionTitle title={lesson.title} />
             <Typography>{lesson.description}</Typography>
