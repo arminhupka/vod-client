@@ -48,6 +48,9 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
         {difficultyLevel && (
           <InfoBlob message={convertDifficultLevel(difficultyLevel)} />
         )}
+        {daysAvailable && (
+          <InfoBlob message={`Dostep na ${daysAvailable} dni`} />
+        )}
       </StyledBlobsWrapper>
       <Box overflow='hidden'>
         <Link href={`/kursy/${slug}`} passHref>
