@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { deleteCookie, getCookie } from "cookies-next";
 import type { AppContext, AppProps } from "next/app";
 import App from "next/app";
+import NextNProgress from "nextjs-progressbar";
 import { QueryClientProvider } from "react-query";
 
 import { GetMeResponsesDto } from "../api/api-types";
@@ -25,6 +26,13 @@ function MyApp({ Component, pageProps, account, watched }: TAppProps) {
         <QueryClientProvider client={queryClient}>
           <AccountProvider account={account} watched={watched}>
             <CartProvider>
+              <NextNProgress
+                color='#fff'
+                startPosition={0.3}
+                stopDelayMs={200}
+                height={3}
+                showOnShallow={true}
+              />
               <Component {...pageProps} />
             </CartProvider>
           </AccountProvider>

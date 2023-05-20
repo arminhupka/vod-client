@@ -10,7 +10,6 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
 import useModalState from "../../../hooks/useModalState";
@@ -86,8 +85,6 @@ const Header = ({
 
   const { user, logout } = useAccountContext();
 
-  const router = useRouter();
-
   const handleOpenResetPasswordModal = () => {
     onCloseLoginModal();
     onOpenResetPasswordModal();
@@ -95,7 +92,6 @@ const Header = ({
 
   const handleLogout = async (): Promise<void> => {
     await logout();
-    await router.reload();
   };
 
   return (

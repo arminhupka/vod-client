@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   createContext,
   ReactNode,
@@ -44,6 +45,8 @@ export const AccountProvider = ({
   account,
   watched,
 }: IAccountProvider) => {
+  const router = useRouter();
+
   const [userAccount, setUserAccount] = useState<GetMeResponsesDto | null>(
     account,
   );
@@ -52,9 +55,11 @@ export const AccountProvider = ({
 
   const logout = async (): Promise<void> => {
     try {
-      client
-        .get<OkResponseDto>("/auth/logout", { withCredentials: true })
-        .then(() => setUserAccount(null));
+      await client.get<OkResponseDto>("/auth/logout", {
+        withCredentials: true,
+      });
+      await router.reload();
+      setUserAccount(null);
     } catch (err) {
       console.error(err);
     }
