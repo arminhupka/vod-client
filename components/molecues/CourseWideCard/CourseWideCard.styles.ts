@@ -42,3 +42,8 @@ export const StyledChip = styled(Chip)(() => ({}));
 StyledChip.defaultProps = {
   color: "primary",
 };
+
+export const StyledButtonWrapper = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(2),
+}));

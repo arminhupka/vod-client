@@ -1,9 +1,11 @@
 import { Movie } from "@mui/icons-material";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { Box, Button } from "@mui/material";
 import Link from "next/link";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 
 import { GetCourseResponseDto } from "../../../api/api-types";
+import { DownloadCertificate } from "../../../api/courses";
 import { useCartContext } from "../../../providers/CartProvider";
 import { formatPrice } from "../../../utils/formatPrice";
 import CourseProgress from "../../atoms/CourseProgress/CourseProgress";
@@ -36,6 +38,8 @@ const CourseDetailsSidebarPrice = ({
   disableButton,
 }: IProps): ReactElement => {
   const { addToCart, cart } = useCartContext();
+  const [certificateDownloading, setCertificateDownloading] =
+    useState<boolean>(false);
 
   const handleAddToCart = () =>
     addToCart({
@@ -56,6 +60,21 @@ const CourseDetailsSidebarPrice = ({
   const isInCart = () => !!cart.find((ci) => ci._id === course._id);
 
   const formatedYouTubeLink = youtubeLink?.split("=")[1];
+
+  const handleDownloadCertificate = async (): Promise<void> => {
+    try {
+      setCertificateDownloading(true);
+      const data = await DownloadCertificate(course._id);
+      const url = window.URL.createObjectURL(data);
+      window.open(url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setCertificateDownloading(false);
+    }
+  };
+
+  const isFinished = progress === 100;
 
   return (
     <StyledWrapper>
@@ -116,6 +135,17 @@ const CourseDetailsSidebarPrice = ({
               Przejdź do kursu
             </Button>
           </Link>
+          <Button
+            variant='outlined'
+            startIcon={<AssignmentTurnedInIcon />}
+            onClick={handleDownloadCertificate}
+            disabled={certificateDownloading || !isFinished}>
+            {!isFinished
+              ? "Ukończ kurs aby pobrać certyfikat"
+              : certificateDownloading
+              ? "Pobieram"
+              : "Pobierz certyfikat"}
+          </Button>
         </StyledInnerWrapper>
       )}
     </StyledWrapper>

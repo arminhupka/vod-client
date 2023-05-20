@@ -14,3 +14,11 @@ export const GetCourseReviews = async (
   const { data } = await client.get<ReviewDto[]>(`/course/${courseId}/review`);
   return data;
 };
+
+export const DownloadCertificate = async (courseId: string) => {
+  const { data } = await client.get(`/courses/${courseId}/certificate`, {
+    withCredentials: true,
+    responseType: "blob",
+  });
+  return data;
+};
