@@ -1,5 +1,6 @@
 import { Alert, Box } from "@mui/material";
 import { NextPage, NextPageContext } from "next";
+import Head from "next/head";
 
 import { OkResponseDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
@@ -12,19 +13,26 @@ interface INextPageProps {
 
 const ActivationPage: NextPage<INextPageProps> = ({ activated }) => {
   return (
-    <MainLayout>
-      <SectionTitle title='Aktywacja konta' />
-      <Box mt={2}>
-        {activated && (
-          <Alert severity='success'>
-            Twoje konto zostało aktywowane! Możesz się zalogować.
-          </Alert>
-        )}
-        {!activated && (
-          <Alert severity='error'>Wyglada na to że ten link już wygasł.</Alert>
-        )}
-      </Box>
-    </MainLayout>
+    <>
+      <Head>
+        <title>Aktywacja Konta | {process.env.NEXT_PUBLIC_APP_NAME}</title>
+      </Head>
+      <MainLayout>
+        <SectionTitle title='Aktywacja konta' />
+        <Box mt={2}>
+          {activated && (
+            <Alert severity='success'>
+              Twoje konto zostało aktywowane! Możesz się zalogować.
+            </Alert>
+          )}
+          {!activated && (
+            <Alert severity='error'>
+              Wyglada na to że ten link już wygasł.
+            </Alert>
+          )}
+        </Box>
+      </MainLayout>
+    </>
   );
 };
 
