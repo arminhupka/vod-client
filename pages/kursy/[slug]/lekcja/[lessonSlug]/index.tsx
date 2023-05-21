@@ -76,7 +76,7 @@ const LessonPage: NextPage<INextPage> = ({
   }, [lesson._id, topics]);
 
   return (
-    <LessonLayout withoutTopbar fullWidth>
+    <LessonLayout fullWidth>
       <CourseTitle title={courseData.name} />
       <Grid container={!isMobile} minHeight='100vh' bgcolor='#fff'>
         <Grid item={!isMobile} xs={12} lg={9}>

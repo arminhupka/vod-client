@@ -3,6 +3,7 @@ import {
   LoginDto,
   OkResponseDto,
   RegisterUserDto,
+  ResetPasswordDto,
   ResetPasswordRequestDto,
   UpdateUserDto,
 } from "./api-types";
@@ -46,5 +47,16 @@ export const updateUser = async (
   form: UpdateUserDto,
 ): Promise<GetMeResponsesDto> => {
   const { data } = await client.patch("/user", form, { withCredentials: true });
+  return data;
+};
+
+export const ResetPassword = async (
+  token: string,
+  form: ResetPasswordDto,
+): Promise<OkResponseDto> => {
+  const { data } = await client.post<OkResponseDto>(
+    `/users/reset-password/${token}`,
+    form,
+  );
   return data;
 };

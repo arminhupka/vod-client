@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps, account, watched }: TAppProps) {
                 color='#fff'
                 startPosition={0.3}
                 stopDelayMs={200}
-                height={3}
+                height={16}
                 showOnShallow={true}
               />
               <Component {...pageProps} />
