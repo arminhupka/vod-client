@@ -92,7 +92,12 @@ const UpdateProfileForm = ({ userData }: IProps): ReactElement => {
     setValue("postCode", userData.billing.postCode);
     setValue("country", userData.billing.country);
     setValue("companyName", userData.billing.companyName);
+    setValue("city", userData.billing.city);
     setValue("vatNumber", userData.billing.vatNumber);
+    setValue("companyStreet", userData.billing.companyStreet);
+    setValue("companyPostCode", userData.billing.companyPostCode);
+    setValue("companyCity", userData.billing.companyPostCode);
+    setValue("companyCountry", userData.billing.companyCountry);
   }, []);
 
   useEffect(() => {
@@ -215,6 +220,22 @@ const UpdateProfileForm = ({ userData }: IProps): ReactElement => {
               error={!!errors.companyName}
               helperText={errors.companyName?.message}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField fullWidth label='Adres' {...register("companyStreet")} />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              fullWidth
+              label='Kod pocztowy'
+              {...register("companyPostCode")}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField fullWidth label='Miasto' {...register("companyCity")} />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField fullWidth label='Kraj' {...register("companyCountry")} />
           </Grid>
           <Grid item xs={12}>
             <Button type='submit' fullWidth variant='contained'>
