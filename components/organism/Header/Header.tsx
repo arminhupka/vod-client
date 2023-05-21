@@ -1,4 +1,4 @@
-import { Logout, Menu } from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -18,28 +18,27 @@ import { useCartContext } from "../../../providers/CartProvider";
 import AvatarMenu from "../../atoms/AvatarMenu/AvatarMenu";
 import CartButton from "../../atoms/CartButton/CartButton";
 import Logo from "../../atoms/Logo/Logo";
-import MainDrawer from "../../molecues/MainDrawer/MainDrawer";
 import CouponModal from "../Modals/CouponModal/CouponModal";
 import LoginModal from "../Modals/LoginModal/LoginModal";
 import RegistrationModal from "../Modals/RegistrationModal/RegistrationModal";
 import ResetPasswordModal from "../Modals/ResetPasswordModal/ResetPasswordModal";
 
-const links = [
-  {
-    id: 1,
-    href: "/",
-    name: "Strona główna",
-  },
-  {
-    id: 2,
-    href: "/kursy",
-    name: "Kursy",
-  },
-  {
-    id: 3,
-    href: "/warsztaty",
-    name: "Warsztaty",
-  },
+const links: any[] = [
+  // {
+  //   id: 1,
+  //   href: "/",
+  //   name: "Strona główna",
+  // },
+  // {
+  //   id: 2,
+  //   href: "/kursy",
+  //   name: "Kursy",
+  // },
+  // {
+  //   id: 3,
+  //   href: "/warsztaty",
+  //   name: "Warsztaty",
+  // },
 ];
 
 interface IProps {
@@ -96,7 +95,6 @@ const Header = ({
 
   return (
     <>
-      <MainDrawer open={isOpenDrawer} onClose={onCloseDrawer} />
       <RegistrationModal onClose={onClose} open={isOpen} />
       <LoginModal
         onClose={onCloseLoginModal}
@@ -191,11 +189,6 @@ const Header = ({
                   onOpenLoginModal={onOpenLoginModal}
                   onOpenRegisterModal={onOpen}
                 />
-              )}
-              {isMobile && (
-                <IconButton onClick={onOpenDrawer}>
-                  <Menu />
-                </IconButton>
               )}
             </Box>
           </Box>
