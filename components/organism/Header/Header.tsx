@@ -167,7 +167,7 @@ const Header = ({
               )}
               {!isMobile && user && (
                 <>
-                  <Link href='/konto' passHref>
+                  <Link href='/konto/kursy' passHref>
                     <Button component='a' variant='outlined' size='small'>
                       Moje Konto
                     </Button>

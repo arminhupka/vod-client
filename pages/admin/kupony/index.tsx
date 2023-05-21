@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
 import { ApiError } from "next/dist/server/api-utils";
+import Head from "next/head";
 
 import {
   CouponsListResponseDto,
@@ -26,6 +27,9 @@ const AdminCouponsPage: NextPage<IProps> = ({ coupons, courses }) => {
 
   return (
     <>
+      <Head>
+        <title>Kupony | {process.env.NEXT_PUBLIC_APP_NAME}</title>
+      </Head>
       <NewCouponModal courses={courses} onClose={onClose} open={isOpen} />
       <AdminLayout>
         <SectionTitle title='Kupony'>

@@ -13,11 +13,6 @@ const AccountSidebar = (): ReactElement => {
   return (
     <StyledWrapper>
       <List>
-        <StyledListItem active={router.pathname == "/konto"}>
-          <Link href='/konto' passHref>
-            <ListItemText>Pulpit</ListItemText>
-          </Link>
-        </StyledListItem>
         <StyledListItem active={router.pathname.includes("konto/kursy")}>
           <Link href='/konto/kursy' passHref>
             <ListItemText>Kursy</ListItemText>
