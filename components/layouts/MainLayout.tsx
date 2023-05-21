@@ -7,12 +7,24 @@ import { StyledWrapper } from "./MainLayouts.styles";
 
 interface IProps {
   children: ReactNode;
+  center?: boolean;
 }
 
-const MainLayout = ({ children }: IProps): ReactElement => (
+const MainLayout = ({ children, center }: IProps): ReactElement => (
   <StyledWrapper>
     <Header />
-    <Container sx={{ py: 4, mt: 12, flex: 1 }}>{children}</Container>
+    <Container
+      sx={{
+        py: 4,
+        mt: 12,
+        flex: 1,
+        minHeight: "100%",
+        display: center ? "flex" : "block",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+      {children}
+    </Container>
     <Footer />
   </StyledWrapper>
 );
