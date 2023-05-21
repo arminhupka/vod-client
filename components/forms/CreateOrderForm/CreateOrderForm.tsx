@@ -27,17 +27,20 @@ const CreateOrderForm = (): ReactElement => {
 
   useEffect(() => {
     if (user) {
+      formMethods.setValue("email", user.email);
+      formMethods.setValue("password", undefined);
+      formMethods.setValue("passwordConfirm", undefined);
       formMethods.setValue("firstName", user.billing.firstName);
       formMethods.setValue("lastName", user.billing.lastName);
       formMethods.setValue("street", user.billing.street);
       formMethods.setValue("postCode", user.billing.postCode);
-      formMethods.setValue("city", user.billing.city);
       formMethods.setValue("country", user.billing.country);
       formMethods.setValue("companyName", user.billing.companyName);
+      formMethods.setValue("city", user.billing.city);
       formMethods.setValue("vatNumber", user.billing.vatNumber);
       formMethods.setValue("companyStreet", user.billing.companyStreet);
       formMethods.setValue("companyPostCode", user.billing.companyPostCode);
-      formMethods.setValue("companyCity", user.billing.companyCity);
+      formMethods.setValue("companyCity", user.billing.companyPostCode);
       formMethods.setValue("companyCountry", user.billing.companyCountry);
     }
   }, []);

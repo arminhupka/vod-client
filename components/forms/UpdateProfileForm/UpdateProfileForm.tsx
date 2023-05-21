@@ -74,7 +74,6 @@ const UpdateProfileForm = ({ userData }: IProps): ReactElement => {
   );
 
   const handleProfileUpdate: SubmitHandler<UpdateUserDto> = (form) => {
-    console.log(form);
     mutate(form);
   };
 
@@ -96,7 +95,7 @@ const UpdateProfileForm = ({ userData }: IProps): ReactElement => {
     setValue("vatNumber", userData.billing.vatNumber);
     setValue("companyStreet", userData.billing.companyStreet);
     setValue("companyPostCode", userData.billing.companyPostCode);
-    setValue("companyCity", userData.billing.companyPostCode);
+    setValue("companyCity", userData.billing.companyCity);
     setValue("companyCountry", userData.billing.companyCountry);
   }, []);
 
@@ -111,10 +110,6 @@ const UpdateProfileForm = ({ userData }: IProps): ReactElement => {
       clearErrors("passwordConfirm");
     }
   }, [watchPassword, watchPasswordConfirm]);
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
 
   return (
     <Box>
