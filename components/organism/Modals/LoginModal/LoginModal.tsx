@@ -55,7 +55,7 @@ const LoginModal = ({ open, onClose, onResetPasswordClick }: IProps) => {
     async (vars) => userLogin(vars),
     {
       onSuccess: async () => {
-        router.reload();
+        await router.push("/");
       },
       onError: (error) => {
         if (error.statusCode === 404) {
