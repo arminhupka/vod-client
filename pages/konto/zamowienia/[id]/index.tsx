@@ -9,6 +9,7 @@ import Head from "next/head";
 
 import { GetOrderResponseDto } from "../../../../api/api-types";
 import { client } from "../../../../api/client";
+import { OrderStatusEnum } from "../../../../components/atoms/OrderStatus/OrderStatus";
 import SectionTitle from "../../../../components/atoms/SectionTitle/SectionTitle";
 import AccountLayout from "../../../../components/layouts/AccountLayout/AccountLayout";
 import MainLayout from "../../../../components/layouts/MainLayout";
@@ -49,7 +50,8 @@ const MyAccountOrderDetails: NextPage<INextPage> = ({ order }) => {
                   <Button
                     variant='contained'
                     startIcon={<AssignmentReturnedIcon />}
-                    onClick={handleInvoiceDownload}>
+                    onClick={handleInvoiceDownload}
+                    disabled={order.status !== OrderStatusEnum.COMPLETE}>
                     Pobierz fakture
                   </Button>
                 </Box>
