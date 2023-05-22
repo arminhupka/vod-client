@@ -1,5 +1,17 @@
 import AssignmentReturnedIcon from "@mui/icons-material/AssignmentReturned";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import FileDownload from "js-file-download";
@@ -9,10 +21,13 @@ import Head from "next/head";
 
 import { GetOrderResponseDto } from "../../../../api/api-types";
 import { client } from "../../../../api/client";
-import { OrderStatusEnum } from "../../../../components/atoms/OrderStatus/OrderStatus";
+import OrderStatus, {
+  OrderStatusEnum,
+} from "../../../../components/atoms/OrderStatus/OrderStatus";
 import SectionTitle from "../../../../components/atoms/SectionTitle/SectionTitle";
 import AccountLayout from "../../../../components/layouts/AccountLayout/AccountLayout";
 import MainLayout from "../../../../components/layouts/MainLayout";
+import { formatPrice } from "../../../../utils/formatPrice";
 
 interface INextPage {
   order: GetOrderResponseDto;
@@ -25,7 +40,9 @@ const MyAccountOrderDetails: NextPage<INextPage> = ({ order }) => {
         withCredentials: true,
         responseType: "blob",
       })
-      .then(({ data }) => FileDownload(data, "faktura.pdf"));
+      .then(({ data }) => FileDownload(data, "FAKTURA.pdf"));
+
+  const isCompany = !!order.billing.vatNumber;
 
   return (
     <>
@@ -36,31 +53,72 @@ const MyAccountOrderDetails: NextPage<INextPage> = ({ order }) => {
         <AccountLayout>
           <SectionTitle title={`Zamówienie ${order.orderId}`} />
           <Grid mt={2} container spacing={2}>
-            <Grid item xs={12} lg={6}>
-              <Paper elevation={8}>
-                <Box p={2}>
-                  <Typography>Kupujący</Typography>
-                </Box>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <Paper elevation={8}>
-                <Box p={2}>
-                  <Typography>Kupujący</Typography>
-                  <Button
-                    variant='contained'
-                    startIcon={<AssignmentReturnedIcon />}
-                    onClick={handleInvoiceDownload}
-                    disabled={order.status !== OrderStatusEnum.COMPLETE}>
-                    Pobierz fakture
-                  </Button>
-                </Box>
-              </Paper>
-            </Grid>
             <Grid item xs={12}>
+              <Box
+                display='flex'
+                justifyContent='flex-end'
+                alignItems='center'
+                gap={2}>
+                <OrderStatus status={order.status as OrderStatusEnum} />
+                <Button
+                  variant='contained'
+                  startIcon={<AssignmentReturnedIcon />}
+                  onClick={handleInvoiceDownload}
+                  disabled={order.status !== OrderStatusEnum.COMPLETE}
+                  size='small'>
+                  Pobierz fakture
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={4}>
               <Paper elevation={8}>
                 <Box p={2}>
-                  <Typography>Lista</Typography>
+                  {!isCompany && (
+                    <>
+                      <Typography>
+                        {order.billing.firstName} {order.billing.lastName}
+                      </Typography>
+                      <Typography>{order.billing.street}</Typography>
+                      <Typography>
+                        {order.billing.postCode}, {order.billing.city}
+                      </Typography>
+                      <Typography>{order.billing.country}</Typography>
+                    </>
+                  )}
+                  {isCompany && (
+                    <>
+                      <Typography>{order.billing.companyName}</Typography>
+                      <Typography>{order.billing.companyStreet}</Typography>
+                      <Typography>
+                        {order.billing.companyPostCode},{" "}
+                        {order.billing.companyPostCity}
+                      </Typography>
+                    </>
+                  )}
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} lg={8}>
+              <Paper elevation={8}>
+                <Box p={2}>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Kurs</TableCell>
+                          <TableCell>Cena</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {order.orderItems.map((oi) => (
+                          <TableRow key={oi.product._id}>
+                            <TableCell>{oi.product.name}</TableCell>
+                            <TableCell>{formatPrice(oi.price, true)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </Box>
               </Paper>
             </Grid>
