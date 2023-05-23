@@ -341,6 +341,11 @@ export interface OrderListItemBilling {
   city: string;
 }
 
+export interface OrderListItemUser {
+  _id: string;
+  email: string;
+}
+
 export interface OrdersListItemDto {
   _id: string;
   orderId: string;
@@ -350,6 +355,7 @@ export interface OrdersListItemDto {
   totalTax: number;
   total: number;
   totalSum: number;
+  user: OrderListItemUser;
   /** @format date-time */
   paidAt: string;
   /** @format date-time */
@@ -987,6 +993,41 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/courses/${id}/reviews`,
         method: "GET",
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Courses
+     * @name CoursesControllerGenerateCertificate
+     * @summary Generate certificate
+     * @request GET:/courses/{id}/certificate
+     * @secure
+     */
+    coursesControllerGenerateCertificate: (id: string, params: RequestParams = {}) =>
+      this.request<
+        any,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+      >({
+        path: `/courses/${id}/certificate`,
+        method: "GET",
+        secure: true,
         ...params,
       }),
   };

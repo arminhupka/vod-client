@@ -55,8 +55,10 @@ const AdminOrdersTable = ({ data }: IProps): ReactElement => {
               <TableCell>ID zamówienia</TableCell>
               <TableCell>Numer zamówienia</TableCell>
               <TableCell>Użytkownik</TableCell>
+              <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Łącznie</TableCell>
+              <TableCell>Data</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
@@ -68,10 +70,15 @@ const AdminOrdersTable = ({ data }: IProps): ReactElement => {
                 <TableCell>
                   {o.billing.firstName} {o.billing.lastName}
                 </TableCell>
+                <TableCell>{o.user.email}</TableCell>
                 <TableCell>
                   <OrderStatus status={o.status as OrderStatusEnum} />.
                 </TableCell>
                 <TableCell>{formatPrice(o.totalSum)}</TableCell>
+                <TableCell>
+                  {new Date(o.createdAt).toLocaleDateString("pl-PL")} &nbsp;
+                  {new Date(o.createdAt).toLocaleTimeString("pl-PL")}
+                </TableCell>
                 <TableCell>
                   <Button size='small'>Szczegóły</Button>
                 </TableCell>
