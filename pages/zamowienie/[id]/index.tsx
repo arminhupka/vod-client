@@ -12,6 +12,7 @@ import { getOrder } from "../../../api/orders";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import MainLayout from "../../../components/layouts/MainLayout";
 import UserOrder from "../../../components/organism/UserOrder/UserOrder";
+import { formatPrice } from "../../../utils/formatPrice";
 
 const SuccessMessage = (): ReactElement => (
   <Box mt={2} display='flex' flexDirection='column' alignItems='center' gap={3}>
@@ -57,6 +58,14 @@ const OrderDetailsPage: NextPage = () => {
     async () => await getOrder(id as string),
     {
       refetchInterval: 3000,
+      onSuccess: async (data) => {
+        const pixel = (await import("react-facebook-pixel")).default;
+        pixel.init("4866321303446257");
+        pixel.track("Purchase", {
+          value: formatPrice(data.totalSum, false),
+          currency: "PLN",
+        });
+      },
     },
   );
 

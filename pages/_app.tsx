@@ -5,6 +5,7 @@ import { deleteCookie, getCookie } from "cookies-next";
 import type { AppContext, AppProps } from "next/app";
 import App from "next/app";
 import NextNProgress from "nextjs-progressbar";
+import { useEffect } from "react";
 import { QueryClientProvider } from "react-query";
 
 import { GetMeResponsesDto } from "../api/api-types";
@@ -19,6 +20,16 @@ type TAppProps = AppProps & {
 };
 
 function MyApp({ Component, pageProps, account, watched }: TAppProps) {
+  useEffect(() => {
+    import("react-facebook-pixel")
+      .then((module) => module.default)
+      .then((ReactPixel) => {
+        ReactPixel.init("4866321303446257");
+        ReactPixel.pageView();
+        return;
+      });
+  }, []);
+
   return (
     <>
       <CssBaseline />

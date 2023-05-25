@@ -15,6 +15,7 @@ import CourseDetailsSidebar from "../../../components/organism/CourseDetailsSide
 import CourseDetailsSidebarPrice from "../../../components/organism/CourseDetailsSidebarPrice/CourseDetailsSidebarPrice";
 import CourseInfoTabs from "../../../components/organism/CourseInfoTabs/CourseInfoTabs";
 import { useAccountContext } from "../../../providers/AccountProvider";
+import { useCartContext } from "../../../providers/CartProvider";
 
 interface INextPage {
   course: GetCourseResponseDto;
@@ -30,6 +31,7 @@ const CourseDetailsPage: NextPage<INextPage> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.not("lg"));
   const { user } = useAccountContext();
+  const { cart } = useCartContext();
 
   const userHaveCourse = () =>
     !!user?.courses.find((item) => item.course?._id === course._id!);

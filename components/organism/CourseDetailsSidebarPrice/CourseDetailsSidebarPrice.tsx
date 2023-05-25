@@ -41,7 +41,15 @@ const CourseDetailsSidebarPrice = ({
   const [certificateDownloading, setCertificateDownloading] =
     useState<boolean>(false);
 
-  const handleAddToCart = () =>
+  // import("react-facebook-pixel")
+  //   .then((module) => module.default)
+  //   .then((ReactPixel) => {
+  //     ReactPixel.init("4866321303446257");
+  //     ReactPixel.pageView();
+  //     return;
+  //   });
+
+  const handleAddToCart = async () => {
     addToCart({
       price: course.price,
       _id: course._id,
@@ -56,6 +64,14 @@ const CourseDetailsSidebarPrice = ({
       lessonsCount: course.lessonsCount,
       topicsCount: course.topicsCount,
     });
+
+    const pixel = (await import("react-facebook-pixel")).default;
+    pixel.init("4866321303446257");
+    pixel.track("AddToCart", {
+      value: formatPrice(course.price, false),
+      currency: "PLN",
+    });
+  };
 
   const isInCart = () => !!cart.find((ci) => ci._id === course._id);
 
