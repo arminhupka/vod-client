@@ -94,7 +94,6 @@ const CourseDetailsPage: NextPage<INextPage> = ({
                 youtubeLink={course.youtubePreview}
                 userHasCourse={userHaveCourse()}
                 lastLesson={userLastViewedLesson()}
-                disableButton={!userLastViewedLesson()}
               />
             </Grid>
             <Grid item xs={12}>

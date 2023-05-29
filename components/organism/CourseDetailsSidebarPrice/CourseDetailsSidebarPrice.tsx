@@ -131,7 +131,7 @@ const CourseDetailsSidebarPrice = ({
           <Button
             fullWidth
             variant='contained'
-            disabled={isInCart() || disableButton}
+            disabled={isInCart()}
             onClick={handleAddToCart}>
             Dodaj do koszyka
           </Button>

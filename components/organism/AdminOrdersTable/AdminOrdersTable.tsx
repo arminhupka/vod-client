@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, ReactElement } from "react";
+import { ChangeEvent, Dispatch, ReactElement, SetStateAction } from "react";
 
 import { GetAdminOrdersResponseDto } from "../../../api/api-types";
 import { formatPrice } from "../../../utils/formatPrice";
@@ -20,30 +20,36 @@ import OrderStatus, {
 
 interface IProps {
   data: GetAdminOrdersResponseDto;
+  setIsLoading?: Dispatch<SetStateAction<boolean>>;
 }
 
-const AdminOrdersTable = ({ data }: IProps): ReactElement => {
+const AdminOrdersTable = ({ data, setIsLoading }: IProps): ReactElement => {
   const router = useRouter();
   const currentQuery = router.query;
 
   const handlePageChange = async (page: number) => {
-    await router.push(router.asPath, {
-      query: {
-        ...currentQuery,
-        page,
-      },
-    });
+    if (setIsLoading) {
+      setIsLoading(true);
+    }
+    router.query.page = page.toString();
+
+    await router
+      .push(router)
+      .finally(() => setIsLoading && setIsLoading(false));
   };
 
   const handleLimitChange = async (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => {
-    await router.push(router.asPath, {
-      query: {
-        ...currentQuery,
-        limit: e.target.value,
-      },
-    });
+    if (setIsLoading) {
+      setIsLoading(true);
+    }
+
+    router.query.limit = e.target.value.toString();
+
+    await router
+      .push(router)
+      .finally(() => setIsLoading && setIsLoading(false));
   };
 
   return (
