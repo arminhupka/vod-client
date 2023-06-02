@@ -1,5 +1,4 @@
-import { Movie, ShoppingCart } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
@@ -77,15 +76,15 @@ export const CourseCard = (props: CourseListItem): ReactElement => {
       </StyledInfoWrapper>
       <StyledButtonWrapper>
         <StyledPrice>{formatPrice(salePrice || price, true)}</StyledPrice>
-        <Button
-          disabled={!!cart.find((item) => item._id === _id)}
-          startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}
-          variant='contained'
-          onClick={() => addToCart(props)}>
-          {userHaveCourse()
-            ? `Przedluż o ${daysAvailable} dni`
-            : "Dodaj do koszyka"}
-        </Button>
+        {/*<Button*/}
+        {/*  disabled={!!cart.find((item) => item._id === _id)}*/}
+        {/*  startIcon={userHaveCourse() ? <Movie /> : <ShoppingCart />}*/}
+        {/*  variant='contained'*/}
+        {/*  onClick={() => addToCart(props)}>*/}
+        {/*  {userHaveCourse()*/}
+        {/*    ? `Przedluż o ${daysAvailable} dni`*/}
+        {/*    : "Dodaj do koszyka"}*/}
+        {/*</Button>*/}
       </StyledButtonWrapper>
     </StyledWrapper>
   );

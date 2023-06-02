@@ -128,13 +128,14 @@ const CourseDetailsSidebarPrice = ({
               <StyledPrice>{formatPrice(price, true)}</StyledPrice>
             )}
           </StyledPricesWrapper>
-          <Button
-            fullWidth
-            variant='contained'
-            disabled={isInCart()}
-            onClick={handleAddToCart}>
-            Dodaj do koszyka
-          </Button>
+          <Button variant='contained'>Nabór został zamknięty</Button>
+          {/*<Button*/}
+          {/*  fullWidth*/}
+          {/*  variant='contained'*/}
+          {/*  disabled={isInCart()}*/}
+          {/*  onClick={handleAddToCart}>*/}
+          {/*  Dodaj do koszyka*/}
+          {/*</Button>*/}
         </StyledInnerWrapper>
       )}
 
