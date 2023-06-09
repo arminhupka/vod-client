@@ -9,10 +9,12 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
+import fileDownload from "js-file-download";
 import { useRouter } from "next/router";
 import { ChangeEvent, Dispatch, ReactElement, SetStateAction } from "react";
 
 import { GetAdminOrdersResponseDto } from "../../../api/api-types";
+import { getInvoice } from "../../../api/orders";
 import { formatPrice } from "../../../utils/formatPrice";
 import OrderStatus, {
   OrderStatusEnum,
@@ -26,6 +28,15 @@ interface IProps {
 const AdminOrdersTable = ({ data, setIsLoading }: IProps): ReactElement => {
   const router = useRouter();
   const currentQuery = router.query;
+
+  const handleInvoiceDownload = async (orderId: string): Promise<void> => {
+    try {
+      const { data } = await getInvoice(orderId);
+      fileDownload(data, "faktura.pdf");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handlePageChange = async (page: number) => {
     if (setIsLoading) {
@@ -87,6 +98,13 @@ const AdminOrdersTable = ({ data, setIsLoading }: IProps): ReactElement => {
                 </TableCell>
                 <TableCell>
                   <Button size='small'>Szczegóły</Button>
+                  <Button
+                    size='small'
+                    variant='contained'
+                    disabled={o.status !== OrderStatusEnum.COMPLETE}
+                    onClick={() => handleInvoiceDownload(o._id)}>
+                    Faktura
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

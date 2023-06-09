@@ -9,5 +9,8 @@ export const getOrder = async (id: string): Promise<GetOrderResponseDto> => {
 };
 
 export const getInvoice = async (id: string) => {
-  return await client.get(`/order/${id}/invoice`);
+  return await client.get(`/orders/${id}/invoice`, {
+    withCredentials: true,
+    responseType: "blob",
+  });
 };
