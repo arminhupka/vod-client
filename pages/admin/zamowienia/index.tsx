@@ -57,7 +57,6 @@ const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
     Object.keys(router.query).forEach(
       (k) => router.query[k] === "" && delete router.query[k],
     );
-    console.log(router.query);
 
     setIsLoading(true);
     router.push(router).finally(() => setIsLoading(false));
