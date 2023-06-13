@@ -1,4 +1,14 @@
-import { Box, Button, Paper, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from "@mui/material";
 import { AxiosError } from "axios";
 import { getCookie } from "cookies-next";
 import { NextPage, NextPageContext } from "next";
@@ -9,9 +19,11 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { GetAdminOrdersResponseDto } from "../../../api/api-types";
 import { client } from "../../../api/client";
 import Loading from "../../../components/atoms/Loading/Loading";
+import { OrderStatusEnum } from "../../../components/atoms/OrderStatus/OrderStatus";
 import SectionTitle from "../../../components/atoms/SectionTitle/SectionTitle";
 import AdminLayout from "../../../components/layouts/AdminLayout/AdminLayout";
 import AdminOrdersTable from "../../../components/organism/AdminOrdersTable/AdminOrdersTable";
+import { convertOrderStatus } from "../../../utils/convertOrderStatus";
 
 interface INextPageProps {
   orders: GetAdminOrdersResponseDto;
@@ -23,6 +35,7 @@ const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [emailSearch, setEmailSearch] = useState<string>("");
   const [orderNumberSearch, setOrderNumberSearch] = useState<string>("");
+  const [status, setStatus] = useState<OrderStatusEnum | string>("");
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -35,9 +48,25 @@ const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
     router.query.orderId = orderNumberSearch;
     router.query.email = emailSearch;
 
+    if (status === "Wszystko") {
+      router.query.status = "";
+    } else {
+      router.query.status = status;
+    }
+
+    Object.keys(router.query).forEach(
+      (k) => router.query[k] === "" && delete router.query[k],
+    );
+    console.log(router.query);
+
     setIsLoading(true);
     router.push(router).finally(() => setIsLoading(false));
   };
+
+  const handleChangeStatus = (e: SelectChangeEvent) =>
+    setStatus(e.target.value as OrderStatusEnum);
+
+  const handleResetStatus = () => setStatus("");
 
   return (
     <AdminLayout>
@@ -46,15 +75,37 @@ const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
         <Paper>
           <Box p={2} display='flex' gap={2}>
             <TextField
-              placeholder='Numer zamówienia'
+              label='Numer zamówienia'
               size='small'
               onChange={(e) => handleChange(e, setOrderNumberSearch)}
             />
             <TextField
-              placeholder='Adres email'
+              label='Adres email'
               size='small'
               onChange={(e) => handleChange(e, setEmailSearch)}
             />
+            <Box minWidth={150}>
+              <FormControl fullWidth>
+                <InputLabel id='status-select-label' size='small'>
+                  Status
+                </InputLabel>
+                <Select
+                  labelId='status-select-label'
+                  id='status-select'
+                  value={status}
+                  label='Status'
+                  onChange={handleChangeStatus}
+                  size='small'>
+                  <MenuItem value='Wszystko'>Wszystkie</MenuItem>
+                  {Object.values(OrderStatusEnum).map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {convertOrderStatus(item)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
             <Button size='small' onClick={submitSearch} variant='outlined'>
               Szukaj
             </Button>
@@ -70,7 +121,13 @@ const AdminOrdersPage: NextPage<INextPageProps> = ({ orders }) => {
 };
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
-  const { page = 1, limit = 15, orderId = "", email = "" } = ctx.query;
+  const {
+    page = 1,
+    limit = 15,
+    orderId = "",
+    email = "",
+    status = "",
+  } = ctx.query;
   const token = getCookie("token", { res: ctx.res, req: ctx.req });
 
   if (!token) {
@@ -91,6 +148,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
           limit: +limit,
           orderId,
           email,
+          status,
         },
         headers: {
           Cookie: `token=${token};`,
