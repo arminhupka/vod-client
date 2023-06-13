@@ -89,7 +89,7 @@ const AdminOrdersTable = ({ data, setIsLoading }: IProps): ReactElement => {
                 </TableCell>
                 <TableCell>{o.user.email}</TableCell>
                 <TableCell>
-                  <OrderStatus status={o.status as OrderStatusEnum} />.
+                  <OrderStatus status={o.status as OrderStatusEnum} />
                 </TableCell>
                 <TableCell>{formatPrice(o.totalSum)}</TableCell>
                 <TableCell>
