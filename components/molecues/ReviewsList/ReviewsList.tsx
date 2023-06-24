@@ -42,7 +42,7 @@ export const ReviewsList = ({ reviews, courseId }: IProps): ReactElement => {
         {reviews.map((r) => (
           <CourseReview key={r._id} review={r} />
         ))}
-        {!alreadyCommented && (
+        {user && !alreadyCommented && (
           <Box mt={4} display='flex' justifyContent='center'>
             <Button
               startIcon={<ReviewsIcon />}
