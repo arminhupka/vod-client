@@ -292,7 +292,7 @@ export interface OrderBillingDto {
   companyStreet: string;
   companyCountry: string;
   companyPostCode: string;
-  companyPostCity: string;
+  companyCity: string;
 }
 
 export interface OrderProductDto {
@@ -304,7 +304,7 @@ export interface OrderProductDto {
 }
 
 export interface OrderItemDto {
-  product: OrderProductDto[];
+  product: OrderProductDto;
   price: number;
   tax: number;
 }
@@ -425,13 +425,6 @@ export interface UsersListResponse {
   prevPage: boolean;
   nextPage: boolean;
   docs: UsersListItemDto[];
-}
-
-export interface FindAllInvoicesQueryDto {
-  /** @min 1 */
-  page?: number;
-  /** @min 1 */
-  limit?: number;
 }
 
 export interface InvoiceListItemOrderDto {
@@ -718,11 +711,18 @@ export interface ActivateCourseDto {
 
 export type CreateOrderDto = object;
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  HeadersDefaults,
+  ResponseType,
+} from "axios";
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams
+  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -737,9 +737,13 @@ export interface FullRequestParams extends Omit<AxiosRequestConfig, "data" | "pa
   body?: unknown;
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<
+  FullRequestParams,
+  "body" | "method" | "query" | "path"
+>;
 
-export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown>
+  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -761,8 +765,16 @@ export class HttpClient<SecurityDataType = unknown> {
   private secure?: boolean;
   private format?: ResponseType;
 
-  constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "" });
+  constructor({
+    securityWorker,
+    secure,
+    format,
+    ...axiosConfig
+  }: ApiConfig<SecurityDataType> = {}) {
+    this.instance = axios.create({
+      ...axiosConfig,
+      baseURL: axiosConfig.baseURL || "",
+    });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -772,7 +784,10 @@ export class HttpClient<SecurityDataType = unknown> {
     this.securityData = data;
   };
 
-  protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
+  protected mergeRequestParams(
+    params1: AxiosRequestConfig,
+    params2?: AxiosRequestConfig,
+  ): AxiosRequestConfig {
     const method = params1.method || (params2 && params2.method);
 
     return {
@@ -780,7 +795,11 @@ export class HttpClient<SecurityDataType = unknown> {
       ...params1,
       ...(params2 || {}),
       headers: {
-        ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
+        ...((method &&
+          this.instance.defaults.headers[
+            method.toLowerCase() as keyof HeadersDefaults
+          ]) ||
+          {}),
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
@@ -798,11 +817,15 @@ export class HttpClient<SecurityDataType = unknown> {
   protected createFormData(input: Record<string, unknown>): FormData {
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] = property instanceof Array ? property : [property];
+      const propertyContent: any[] =
+        property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
-        formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem));
+        formData.append(
+          key,
+          isFileType ? formItem : this.stringifyFormItem(formItem),
+        );
       }
 
       return formData;
@@ -826,11 +849,21 @@ export class HttpClient<SecurityDataType = unknown> {
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
-    if (type === ContentType.FormData && body && body !== null && typeof body === "object") {
+    if (
+      type === ContentType.FormData &&
+      body &&
+      body !== null &&
+      typeof body === "object"
+    ) {
       body = this.createFormData(body as Record<string, unknown>);
     }
 
-    if (type === ContentType.Text && body && body !== null && typeof body !== "string") {
+    if (
+      type === ContentType.Text &&
+      body &&
+      body !== null &&
+      typeof body !== "string"
+    ) {
       body = JSON.stringify(body);
     }
 
@@ -838,7 +871,9 @@ export class HttpClient<SecurityDataType = unknown> {
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+        ...(type && type !== ContentType.FormData
+          ? { "Content-Type": type }
+          : {}),
       },
       params: query,
       responseType: responseFormat,
@@ -855,7 +890,9 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * Olga Wałek API Documentation
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<
+  SecurityDataType extends unknown,
+> extends HttpClient<SecurityDataType> {
   /**
    * No description
    *
@@ -878,7 +915,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Create new course
      * @request POST:/courses
      */
-    coursesControllerCreateCourse: (data: NewCourseDto, params: RequestParams = {}) =>
+    coursesControllerCreateCourse: (
+      data: NewCourseDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         CourseResponseDto,
         {
@@ -907,12 +947,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/courses
      */
     coursesControllerGetCourses: (params: RequestParams = {}) =>
-      this.request<AdminGetCoursesResponseDto | GetCoursesListResponseDto, any>({
-        path: `/courses`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
+      this.request<AdminGetCoursesResponseDto | GetCoursesListResponseDto, any>(
+        {
+          path: `/courses`,
+          method: "GET",
+          format: "json",
+          ...params,
+        },
+      ),
 
     /**
      * No description
@@ -922,7 +964,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Update course
      * @request PATCH:/courses/{id}
      */
-    coursesControllerUpdateCourse: (id: string, data: UpdateCourseDto, params: RequestParams = {}) =>
+    coursesControllerUpdateCourse: (
+      id: string,
+      data: UpdateCourseDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         CourseResponseDto,
         {
@@ -1002,7 +1048,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Get course lessons by id or slug
      * @request GET:/courses/{id}/lessons
      */
-    coursesControllerGetCourseLessons: (id: string, params: RequestParams = {}) =>
+    coursesControllerGetCourseLessons: (
+      id: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         AdminGetCourseLessonsItemResponseDto | GetCourseLessonsItemResponseDto,
         {
@@ -1028,7 +1077,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Get course topics by id or slug
      * @request GET:/courses/{id}/topics
      */
-    coursesControllerGetCourseTopics: (id: string, params: RequestParams = {}) =>
+    coursesControllerGetCourseTopics: (
+      id: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         AdminGetCourseTopicsItemResponseDto | GetCourseTopicsItemResponseDto,
         {
@@ -1054,7 +1106,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Get course reviews
      * @request GET:/courses/{id}/reviews
      */
-    coursesControllerGetCourseReviews: (id: string, params: RequestParams = {}) =>
+    coursesControllerGetCourseReviews: (
+      id: string,
+      params: RequestParams = {},
+    ) =>
       this.request<ReviewDto[], any>({
         path: `/courses/${id}/reviews`,
         method: "GET",
@@ -1071,7 +1126,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/courses/{id}/certificate
      * @secure
      */
-    coursesControllerGenerateCertificate: (id: string, params: RequestParams = {}) =>
+    coursesControllerGenerateCertificate: (
+      id: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         any,
         | {
@@ -1107,7 +1165,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/lessons
      * @secure
      */
-    lessonsControllerCreateLesson: (data: NewLessonDto, params: RequestParams = {}) =>
+    lessonsControllerCreateLesson: (
+      data: NewLessonDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         LessonResponseDto,
         | {
@@ -1145,7 +1206,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/lessons/{id}
      * @secure
      */
-    lessonsControllerUpdateLesson: (id: string, data: UpdateLessonDto, params: RequestParams = {}) =>
+    lessonsControllerUpdateLesson: (
+      id: string,
+      data: UpdateLessonDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         LessonResponseDto,
         | {
@@ -1211,7 +1276,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/lessons/{id}/watched
      * @secure
      */
-    lessonsControllerSetWatchedLesson: (id: string, params: RequestParams = {}) =>
+    lessonsControllerSetWatchedLesson: (
+      id: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         OkResponseDto,
         | {
@@ -1286,7 +1354,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/topics/{id}
      * @secure
      */
-    topicsControllerUpdateTopic: (id: string, data: UpdateTopicDto, params: RequestParams = {}) =>
+    topicsControllerUpdateTopic: (
+      id: string,
+      data: UpdateTopicDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         TopicResponseDto,
         | {
@@ -1514,7 +1586,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary User register
      * @request POST:/users
      */
-    usersControllerRegister: (data: RegisterUserDto, params: RequestParams = {}) =>
+    usersControllerRegister: (
+      data: RegisterUserDto,
+      params: RequestParams = {},
+    ) =>
       this.request<OkResponseDto, any>({
         path: `/users`,
         method: "POST",
@@ -1578,7 +1653,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Activating user account
      * @request GET:/users/activate/{token}
      */
-    usersControllerActivateAccount: (token: string, params: RequestParams = {}) =>
+    usersControllerActivateAccount: (
+      token: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         OkResponseDto,
         {
@@ -1604,7 +1682,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Request password change
      * @request POST:/users/reset-password
      */
-    usersControllerResetPasswordRequest: (data: ResetPasswordRequestDto, params: RequestParams = {}) =>
+    usersControllerResetPasswordRequest: (
+      data: ResetPasswordRequestDto,
+      params: RequestParams = {},
+    ) =>
       this.request<OkResponseDto, any>({
         path: `/users/reset-password`,
         method: "POST",
@@ -1622,7 +1703,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Reset password with token
      * @request POST:/users/reset-password/{token}
      */
-    usersControllerResetPasswordWithToken: (token: string, data: ResetPasswordDto, params: RequestParams = {}) =>
+    usersControllerResetPasswordWithToken: (
+      token: string,
+      data: ResetPasswordDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         OkResponseDto,
         {
@@ -1652,7 +1737,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/invoices
      * @secure
      */
-    invoicesControllerFindAll: (data: FindAllInvoicesQueryDto, params: RequestParams = {}) =>
+    invoicesControllerFindAll: (
+      query: {
+        /** @min 1 */
+        page?: number;
+        /** @min 1 */
+        limit?: number;
+        startDate: string;
+        endDate: string;
+        keyword: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<
         FindAllInvoicesResponseDto,
         | {
@@ -1674,9 +1770,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/invoices`,
         method: "GET",
-        body: data,
+        query: query,
         secure: true,
-        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -1690,7 +1785,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/reviews
      * @secure
      */
-    reviewsControllerNewReview: (data: NewReviewDto, params: RequestParams = {}) =>
+    reviewsControllerNewReview: (
+      data: NewReviewDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         ReviewDto,
         | {
@@ -1770,7 +1868,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/reviews/{id}
      * @secure
      */
-    reviewsControllerUpdateReview: (id: string, data: UpdateReviewDto, params: RequestParams = {}) =>
+    reviewsControllerUpdateReview: (
+      id: string,
+      data: UpdateReviewDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         ReviewDto,
         | {
@@ -2029,7 +2131,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Get course lesson
      * @request GET:/user/courses/{course}/lesson/{id}
      */
-    userControllerGetCourseLesson: (id: string, course: string, params: RequestParams = {}) =>
+    userControllerGetCourseLesson: (
+      id: string,
+      course: string,
+      params: RequestParams = {},
+    ) =>
       this.request<
         UserCourseLessonDto,
         | {
@@ -2105,7 +2211,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @summary Update current user
      * @request PATCH:/user
      */
-    userControllerUpdateUser: (data: UpdateUserDto, params: RequestParams = {}) =>
+    userControllerUpdateUser: (
+      data: UpdateUserDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         GetMeResponsesDto,
         | {
@@ -2143,7 +2252,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/coupons
      * @secure
      */
-    couponsControllerCreate: (data: CreateCouponDto, params: RequestParams = {}) =>
+    couponsControllerCreate: (
+      data: CreateCouponDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         CouponResponseDto,
         | {
@@ -2262,7 +2374,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/coupons/activate
      * @secure
      */
-    couponsControllerActivate: (data: ActivateCourseDto, params: RequestParams = {}) =>
+    couponsControllerActivate: (
+      data: ActivateCourseDto,
+      params: RequestParams = {},
+    ) =>
       this.request<
         CouponResponseDto,
         | {

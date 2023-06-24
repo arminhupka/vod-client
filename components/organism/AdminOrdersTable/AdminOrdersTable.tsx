@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import fileDownload from "js-file-download";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, Dispatch, ReactElement, SetStateAction } from "react";
 
@@ -97,7 +98,11 @@ const AdminOrdersTable = ({ data, setIsLoading }: IProps): ReactElement => {
                   {new Date(o.createdAt).toLocaleTimeString("pl-PL")}
                 </TableCell>
                 <TableCell>
-                  <Button size='small'>Szczegóły</Button>
+                  <Link href={`/admin/zamowienia/${o._id}`} passHref>
+                    <Button component='a' size='small'>
+                      Szczegóły
+                    </Button>
+                  </Link>
                   <Button
                     size='small'
                     variant='contained'

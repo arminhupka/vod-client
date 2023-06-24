@@ -51,11 +51,6 @@ const AdminLayout = ({ children, isLoading }: IProps): ReactElement => (
               <StyledListItemText>Użytkownicy</StyledListItemText>
             </Link>
           </StyledListItem>
-          <StyledListItem>
-            <Link href='/admin/bannery' passHref>
-              <StyledListItemText>Bannery</StyledListItemText>
-            </Link>
-          </StyledListItem>
         </StyledList>
       </StyledDrawer>
       <StyledBody>{children}</StyledBody>
