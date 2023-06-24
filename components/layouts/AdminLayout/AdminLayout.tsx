@@ -37,6 +37,11 @@ const AdminLayout = ({ children, isLoading }: IProps): ReactElement => (
             </Link>
           </StyledListItem>
           <StyledListItem>
+            <Link href='/admin/faktury' passHref>
+              <StyledListItemText>Faktury</StyledListItemText>
+            </Link>
+          </StyledListItem>
+          <StyledListItem>
             <Link href='/admin/kupony' passHref>
               <StyledListItemText>Kupony</StyledListItemText>
             </Link>

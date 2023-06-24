@@ -401,6 +401,72 @@ export interface ResetPasswordDto {
   passwordConfirm: string;
 }
 
+export interface UserListItemBillingDto {
+  firstName: string;
+  lastName: string;
+}
+
+export interface UsersListItemDto {
+  _id: string;
+  email: string;
+  activated: boolean;
+  courses: number;
+  billing: UserListItemBillingDto;
+}
+
+export interface UsersListResponse {
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: boolean;
+  nextPage: boolean;
+  docs: UsersListItemDto[];
+}
+
+export interface FindAllInvoicesQueryDto {
+  /** @min 1 */
+  page?: number;
+  /** @min 1 */
+  limit?: number;
+}
+
+export interface InvoiceListItemOrderDto {
+  _id: string;
+  orderId: string;
+}
+
+export interface InvoiceListItemDto {
+  _id: string;
+  invoiceNumber: number;
+  total: number;
+  subtotal: number;
+  tax: number;
+  orderId: InvoiceListItemOrderDto;
+  /** @format date-time */
+  paidAt: string;
+  /** @format date-time */
+  createdAt: string;
+  /** @format date-time */
+  updatedAt: string;
+}
+
+export interface FindAllInvoicesResponseDto {
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: boolean;
+  nextPage: boolean;
+  docs: InvoiceListItemDto[];
+}
+
 export interface NewReviewDto {
   course: string;
   title: string;
@@ -1341,7 +1407,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/orders
      * @secure
      */
-    ordersControllerGetOrders: (params: RequestParams = {}) =>
+    ordersControllerGetOrders: (
+      query: {
+        orderId: string;
+        email: string;
+        status: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<
         GetAdminOrdersResponseDto,
         {
@@ -1355,6 +1428,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/orders`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -1454,6 +1528,52 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Users
+     * @name UsersControllerFindAll
+     * @summary Get all users
+     * @request GET:/users
+     * @secure
+     */
+    usersControllerFindAll: (
+      query: {
+        /** @min 1 */
+        page?: number;
+        /** @min 1 */
+        limit?: number;
+        keyword: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        UsersListResponse,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+      >({
+        path: `/users`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
      * @name UsersControllerActivateAccount
      * @summary Activating user account
      * @request GET:/users/activate/{token}
@@ -1517,6 +1637,45 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/users/reset-password/${token}`,
         method: "POST",
         body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  invoices = {
+    /**
+     * No description
+     *
+     * @tags Invoices
+     * @name InvoicesControllerFindAll
+     * @summary Fetch all invoices
+     * @request GET:/invoices
+     * @secure
+     */
+    invoicesControllerFindAll: (data: FindAllInvoicesQueryDto, params: RequestParams = {}) =>
+      this.request<
+        FindAllInvoicesResponseDto,
+        | {
+            /** @example 401 */
+            statusCode: number;
+            /** @example "Unauthorized" */
+            message: string;
+            /** @example "Unauthorized" */
+            error?: string;
+          }
+        | {
+            /** @example 403 */
+            statusCode: number;
+            /** @example "Forbidden" */
+            message: string;
+            /** @example "Forbidden" */
+            error?: string;
+          }
+      >({
+        path: `/invoices`,
+        method: "GET",
+        body: data,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,
@@ -2022,7 +2181,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/coupons
      * @secure
      */
-    couponsControllerFindAll: (params: RequestParams = {}) =>
+    couponsControllerFindAll: (
+      query?: {
+        /** @min 1 */
+        page?: number;
+        /** @min 1 */
+        limit?: number;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<
         CouponsListResponseDto,
         | {
@@ -2044,6 +2211,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/coupons`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
