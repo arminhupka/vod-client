@@ -16,9 +16,8 @@ export const GetCourseReviews = async (
 };
 
 export const DownloadCertificate = async (courseId: string) => {
-  const { data } = await client.get(`/courses/${courseId}/certificate`, {
+  return await client.get(`/courses/${courseId}/certificate`, {
     withCredentials: true,
     responseType: "blob",
   });
-  return data;
 };

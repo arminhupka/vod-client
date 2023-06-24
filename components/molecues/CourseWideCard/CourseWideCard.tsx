@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import fileDownload from "js-file-download";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -30,11 +31,21 @@ const CourseWideCard = ({ course }: IProps): ReactElement => {
     {
       enabled: false,
       onSuccess: (data) => {
-        const url = window.URL.createObjectURL(data);
+        const url = window.URL.createObjectURL(data.data);
         window.open(url);
       },
     },
   );
+
+  const downloadCertificate = async (): Promise<void> => {
+    try {
+      const { data } = await DownloadCertificate(course.course._id);
+      console.log(data);
+      fileDownload(data, `CERTYFIKAT_${course.course.name.toUpperCase()}.pdf`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <StyledWrapper>
@@ -54,7 +65,7 @@ const CourseWideCard = ({ course }: IProps): ReactElement => {
             size='small'
             label={`Dostępny do ${new Date(
               course.availableUntil,
-            ).toLocaleDateString()}`}
+            ).toLocaleDateString("pl-PL")}`}
           />
         </StyledChipWrapper>
         <StyledHeading>{course.course?.name}</StyledHeading>
@@ -64,10 +75,7 @@ const CourseWideCard = ({ course }: IProps): ReactElement => {
               Przejdź do kursu
             </Button>
           </Link>
-          <Button
-            size='small'
-            variant='outlined'
-            onClick={() => query.refetch()}>
+          <Button size='small' variant='outlined' onClick={downloadCertificate}>
             Pobierz certyfikat
           </Button>
         </StyledButtonWrapper>
