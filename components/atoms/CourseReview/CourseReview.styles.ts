@@ -12,7 +12,9 @@ export const StyledReviewHeader = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-export const StyledReviewUserWrapper = styled(Box)(() => ({}));
+export const StyledReviewUserWrapper = styled(Box)(() => ({
+  flex: 1,
+}));
 
 export const StyledUserName = styled(Typography)(() => ({
   fontFamily: "Playfair Display",

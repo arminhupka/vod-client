@@ -38,14 +38,7 @@ const CourseReview = ({ review }: IProps): ReactElement => {
     AxiosError<ApiError>,
     string
   >(async (id) => await DeleteReview(id), {
-    onSuccess: () =>
-      router.replace(
-        {
-          pathname: router.asPath,
-        },
-        undefined,
-        { scroll: false },
-      ),
+    onSuccess: () => router.replace(router.asPath),
   });
 
   const handleReviewDelete = () => mutate(review._id);

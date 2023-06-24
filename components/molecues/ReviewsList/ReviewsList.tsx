@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 
 import { ReviewDto } from "../../../api/api-types";
 import useModalState from "../../../hooks/useModalState";
+import { useAccountContext } from "../../../providers/AccountProvider";
 import CourseReview from "../../atoms/CourseReview/CourseReview";
 import NoDataLabel from "../../atoms/NoDataLabel/NoDataLabel";
 import NewReviewModal from "../../organism/Modals/NewReviewModal/NewReviewModal";
@@ -16,6 +17,9 @@ interface IProps {
 
 export const ReviewsList = ({ reviews, courseId }: IProps): ReactElement => {
   const { isOpen, onOpen, onClose } = useModalState();
+  const { user } = useAccountContext();
+  const alreadyCommented = !!reviews.find((r) => r.user._id === user?._id);
+
   return (
     <>
       <NewReviewModal courseId={courseId} onClose={onClose} open={isOpen} />
@@ -38,6 +42,16 @@ export const ReviewsList = ({ reviews, courseId }: IProps): ReactElement => {
         {reviews.map((r) => (
           <CourseReview key={r._id} review={r} />
         ))}
+        {!alreadyCommented && (
+          <Box mt={4} display='flex' justifyContent='center'>
+            <Button
+              startIcon={<ReviewsIcon />}
+              onClick={onOpen}
+              variant='outlined'>
+              Napisz recenzje
+            </Button>
+          </Box>
+        )}
       </StyledWrapper>
     </>
   );
