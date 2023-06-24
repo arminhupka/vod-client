@@ -1,13 +1,11 @@
 import { Button } from "@mui/material";
-import fileDownload from "js-file-download";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-import { useQuery } from "react-query";
 
 import { GetUserCoursesDto } from "../../../api/api-types";
-import { DownloadCertificate } from "../../../api/courses";
+import { downloadCertificate } from "../../../utils/certificateDownload";
 import {
   StyledButtonWrapper,
   StyledChip,
@@ -24,28 +22,6 @@ interface IProps {
 
 const CourseWideCard = ({ course }: IProps): ReactElement => {
   const router = useRouter();
-
-  const query = useQuery(
-    "getCertificate",
-    async () => await DownloadCertificate(course.course._id),
-    {
-      enabled: false,
-      onSuccess: (data) => {
-        const url = window.URL.createObjectURL(data.data);
-        window.open(url);
-      },
-    },
-  );
-
-  const downloadCertificate = async (): Promise<void> => {
-    try {
-      const { data } = await DownloadCertificate(course.course._id);
-      console.log(data);
-      fileDownload(data, `CERTYFIKAT_${course.course.name.toUpperCase()}.pdf`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <StyledWrapper>
@@ -75,7 +51,12 @@ const CourseWideCard = ({ course }: IProps): ReactElement => {
               Przejdź do kursu
             </Button>
           </Link>
-          <Button size='small' variant='outlined' onClick={downloadCertificate}>
+          <Button
+            size='small'
+            variant='outlined'
+            onClick={() =>
+              downloadCertificate(course.course._id, course.course.name)
+            }>
             Pobierz certyfikat
           </Button>
         </StyledButtonWrapper>

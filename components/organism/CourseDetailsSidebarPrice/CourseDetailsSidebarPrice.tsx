@@ -5,8 +5,8 @@ import Link from "next/link";
 import { ReactElement, useState } from "react";
 
 import { GetCourseResponseDto } from "../../../api/api-types";
-import { DownloadCertificate } from "../../../api/courses";
 import { useCartContext } from "../../../providers/CartProvider";
+import { downloadCertificate } from "../../../utils/certificateDownload";
 import { formatPrice } from "../../../utils/formatPrice";
 import CourseProgress from "../../atoms/CourseProgress/CourseProgress";
 import {
@@ -77,20 +77,15 @@ const CourseDetailsSidebarPrice = ({
 
   const formatedYouTubeLink = youtubeLink?.split("=")[1];
 
-  const handleDownloadCertificate = async (): Promise<void> => {
-    try {
-      setCertificateDownloading(true);
-      const data = await DownloadCertificate(course._id);
-      const url = window.URL.createObjectURL(data);
-      window.open(url);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setCertificateDownloading(false);
-    }
-  };
+  // const isFinished = progress === 100;
+  const isFinished = true;
 
-  const isFinished = progress === 100;
+  const handleDownload = async () => {
+    setCertificateDownloading(true);
+    await downloadCertificate(course._id, course.name).then(() => {
+      setCertificateDownloading(false);
+    });
+  };
 
   return (
     <StyledWrapper>
@@ -155,12 +150,12 @@ const CourseDetailsSidebarPrice = ({
           <Button
             variant='outlined'
             startIcon={<AssignmentTurnedInIcon />}
-            onClick={handleDownloadCertificate}
+            onClick={handleDownload}
             disabled={certificateDownloading || !isFinished}>
             {!isFinished
               ? "Ukończ kurs aby pobrać certyfikat"
               : certificateDownloading
-              ? "Pobieram"
+              ? "Trwa generowanie"
               : "Pobierz certyfikat"}
           </Button>
         </StyledInnerWrapper>

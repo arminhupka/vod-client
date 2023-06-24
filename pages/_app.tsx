@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps, account, watched }: TAppProps) {
           <AccountProvider account={account} watched={watched}>
             <CartProvider>
               <NextNProgress
-                color='#fff'
+                color='#936cb1'
                 startPosition={0.3}
                 stopDelayMs={200}
                 height={16}

@@ -58,8 +58,8 @@ export const AccountProvider = ({
       await client.get<OkResponseDto>("/auth/logout", {
         withCredentials: true,
       });
-      await router.reload();
       setUserAccount(null);
+      await router.reload();
     } catch (err) {
       console.error(err);
     }
